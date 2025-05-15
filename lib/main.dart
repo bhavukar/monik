@@ -2,9 +2,27 @@ import 'package:fluent_ui/fluent_ui.dart';
 import 'package:monik/panels/monitor_control_panel.dart';
 import 'package:monik/panels/system_info.dart';
 import 'package:monik/services/tray_service.dart';
+import 'package:window_manager/window_manager.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  await windowManager.ensureInitialized();
+
+  WindowOptions windowOptions = const WindowOptions(
+    size: Size(800, 600),
+    center: true,
+    backgroundColor: Colors.transparent,
+    skipTaskbar: false,
+    titleBarStyle: TitleBarStyle.normal,
+    title: "Windows Monitor Control",
+  );
+
+  // Set window options
+  await windowManager.waitUntilReadyToShow(windowOptions, () async {
+    await windowManager.show();
+    await windowManager.focus();
+  });
 
   // Initialize tray
   await TrayService.instance.initialize();
@@ -12,8 +30,43 @@ void main() async {
   runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> with WindowListener {
+  @override
+  void initState() {
+    super.initState();
+
+    // Setup tray listeners
+    TrayService.instance.setupListeners(_showApp, _exitApp);
+  }
+
+  @override
+  void dispose() {
+    windowManager.removeListener(this);
+    TrayService.instance.removeListeners();
+    super.dispose();
+  }
+
+  void _showApp() async {
+    await windowManager.show();
+    await windowManager.focus();
+  }
+
+  void _exitApp() async {
+    await windowManager.destroy();
+  }
+
+  @override
+  void onWindowClose() async {
+    // Hide window to system tray instead of closing
+    await windowManager.hide();
+  }
 
   @override
   Widget build(BuildContext context) {
