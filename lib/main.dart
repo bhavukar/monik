@@ -1,4 +1,5 @@
 import 'package:fluent_ui/fluent_ui.dart';
+import 'package:monik/panels/about.dart';
 import 'package:monik/panels/monitor_control_panel.dart';
 import 'package:monik/panels/system_info.dart';
 import 'package:monik/services/tray_service.dart';
@@ -15,7 +16,7 @@ void main() async {
     backgroundColor: Colors.transparent,
     skipTaskbar: false,
     titleBarStyle: TitleBarStyle.normal,
-    title: "Windows Monitor Control",
+    title: "Monik",
   );
 
   // Set window options
@@ -71,8 +72,9 @@ class _MyAppState extends State<MyApp> with WindowListener {
   @override
   Widget build(BuildContext context) {
     return FluentApp(
-      title: 'Windows Monitor Control',
+      title: 'Monik',
       themeMode: ThemeMode.system,
+      debugShowCheckedModeBanner: false,
       darkTheme: FluentThemeData(
         brightness: Brightness.dark,
         accentColor: Colors.blue,
@@ -81,13 +83,8 @@ class _MyAppState extends State<MyApp> with WindowListener {
           glowFactor: is10footScreen(context) ? 2.0 : 0.0,
         ),
       ),
-      theme: FluentThemeData(
-        accentColor: Colors.blue,
-        visualDensity: VisualDensity.standard,
-        focusTheme: FocusThemeData(
-          glowFactor: is10footScreen(context) ? 2.0 : 0.0,
-        ),
-      ),
+
+      theme: FluentThemeData.light(),
       home: const MainNavigationView(),
     );
   }
@@ -106,14 +103,10 @@ class _MainNavigationViewState extends State<MainNavigationView> {
   @override
   Widget build(BuildContext context) {
     return NavigationView(
-      appBar: const NavigationAppBar(
-        title: Text('Windows Monitor Control'),
-        automaticallyImplyLeading: false,
-      ),
       pane: NavigationPane(
         selected: _currentIndex,
         onChanged: (index) => setState(() => _currentIndex = index),
-        displayMode: PaneDisplayMode.top,
+        displayMode: PaneDisplayMode.compact,
         items: [
           PaneItem(
             icon: Icon(FluentIcons.personalize),
@@ -124,6 +117,11 @@ class _MainNavigationViewState extends State<MainNavigationView> {
             icon: const Icon(FluentIcons.pc1),
             title: const Text('System Info'),
             body: const SystemInfoPage(),
+          ),
+          PaneItem(
+            icon: const Icon(FluentIcons.info),
+            title: const Text('About'),
+            body: const Center(child: AboutPage()),
           ),
         ],
       ),
