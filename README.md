@@ -1,9 +1,13 @@
-# Monik - Your Digital KVM & Display Control Hub for Windows
+# Monik - Your Digital KVM & Display Control Hub for Windows, macOS, and Linux
 
 [![Platform Windows](https://img.shields.io/badge/platform-windows-brightgreen?style=for-the-badge&logo=windows)](https://www.microsoft.com/windows/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](https://opensource.org/licenses/MIT)
-**Monik** is a lightweight Windows application that gives you convenient control over your monitor's settings and provides insights into your system hardware. It acts as a software-based alternative for common KVM switch functionalities, display adjustments, and system information utilities. Easily manage brightness, switch input sources, adjust refresh rates, and view detailed system specifications directly from your desktop.
 
+
+![Monik Screenshot](https://github.com/bhavukar/monik/raw/master/preview.png)
+
+
+**Monik** is a lightweight Windows application that gives you convenient control over your monitor's settings and provides insights into your system hardware. It acts as a software-based alternative for common KVM switch functionalities, display adjustments, and system information utilities. Easily manage brightness, switch input sources, adjust refresh rates, and view detailed system specifications directly from your desktop.
 Currently, Monik is available for **Windows**, with future plans to support macOS and Linux.
 
 ## ✨ Features
