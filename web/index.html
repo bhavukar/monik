@@ -26,7 +26,7 @@
 
       <nav class="nav-links">
         <a href="#features">Features</a>
-        <a href="#demo">Interactive Mockup</a>
+        <a href="#demo">Preview</a>
         <a href="#comparison">Compare</a>
         <a href="#platforms">Platforms</a>
         <a href="#download" class="nav-btn-solid">Download</a>
@@ -41,9 +41,9 @@
   </header>
 
   <main>
-    <!-- Hero Showcase Section with React Bits Prism Background -->
+    <!-- Hero Showcase Section with Subtle Prism Backlight -->
     <section class="hero-showcase">
-      <!-- 3D Raymarched Prism Background Container -->
+      <!-- 3D Raymarched Prism Ambient Glow -->
       <div id="prism-canvas-container" class="prism-bg"></div>
 
       <div class="hero-content">
@@ -74,26 +74,7 @@
           </a>
         </div>
 
-        <!-- Interactive UI View Switcher Controls -->
-        <div class="mockup-view-toggles">
-          <button class="view-pill active" id="btn-view-popover">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <rect x="2" y="3" width="20" height="14" rx="2"></rect>
-              <line x1="8" y1="21" x2="16" y2="21"></line>
-              <line x1="12" y1="17" x2="12" y2="21"></line>
-            </svg>
-            <span>Menu Bar Popover View</span>
-          </button>
-          <button class="view-pill" id="btn-view-settings">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <circle cx="12" cy="12" r="3"></circle>
-              <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
-            </svg>
-            <span>Full Settings Window View</span>
-          </button>
-        </div>
-
-        <!-- Realistic Floating MacBook Mockup with Wallpaper Screen -->
+        <!-- Realistic Floating MacBook Mockup -->
         <div id="demo" class="macbook-wrapper">
           <div class="macbook-mockup">
             <!-- MacBook Lid / Screen -->
@@ -107,22 +88,23 @@
               <div class="macos-menubar">
                 <div class="menubar-left">
                   <span class="apple-icon"></span>
-                  <span class="app-name">Manage Your Display</span>
+                  <span class="menu-app-title">Finder</span>
                   <span class="menu-item hide-mobile">File</span>
                   <span class="menu-item hide-mobile">Edit</span>
                   <span class="menu-item hide-mobile">View</span>
+                  <span class="menu-item hide-mobile">Go</span>
                   <span class="menu-item hide-mobile">Window</span>
                   <span class="menu-item hide-mobile">Help</span>
                 </div>
                 <div class="menubar-right">
-                  <button class="status-icon active-icon" id="menubar-app-btn" title="Toggle Manage Your Display Popover">
-                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                  <!-- Manage Your Display Menu Bar Icon -->
+                  <div class="menubar-item-active" id="menubar-trigger" title="Manage Your Display Menu Bar">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
                       <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
                       <line x1="8" y1="21" x2="16" y2="21"></line>
                       <line x1="12" y1="17" x2="12" y2="21"></line>
                     </svg>
-                  </button>
-                  <span class="status-text hide-mobile">100%</span>
+                  </div>
                   <span class="status-icon hide-mobile">
                     <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                       <path d="M5 12.55a11 11 0 0 1 14.08 0"></path>
@@ -131,325 +113,333 @@
                       <line x1="12" y1="20" x2="12.01" y2="20"></line>
                     </svg>
                   </span>
-                  <span class="status-time" id="sim-clock">Fri 7:42 PM</span>
+                  <span class="status-text hide-mobile">100%</span>
+                  <span class="status-time" id="sim-clock">Fri 18 Sep 7:38 PM</span>
                 </div>
               </div>
 
-              <!-- Screen Desktop Wallpaper Background -->
+              <!-- Screen Desktop Workspace -->
               <div class="macbook-display-content" id="macbook-desktop">
                 
-                <!-- VIEW 1: Menu Bar Popover Controller -->
-                <div class="popover-container active" id="view-popover">
-                  <div class="popover-arrow"></div>
+                <!-- Left: Settings Window -->
+                <div class="desktop-settings-window">
+                  <div class="settings-titlebar">
+                    <div class="settings-dots">
+                      <span class="dot dot-red"></span>
+                      <span class="dot dot-yellow"></span>
+                      <span class="dot dot-green"></span>
+                    </div>
+                    <div class="settings-title">Manage Your Display Settings</div>
+                  </div>
 
-                  <div class="app-popover">
-                    <!-- Popover Header -->
-                    <div class="popover-header">
-                      <div class="popover-dots">
-                        <span class="dot dot-red"></span>
-                        <span class="dot dot-yellow"></span>
-                        <span class="dot dot-green"></span>
+                  <div class="settings-body-split">
+                    <!-- Left Sidebar -->
+                    <div class="settings-sidebar">
+                      <div class="sb-btn active">
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                          <rect x="2" y="3" width="20" height="14" rx="2"></rect>
+                          <line x1="8" y1="21" x2="16" y2="21"></line>
+                          <line x1="12" y1="17" x2="12" y2="21"></line>
+                        </svg>
+                        <span>Displays</span>
                       </div>
-                      <div class="popover-title">Manage Your Display</div>
-                      <div class="popover-badge">2 Active Displays</div>
+                      <div class="sb-btn">
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                          <rect x="3" y="3" width="7" height="7"></rect>
+                          <rect x="14" y="3" width="7" height="7"></rect>
+                          <rect x="14" y="14" width="7" height="7"></rect>
+                          <rect x="3" y="14" width="7" height="7"></rect>
+                        </svg>
+                        <span>Groups</span>
+                      </div>
+                      <div class="sb-btn">
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                          <circle cx="12" cy="12" r="3"></circle>
+                          <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+                        </svg>
+                        <span>Application</span>
+                      </div>
+                      <div class="sb-btn">
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                          <line x1="3" y1="12" x2="21" y2="12"></line>
+                          <line x1="3" y1="6" x2="21" y2="6"></line>
+                          <line x1="3" y1="18" x2="21" y2="18"></line>
+                        </svg>
+                        <span>Menu</span>
+                      </div>
+                      <div class="sb-btn">
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                          <rect x="2" y="4" width="20" height="16" rx="2"></rect>
+                          <line x1="6" y1="8" x2="6.01" y2="8"></line>
+                          <line x1="10" y1="8" x2="10.01" y2="8"></line>
+                          <line x1="14" y1="8" x2="14.01" y2="8"></line>
+                          <line x1="18" y1="8" x2="18.01" y2="8"></line>
+                        </svg>
+                        <span>Keyboard</span>
+                      </div>
+                      <div class="sb-btn">
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                          <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+                          <polyline points="2 17 12 22 22 17"></polyline>
+                          <polyline points="2 12 12 17 22 12"></polyline>
+                        </svg>
+                        <span>Presets</span>
+                      </div>
+                      <div class="sb-btn pro-sb">
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                        </svg>
+                        <span>Pro</span>
+                        <span class="pro-green">✓</span>
+                      </div>
+                      <div class="sb-btn">
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                          <circle cx="12" cy="12" r="10"></circle>
+                          <line x1="12" y1="16" x2="12" y2="12"></line>
+                          <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                        </svg>
+                        <span>About</span>
+                      </div>
+
+                      <div class="sb-footer">
+                        <span>☑ Show details</span>
+                        <span>⚙ App Menu</span>
+                        <span>🌐 English (US)</span>
+                      </div>
                     </div>
 
-                    <!-- Popover Body -->
-                    <div class="popover-body">
-                      <!-- Presets Bar -->
-                      <div class="presets-row">
-                        <button class="preset-btn active" data-preset="work">Work & Day</button>
-                        <button class="preset-btn" data-preset="night">Ultra-Dim Night</button>
-                        <button class="preset-btn" data-preset="gaming">Gaming 144Hz</button>
-                        <button class="preset-btn" data-preset="focus">Focus Mode</button>
-                      </div>
-
-                      <!-- Card 1: External Monitor (Acer KG271) -->
-                      <div class="display-card" id="card-1">
-                        <div class="card-header">
-                          <div class="display-info">
-                            <div class="display-icon">
-                              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
-                                <line x1="8" y1="21" x2="16" y2="21"></line>
-                                <line x1="12" y1="17" x2="12" y2="21"></line>
-                              </svg>
-                            </div>
-                            <span class="display-name">Acer KG271</span>
-                            <span class="tag-main">Main</span>
-                          </div>
-                          <label class="mac-switch" title="Hardware Power Toggle">
-                            <input type="checkbox" id="power-toggle-1" checked>
-                            <span class="mac-slider"></span>
-                          </label>
+                    <!-- Right Content -->
+                    <div class="settings-main">
+                      <!-- Display Device Tabs -->
+                      <div class="device-tabs">
+                        <div class="dev-tab active">
+                          <div class="dev-icon">≡</div>
+                          <span>Overview</span>
                         </div>
-
-                        <!-- Brightness Slider -->
-                        <div class="slider-group">
-                          <div class="slider-label-row">
-                            <span class="label-name">
-                              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <circle cx="12" cy="12" r="5"></circle>
-                                <line x1="12" y1="1" x2="12" y2="3"></line>
-                                <line x1="12" y1="21" x2="12" y2="23"></line>
-                              </svg>
-                              Brightness (DDC)
-                            </span>
-                            <span class="label-value" id="brightness-val-1">100%</span>
-                          </div>
-                          <input type="range" min="0" max="100" value="100" class="mac-range" id="brightness-slider-1">
+                        <div class="dev-tab">
+                          <div class="dev-icon">💻</div>
+                          <span>MacBook Disp...</span>
                         </div>
-
-                        <!-- Volume Slider -->
-                        <div class="slider-group">
-                          <div class="slider-label-row">
-                            <span class="label-name">
-                              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
-                                <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>
-                              </svg>
-                              Audio Volume
-                            </span>
-                            <span class="label-value" id="volume-val-1">80%</span>
-                          </div>
-                          <input type="range" min="0" max="100" value="80" class="mac-range" id="volume-slider-1">
+                        <div class="dev-tab">
+                          <div class="dev-icon">🖥</div>
+                          <span>Acer KG271 C</span>
                         </div>
-
-                        <!-- Resolution Selector -->
-                        <div class="select-group">
-                          <span class="select-label">Native Resolution</span>
-                          <select id="res-select-1" class="mac-select">
-                            <option value="1920x1080@144">1920 x 1080 @ 144Hz (HiDPI)</option>
-                            <option value="1920x1080@120">1920 x 1080 @ 120Hz</option>
-                            <option value="1920x1080@75">1920 x 1080 @ 75Hz</option>
-                            <option value="1600x900@144">1600 x 900 @ 144Hz</option>
-                          </select>
-                        </div>
-
-                        <!-- Panel Math Intelligence -->
-                        <div class="panel-intel-tag">
-                          <span class="intel-badge">Auto Math</span>
-                          <span class="intel-text">27.2" • 81 PPI • 16:9 • sRGB IEC61966-2.1</span>
+                        <div class="dev-tab">
+                          <div class="dev-icon">🖥</div>
+                          <span>Acer KG271</span>
                         </div>
                       </div>
 
-                      <!-- Card 2: MacBook Screen (Built-in) -->
-                      <div class="display-card" id="card-2">
-                        <div class="card-header">
-                          <div class="display-info">
-                            <div class="display-icon">
-                              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <rect x="3" y="4" width="18" height="12" rx="2"></rect>
-                                <path d="M2 20h20"></path>
-                              </svg>
+                      <!-- Virtual Screens -->
+                      <div class="st-card">
+                        <h4 class="st-title">Virtual Screens</h4>
+                        <p class="st-desc">
+                          (memory). Create virtual displays to stream in a PiP window, screen recording, or mirror to physical displays for HiDPI Retina scaling.
+                        </p>
+                        <button class="st-btn">Create New Virtual Screen...</button>
+                        <span class="st-sublink">› Advanced virtual screen settings...</span>
+                      </div>
+
+                      <!-- Display Connections -->
+                      <div class="st-card">
+                        <div class="st-row">
+                          <div class="st-left">
+                            <div class="st-header-badge">
+                              <span class="pro-pill">PRO</span>
+                              <span class="st-title">Display Connections</span>
                             </div>
-                            <span class="display-name">MacBook Display</span>
-                            <span class="tag-builtin">Built-in</span>
+                            <div class="st-power-label">
+                              <span class="red-power">⏻</span>
+                              <strong>Enable connect/disconnect option for displays</strong>
+                            </div>
+                            <p class="st-desc">
+                              Disconnecting a display puts the display into sleep mode and removes it from the display layout. Connecting it restores the display.
+                            </p>
                           </div>
-                          <label class="mac-switch" title="Hardware Power Toggle">
-                            <input type="checkbox" id="power-toggle-2" checked>
+                          <label class="mac-switch">
+                            <input type="checkbox" checked>
                             <span class="mac-slider"></span>
                           </label>
                         </div>
-
-                        <!-- Brightness Slider -->
-                        <div class="slider-group">
-                          <div class="slider-label-row">
-                            <span class="label-name">
-                              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <circle cx="12" cy="12" r="5"></circle>
-                                <line x1="12" y1="1" x2="12" y2="3"></line>
-                                <line x1="12" y1="21" x2="12" y2="23"></line>
-                              </svg>
-                              Liquid Retina XDR
-                            </span>
-                            <span class="label-value" id="brightness-val-2">80%</span>
-                          </div>
-                          <input type="range" min="0" max="100" value="80" class="mac-range" id="brightness-slider-2">
-                        </div>
-
-                        <!-- Resolution Selector -->
-                        <div class="select-group">
-                          <span class="select-label">Retina Mode</span>
-                          <select id="res-select-2" class="mac-select">
-                            <option value="1512x982">1512 x 982 (Retina 2x)</option>
-                            <option value="1800x1169">1800 x 1169 (More Space)</option>
-                            <option value="3024x1964">3024 x 1964 (Native 1x)</option>
-                          </select>
-                        </div>
+                        <button class="st-btn" style="margin-top: 8px;">Connect All Displays Now</button>
                       </div>
                     </div>
                   </div>
                 </div>
 
-                <!-- VIEW 2: Full Settings App Window (Matching User's Screenshot) -->
-                <div class="settings-window-container" id="view-settings">
-                  <div class="settings-window">
-                    <!-- Titlebar -->
-                    <div class="settings-titlebar">
-                      <div class="settings-dots">
-                        <span class="dot dot-red"></span>
-                        <span class="dot dot-yellow"></span>
-                        <span class="dot dot-green"></span>
+                <!-- Right: Authentic Native Menu Bar Popover Controller -->
+                <div class="native-popover">
+                  <!-- Presets Top Row -->
+                  <div class="popover-presets">
+                    <button class="pill-btn active" data-preset="work">☀ Work & Day</button>
+                    <button class="pill-btn" data-preset="night">🌙 Ultra-Dim Night</button>
+                    <button class="pill-btn" data-preset="gaming">🎮 Gaming / Media</button>
+                  </div>
+
+                  <!-- Popover Display List -->
+                  <div class="popover-cards-list">
+                    
+                    <!-- Card 1: MacBook Display -->
+                    <div class="native-card" id="pop-card-1">
+                      <div class="card-head">
+                        <div class="head-left">
+                          <span class="icon-device">💻</span>
+                          <span class="card-name">MacBook Display</span>
+                          <span class="badge-m">M</span>
+                        </div>
+                        <div class="head-right">
+                          <label class="mac-switch">
+                            <input type="checkbox" id="power-toggle-1" checked>
+                            <span class="mac-slider"></span>
+                          </label>
+                        </div>
                       </div>
-                      <div class="settings-title">Manage Your Display Settings</div>
-                      <div style="width: 48px;"></div>
+
+                      <!-- Brightness Slider -->
+                      <div class="row-slider">
+                        <div class="row-title">
+                          <span class="row-label">Brightness (Combined)</span>
+                          <span class="row-val" id="brightness-val-1">100%</span>
+                        </div>
+                        <div class="slider-track-wrap">
+                          <span class="icon-sun">☼</span>
+                          <input type="range" min="0" max="100" value="100" class="real-slider" id="brightness-slider-1">
+                        </div>
+                      </div>
+
+                      <!-- Volume Slider -->
+                      <div class="row-slider">
+                        <div class="row-title">
+                          <span class="row-label">Volume</span>
+                          <span class="row-val" id="volume-val-1">100%</span>
+                        </div>
+                        <div class="slider-track-wrap">
+                          <span class="icon-sun">🔊</span>
+                          <input type="range" min="0" max="100" value="100" class="real-slider" id="volume-slider-1">
+                        </div>
+                      </div>
+
+                      <!-- Resolution Dropdown -->
+                      <div class="row-res">
+                        <span class="res-label">Resolution</span>
+                        <select class="native-select" id="res-select-1">
+                          <option value="1512x982">1512 x 982 ▾</option>
+                          <option value="1800x1169">1800 x 1169 ▾</option>
+                          <option value="3024x1964">3024 x 1964 ▾</option>
+                        </select>
+                      </div>
                     </div>
 
-                    <!-- Settings Body (Sidebar + Content) -->
-                    <div class="settings-content-wrapper">
-                      <!-- Left Sidebar -->
-                      <div class="settings-sidebar">
-                        <div class="sidebar-item active">
-                          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <rect x="2" y="3" width="20" height="14" rx="2"></rect>
-                            <line x1="8" y1="21" x2="16" y2="21"></line>
-                            <line x1="12" y1="17" x2="12" y2="21"></line>
-                          </svg>
-                          <span>Displays</span>
+                    <!-- Card 2: Acer KG271 C -->
+                    <div class="native-card" id="pop-card-2">
+                      <div class="card-head">
+                        <div class="head-left">
+                          <span class="icon-device">🖥</span>
+                          <span class="card-name">Acer KG271 C</span>
                         </div>
-                        <div class="sidebar-item">
-                          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <rect x="3" y="3" width="7" height="7"></rect>
-                            <rect x="14" y="3" width="7" height="7"></rect>
-                            <rect x="14" y="14" width="7" height="7"></rect>
-                            <rect x="3" y="14" width="7" height="7"></rect>
-                          </svg>
-                          <span>Groups</span>
-                        </div>
-                        <div class="sidebar-item">
-                          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <circle cx="12" cy="12" r="3"></circle>
-                            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
-                          </svg>
-                          <span>Application</span>
-                        </div>
-                        <div class="sidebar-item">
-                          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <line x1="3" y1="12" x2="21" y2="12"></line>
-                            <line x1="3" y1="6" x2="21" y2="6"></line>
-                            <line x1="3" y1="18" x2="21" y2="18"></line>
-                          </svg>
-                          <span>Menu</span>
-                        </div>
-                        <div class="sidebar-item">
-                          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <rect x="2" y="4" width="20" height="16" rx="2"></rect>
-                            <line x1="6" y1="8" x2="6.01" y2="8"></line>
-                            <line x1="10" y1="8" x2="10.01" y2="8"></line>
-                            <line x1="14" y1="8" x2="14.01" y2="8"></line>
-                            <line x1="18" y1="8" x2="18.01" y2="8"></line>
-                          </svg>
-                          <span>Keyboard</span>
-                        </div>
-                        <div class="sidebar-item">
-                          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
-                            <polyline points="2 17 12 22 22 17"></polyline>
-                            <polyline points="2 12 12 17 22 12"></polyline>
-                          </svg>
-                          <span>Presets</span>
-                        </div>
-                        <div class="sidebar-item pro-sidebar-item">
-                          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
-                          </svg>
-                          <span>Pro Features</span>
-                          <span class="check-free">✓ Free</span>
-                        </div>
-                        <div class="sidebar-item">
-                          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <circle cx="12" cy="12" r="10"></circle>
-                            <line x1="12" y1="16" x2="12" y2="12"></line>
-                            <line x1="12" y1="8" x2="12.01" y2="8"></line>
-                          </svg>
-                          <span>About</span>
-                        </div>
-
-                        <div class="sidebar-footer">
-                          <span class="footer-check">☑ Show details</span>
-                          <span class="footer-link">⚙ App Menu</span>
-                          <span class="footer-lang">🌐 English (US)</span>
+                        <div class="head-right">
+                          <label class="mac-switch">
+                            <input type="checkbox" id="power-toggle-2" checked>
+                            <span class="mac-slider"></span>
+                          </label>
                         </div>
                       </div>
 
-                      <!-- Right Main Panel -->
-                      <div class="settings-main-panel">
-                        <!-- Displays Selection Tabs -->
-                        <div class="displays-nav-row">
-                          <button class="disp-tab active">
-                            <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor">
-                              <circle cx="12" cy="12" r="10"></circle>
-                            </svg>
-                            <span>Overview</span>
-                          </button>
-                          <button class="disp-tab">
-                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                              <rect x="3" y="4" width="18" height="12" rx="2"></rect>
-                              <path d="M2 20h20"></path>
-                            </svg>
-                            <span>MacBook Disp...</span>
-                          </button>
-                          <button class="disp-tab">
-                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                              <rect x="2" y="3" width="20" height="14" rx="2"></rect>
-                            </svg>
-                            <span>Acer KG271 C</span>
-                          </button>
-                          <button class="disp-tab">
-                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                              <rect x="2" y="3" width="20" height="14" rx="2"></rect>
-                            </svg>
-                            <span>Acer KG271</span>
-                          </button>
+                      <!-- Brightness Slider -->
+                      <div class="row-slider">
+                        <div class="row-title">
+                          <span class="row-label">Brightness (Combined)</span>
+                          <span class="row-val" id="brightness-val-2">90%</span>
                         </div>
-
-                        <!-- Settings Section: Virtual Screens -->
-                        <div class="settings-section">
-                          <div class="section-heading-row">
-                            <h4 class="settings-sec-title">Virtual Screens</h4>
-                          </div>
-                          <p class="settings-sec-desc">
-                            (memory). Create virtual displays to stream in a PiP window, screen recording, or mirror to physical displays for HiDPI Retina scaling.
-                          </p>
-                          <div class="settings-btn-row">
-                            <button class="settings-action-btn">Create New Virtual Screen...</button>
-                          </div>
-                          <div class="settings-accordion">
-                            <span>› Advanced virtual screen settings...</span>
-                          </div>
-                        </div>
-
-                        <!-- Settings Section: Display Connections -->
-                        <div class="settings-section">
-                          <div class="section-heading-row">
-                            <div class="sec-title-with-badge">
-                              <span class="badge-pro-tag">PRO</span>
-                              <h4 class="settings-sec-title">Display Connections</h4>
-                            </div>
-                          </div>
-                          
-                          <div class="settings-toggle-row">
-                            <div class="toggle-text-block">
-                              <div class="power-title-line">
-                                <span class="power-icon-red">⏻</span>
-                                <strong>Enable connect/disconnect option for displays</strong>
-                              </div>
-                              <p class="settings-sec-desc">
-                                Disconnecting a display puts the display into sleep mode and removes it from the display layout. Connecting it restores the display. Disconnected displays can be reconnected with the header toggle, by turning the display on/off or closing and opening the lid for MacBook displays.
-                              </p>
-                            </div>
-                            <label class="mac-switch">
-                              <input type="checkbox" checked>
-                              <span class="mac-slider"></span>
-                            </label>
-                          </div>
-
-                          <div class="settings-btn-row" style="margin-top: 12px;">
-                            <button class="settings-action-btn">Connect All Displays Now</button>
-                          </div>
+                        <div class="slider-track-wrap">
+                          <span class="icon-sun">☼</span>
+                          <input type="range" min="0" max="100" value="90" class="real-slider" id="brightness-slider-2">
                         </div>
                       </div>
+
+                      <!-- Volume Slider -->
+                      <div class="row-slider">
+                        <div class="row-title">
+                          <span class="row-label">Volume</span>
+                          <span class="row-val" id="volume-val-2">100%</span>
+                        </div>
+                        <div class="slider-track-wrap">
+                          <span class="icon-sun">🔊</span>
+                          <input type="range" min="0" max="100" value="100" class="real-slider" id="volume-slider-2">
+                        </div>
+                      </div>
+
+                      <!-- Resolution Dropdown -->
+                      <div class="row-res">
+                        <span class="res-label">Resolution</span>
+                        <select class="native-select" id="res-select-2">
+                          <option value="1920x1080@144">1920 x 1080 @ 144Hz ▾</option>
+                          <option value="1920x1080@120">1920 x 1080 @ 120Hz ▾</option>
+                          <option value="1920x1080@75">1920 x 1080 @ 75Hz ▾</option>
+                        </select>
+                      </div>
+                    </div>
+
+                    <!-- Card 3: Acer KG271 -->
+                    <div class="native-card" id="pop-card-3">
+                      <div class="card-head">
+                        <div class="head-left">
+                          <span class="icon-device">🖥</span>
+                          <span class="card-name">Acer KG271</span>
+                        </div>
+                        <div class="head-right">
+                          <label class="mac-switch">
+                            <input type="checkbox" id="power-toggle-3" checked>
+                            <span class="mac-slider"></span>
+                          </label>
+                        </div>
+                      </div>
+
+                      <!-- Brightness Slider -->
+                      <div class="row-slider">
+                        <div class="row-title">
+                          <span class="row-label">Brightness (Combined)</span>
+                          <span class="row-val" id="brightness-val-3">85%</span>
+                        </div>
+                        <div class="slider-track-wrap">
+                          <span class="icon-sun">☼</span>
+                          <input type="range" min="0" max="100" value="85" class="real-slider" id="brightness-slider-3">
+                        </div>
+                      </div>
+
+                      <!-- Volume Slider -->
+                      <div class="row-slider">
+                        <div class="row-title">
+                          <span class="row-label">Volume</span>
+                          <span class="row-val" id="volume-val-3">100%</span>
+                        </div>
+                        <div class="slider-track-wrap">
+                          <span class="icon-sun">🔊</span>
+                          <input type="range" min="0" max="100" value="100" class="real-slider" id="volume-slider-3">
+                        </div>
+                      </div>
+
+                      <!-- Resolution Dropdown -->
+                      <div class="row-res">
+                        <span class="res-label">Resolution</span>
+                        <select class="native-select" id="res-select-3">
+                          <option value="1920x1080@144">1920 x 1080 @ 144Hz ▾</option>
+                          <option value="1920x1080@120">1920 x 1080 @ 120Hz ▾</option>
+                        </select>
+                      </div>
+                    </div>
+
+                  </div>
+
+                  <!-- Popover Footer -->
+                  <div class="popover-footer">
+                    <div class="footer-badge-pro">
+                      <span class="pro-check">✔</span>
+                      <span>Manage Your Display Pro</span>
+                    </div>
+                    <div class="footer-icons">
+                      <span class="icon-gear">⚙</span>
+                      <span class="icon-power">⏻</span>
                     </div>
                   </div>
                 </div>

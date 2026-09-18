@@ -2,7 +2,7 @@
 import { createPrism } from './prism.js';
 
 document.addEventListener('DOMContentLoaded', () => {
-  // 1. Initialize React Bits Prism Component with Refined Non-Zoomed, Silky Smooth Settings
+  // 1. Initialize React Bits Prism Component (Subtle ambient glow)
   const prismContainer = document.getElementById('prism-canvas-container');
   if (prismContainer) {
     createPrism(prismContainer, {
@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
       timeScale: 0.35,
       height: 3.5,
       baseWidth: 5.5,
-      scale: 1.55,
+      scale: 1.5,
       hueShift: 0,
       colorFrequency: 1.0,
       noise: 0.02,
@@ -22,118 +22,66 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // 2. View Switcher (Popover View vs Settings Window View)
-  const btnViewPopover = document.getElementById('btn-view-popover');
-  const btnViewSettings = document.getElementById('btn-view-settings');
-  const viewPopover = document.getElementById('view-popover');
-  const viewSettings = document.getElementById('view-settings');
-  const menubarAppBtn = document.getElementById('menubar-app-btn');
-
-  const showPopover = () => {
-    if (btnViewPopover) btnViewPopover.classList.add('active');
-    if (btnViewSettings) btnViewSettings.classList.remove('active');
-    if (viewPopover) viewPopover.classList.add('active');
-    if (viewSettings) viewSettings.classList.remove('active');
-  };
-
-  const showSettings = () => {
-    if (btnViewPopover) btnViewPopover.classList.remove('active');
-    if (btnViewSettings) btnViewSettings.classList.add('active');
-    if (viewPopover) viewPopover.classList.remove('active');
-    if (viewSettings) viewSettings.classList.add('active');
-  };
-
-  if (btnViewPopover) btnViewPopover.addEventListener('click', showPopover);
-  if (btnViewSettings) btnViewSettings.addEventListener('click', showSettings);
-  if (menubarAppBtn) {
-    menubarAppBtn.addEventListener('click', () => {
-      if (viewPopover && viewPopover.classList.contains('active')) {
-        showSettings();
-      } else {
-        showPopover();
-      }
-    });
-  }
-
-  // 3. Settings Window Sidebar & Display Tabs Interaction
-  const sidebarItems = document.querySelectorAll('.sidebar-item');
-  sidebarItems.forEach(item => {
-    item.addEventListener('click', () => {
-      sidebarItems.forEach(i => i.classList.remove('active'));
-      item.classList.add('active');
-    });
-  });
-
-  const dispTabs = document.querySelectorAll('.disp-tab');
-  dispTabs.forEach(tab => {
-    tab.addEventListener('click', () => {
-      dispTabs.forEach(t => t.classList.remove('active'));
-      tab.classList.add('active');
-    });
-  });
-
-  // 4. Live Clock in macOS Menu Bar
+  // 2. Live macOS Menu Bar Clock
   const clockEl = document.getElementById('sim-clock');
   const updateClock = () => {
     if (!clockEl) return;
     const now = new Date();
     const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
     const day = days[now.getDay()];
+    const date = now.getDate();
+    const month = months[now.getMonth()];
     let hours = now.getHours();
     const minutes = now.getMinutes().toString().padStart(2, '0');
     const ampm = hours >= 12 ? 'PM' : 'AM';
     hours = hours % 12 || 12;
-    clockEl.textContent = `${day} ${hours}:${minutes} ${ampm}`;
+    clockEl.textContent = `${day} ${date} ${month} ${hours}:${minutes} ${ampm}`;
   };
   updateClock();
   setInterval(updateClock, 30000);
 
-  // 5. Brightness & Volume Sliders
-  const bSlider1 = document.getElementById('brightness-slider-1');
-  const bVal1 = document.getElementById('brightness-val-1');
-  if (bSlider1 && bVal1) {
-    bSlider1.addEventListener('input', (e) => {
-      bVal1.textContent = `${e.target.value}%`;
-    });
-  }
+  // 3. Brightness Sliders for 3 Displays
+  const wireSlider = (sliderId, valId) => {
+    const slider = document.getElementById(sliderId);
+    const val = document.getElementById(valId);
+    if (slider && val) {
+      slider.addEventListener('input', (e) => {
+        val.textContent = `${e.target.value}%`;
+      });
+    }
+  };
+  wireSlider('brightness-slider-1', 'brightness-val-1');
+  wireSlider('brightness-slider-2', 'brightness-val-2');
+  wireSlider('brightness-slider-3', 'brightness-val-3');
+  wireSlider('volume-slider-1', 'volume-val-1');
+  wireSlider('volume-slider-2', 'volume-val-2');
+  wireSlider('volume-slider-3', 'volume-val-3');
 
-  const bSlider2 = document.getElementById('brightness-slider-2');
-  const bVal2 = document.getElementById('brightness-val-2');
-  if (bSlider2 && bVal2) {
-    bSlider2.addEventListener('input', (e) => {
-      bVal2.textContent = `${e.target.value}%`;
-    });
-  }
+  // 4. Power Toggles for 3 Displays
+  const wirePower = (toggleId, cardId) => {
+    const toggle = document.getElementById(toggleId);
+    const card = document.getElementById(cardId);
+    if (toggle && card) {
+      toggle.addEventListener('change', (e) => {
+        card.style.opacity = e.target.checked ? '1.0' : '0.35';
+        card.style.filter = e.target.checked ? 'none' : 'grayscale(80%)';
+      });
+    }
+  };
+  wirePower('power-toggle-1', 'pop-card-1');
+  wirePower('power-toggle-2', 'pop-card-2');
+  wirePower('power-toggle-3', 'pop-card-3');
 
-  const vSlider1 = document.getElementById('volume-slider-1');
-  const vVal1 = document.getElementById('volume-val-1');
-  if (vSlider1 && vVal1) {
-    vSlider1.addEventListener('input', (e) => {
-      vVal1.textContent = `${e.target.value}%`;
-    });
-  }
+  // 5. Presets Switcher
+  const presetButtons = document.querySelectorAll('.pill-btn');
+  const b1 = document.getElementById('brightness-slider-1');
+  const b2 = document.getElementById('brightness-slider-2');
+  const b3 = document.getElementById('brightness-slider-3');
+  const bv1 = document.getElementById('brightness-val-1');
+  const bv2 = document.getElementById('brightness-val-2');
+  const bv3 = document.getElementById('brightness-val-3');
 
-  // 6. Per-Display Power Toggles (SkyLight Zero-LUT Blackout Simulator)
-  const powerToggle1 = document.getElementById('power-toggle-1');
-  const card1 = document.getElementById('card-1');
-  if (powerToggle1 && card1) {
-    powerToggle1.addEventListener('change', (e) => {
-      card1.style.opacity = e.target.checked ? '1.0' : '0.35';
-      card1.style.filter = e.target.checked ? 'none' : 'grayscale(80%)';
-    });
-  }
-
-  const powerToggle2 = document.getElementById('power-toggle-2');
-  const card2 = document.getElementById('card-2');
-  if (powerToggle2 && card2) {
-    powerToggle2.addEventListener('change', (e) => {
-      card2.style.opacity = e.target.checked ? '1.0' : '0.35';
-      card2.style.filter = e.target.checked ? 'none' : 'grayscale(80%)';
-    });
-  }
-
-  // 7. Presets Switcher
-  const presetButtons = document.querySelectorAll('.preset-btn');
   presetButtons.forEach(btn => {
     btn.addEventListener('click', () => {
       presetButtons.forEach(b => b.classList.remove('active'));
@@ -141,26 +89,41 @@ document.addEventListener('DOMContentLoaded', () => {
 
       const preset = btn.getAttribute('data-preset');
       if (preset === 'work') {
-        if (bSlider1) { bSlider1.value = 100; bVal1.textContent = '100%'; }
-        if (bSlider2) { bSlider2.value = 80; bVal2.textContent = '80%'; }
-        if (vSlider1) { vSlider1.value = 80; vVal1.textContent = '80%'; }
-        if (powerToggle1) { powerToggle1.checked = true; card1.style.opacity = '1.0'; card1.style.filter = 'none'; }
-        if (powerToggle2) { powerToggle2.checked = true; card2.style.opacity = '1.0'; card2.style.filter = 'none'; }
+        if (b1) { b1.value = 100; if (bv1) bv1.textContent = '100%'; }
+        if (b2) { b2.value = 90; if (bv2) bv2.textContent = '90%'; }
+        if (b3) { b3.value = 85; if (bv3) bv3.textContent = '85%'; }
       } else if (preset === 'night') {
-        if (bSlider1) { bSlider1.value = 15; bVal1.textContent = '15%'; }
-        if (bSlider2) { bSlider2.value = 10; bVal2.textContent = '10%'; }
-        if (vSlider1) { vSlider1.value = 30; vVal1.textContent = '30%'; }
+        if (b1) { b1.value = 20; if (bv1) bv1.textContent = '20%'; }
+        if (b2) { b2.value = 15; if (bv2) bv2.textContent = '15%'; }
+        if (b3) { b3.value = 10; if (bv3) bv3.textContent = '10%'; }
       } else if (preset === 'gaming') {
-        if (bSlider1) { bSlider1.value = 100; bVal1.textContent = '100%'; }
-        const resSelect1 = document.getElementById('res-select-1');
-        if (resSelect1) resSelect1.value = '1920x1080@144';
-      } else if (preset === 'focus') {
-        if (powerToggle2) { powerToggle2.checked = false; card2.style.opacity = '0.35'; card2.style.filter = 'grayscale(80%)'; }
+        if (b1) { b1.value = 100; if (bv1) bv1.textContent = '100%'; }
+        if (b2) { b2.value = 100; if (bv2) bv2.textContent = '100%'; }
+        if (b3) { b3.value = 100; if (bv3) bv3.textContent = '100%'; }
+        const r2 = document.getElementById('res-select-2');
+        if (r2) r2.value = '1920x1080@144';
       }
     });
   });
 
-  // 8. Platform Installation Tabs
+  // 6. Settings Sidebar & Device Tabs
+  const sbBtns = document.querySelectorAll('.sb-btn');
+  sbBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      sbBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+    });
+  });
+
+  const devTabs = document.querySelectorAll('.dev-tab');
+  devTabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      devTabs.forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+    });
+  });
+
+  // 7. Platform Installation Tabs
   const tabButtons = document.querySelectorAll('.tab-pill');
   const tabContents = document.querySelectorAll('.terminal-card');
 
