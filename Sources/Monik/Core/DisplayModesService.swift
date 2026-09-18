@@ -21,35 +21,60 @@ public class DisplayModesService {
         CGSGetNumberOfDisplayModes(displayID, &numberOfModes)
         CGSGetCurrentDisplayMode(displayID, &currentModeNum)
         
-        guard numberOfModes > 0 else { return items }
-        
-        var modeDesc = CGSDisplayMode()
-        let modeLength = Int32(MemoryLayout<CGSDisplayMode>.size)
-        
         var seenResolutions = Set<String>()
         
-        for i in 0..<numberOfModes {
-            CGSGetDisplayModeDescriptionOfLength(displayID, i, &modeDesc, modeLength)
+        if numberOfModes > 0 {
+            var modeDesc = CGSDisplayMode()
+            let modeLength = Int32(MemoryLayout<CGSDisplayMode>.size)
             
-            let isHiDPI = modeDesc.density > 1.0
-            let refresh = Double(modeDesc.freq)
-            let key = "\(modeDesc.width)x\(modeDesc.height)@\(Int(refresh))-\(isHiDPI)"
-            
-            if !seenResolutions.contains(key) {
-                seenResolutions.insert(key)
-                let item = DisplayModeItem(
-                    modeNumber: Int32(modeDesc.modeNumber),
-                    width: modeDesc.width,
-                    height: modeDesc.height,
-                    refreshRate: refresh,
-                    isHiDPI: isHiDPI,
-                    isActive: (i == currentModeNum)
-                )
-                items.append(item)
+            for i in 0..<numberOfModes {
+                CGSGetDisplayModeDescriptionOfLength(displayID, i, &modeDesc, modeLength)
+                
+                let isHiDPI = modeDesc.density > 1.0
+                let refresh = Double(modeDesc.freq)
+                let key = "\(modeDesc.width)x\(modeDesc.height)@\(Int(refresh))-\(isHiDPI)"
+                
+                if !seenResolutions.contains(key) {
+                    seenResolutions.insert(key)
+                    let item = DisplayModeItem(
+                        modeNumber: Int32(modeDesc.modeNumber),
+                        width: modeDesc.width,
+                        height: modeDesc.height,
+                        refreshRate: refresh,
+                        isHiDPI: isHiDPI,
+                        isActive: (i == currentModeNum)
+                    )
+                    items.append(item)
+                }
             }
         }
         
-        // Sort: Active first, then by resolution descending
+        // Fallback to CoreGraphics modes if SkyLight returned 0
+        if items.isEmpty {
+            let opt = [kCGDisplayShowDuplicateLowResolutionModes: kCFBooleanTrue] as CFDictionary
+            if let cgModes = CGDisplayCopyAllDisplayModes(displayID, opt) as? [CGDisplayMode] {
+                for (idx, m) in cgModes.enumerated() {
+                    let w = UInt32(m.width)
+                    let h = UInt32(m.height)
+                    let refresh = m.refreshRate
+                    let isHiDPI = (m.pixelWidth > m.width || m.pixelHeight > m.height)
+                    let key = "\(w)x\(h)@\(Int(refresh))-\(isHiDPI)"
+                    if !seenResolutions.contains(key) {
+                        seenResolutions.insert(key)
+                        items.append(DisplayModeItem(
+                            modeNumber: Int32(idx),
+                            width: w,
+                            height: h,
+                            refreshRate: refresh,
+                            isHiDPI: isHiDPI,
+                            isActive: (w == CGDisplayPixelsWide(displayID) && h == CGDisplayPixelsHigh(displayID))
+                        ))
+                    }
+                }
+            }
+        }
+        
+        // Sort: Active first, then by resolution width descending, then refresh rate descending
         return items.sorted {
             if $0.isActive != $1.isActive {
                 return $0.isActive

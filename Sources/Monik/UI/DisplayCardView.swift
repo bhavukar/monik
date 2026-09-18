@@ -139,44 +139,70 @@ struct DisplayCardView: View {
             .padding(.horizontal, 10)
             .opacity(display.isPoweredOn ? 1.0 : 0.4)
             
-            // Resolution
-            VStack(alignment: .leading, spacing: 3) {
-                HStack {
-                    Text("Resolution")
-                        .font(.system(size: 11))
-                        .foregroundColor(.white.opacity(0.8))
-                    Spacer()
-                    Text(display.currentResolution)
-                        .font(.system(size: 11, design: .monospaced))
-                        .foregroundColor(.white.opacity(0.9))
-                }
-                HStack(spacing: 8) {
-                    Image(systemName: "aspectratio")
-                        .font(.system(size: 12))
-                        .foregroundColor(.white.opacity(0.8))
-                    
-                    // Quick slider between top available resolutions
-                    Slider(
-                        value: Binding(
-                            get: {
-                                if let idx = display.availableModes.firstIndex(where: { $0.isActive }) {
-                                    return Double(idx)
-                                }
-                                return 0.0
-                            },
-                            set: { newIdx in
-                                let intIdx = Int(round(newIdx))
-                                if intIdx >= 0 && intIdx < display.availableModes.count {
-                                    displayManager.setDisplayMode(for: display, mode: display.availableModes[intIdx])
+            // Resolution Picker
+            HStack(spacing: 8) {
+                Image(systemName: "aspectratio")
+                    .font(.system(size: 12))
+                    .foregroundColor(.white.opacity(0.8))
+                    .frame(width: 16)
+                
+                Text("Resolution")
+                    .font(.system(size: 11))
+                    .foregroundColor(.white.opacity(0.8))
+                
+                Spacer()
+                
+                Menu {
+                    if display.availableModes.isEmpty {
+                        Text("No resolutions available")
+                    } else {
+                        ForEach(display.availableModes) { mode in
+                            Button(action: {
+                                displayManager.setDisplayMode(for: display, mode: mode)
+                            }) {
+                                HStack {
+                                    if mode.isActive {
+                                        Image(systemName: "checkmark")
+                                    }
+                                    Text(mode.descriptionString)
                                 }
                             }
-                        ),
-                        in: 0.0...Double(max(1, display.availableModes.count - 1)),
-                        step: 1.0
-                    )
-                    .tint(.white)
-                    .disabled(!display.isPoweredOn)
+                        }
+                    }
+                } label: {
+                    HStack(spacing: 4) {
+                        Text(display.currentResolution)
+                            .font(.system(size: 11, weight: .semibold, design: .monospaced))
+                            .foregroundColor(.white)
+                            .lineLimit(1)
+                        
+                        if display.currentRefreshRate > 0 {
+                            Text("@ \(Int(round(display.currentRefreshRate)))Hz")
+                                .font(.system(size: 10, design: .monospaced))
+                                .foregroundColor(.white.opacity(0.7))
+                        }
+                        
+                        if display.isHiDPI {
+                            Text("HiDPI")
+                                .font(.system(size: 8, weight: .bold))
+                                .padding(.horizontal, 4)
+                                .padding(.vertical, 1)
+                                .background(Color.blue.opacity(0.4))
+                                .cornerRadius(3)
+                                .foregroundColor(.white)
+                        }
+                        
+                        Image(systemName: "chevron.up.chevron.down")
+                            .font(.system(size: 9))
+                            .foregroundColor(.white.opacity(0.6))
+                    }
+                    .padding(.horizontal, 8)
+                    .padding(.vertical, 4)
+                    .background(Color.white.opacity(0.12))
+                    .cornerRadius(6)
                 }
+                .menuStyle(BorderlessButtonMenuStyle())
+                .disabled(!display.isPoweredOn)
             }
             .padding(.horizontal, 10)
             .opacity(display.isPoweredOn ? 1.0 : 0.4)
@@ -428,35 +454,44 @@ struct DisplayCardView: View {
     
     // Display Modes Submenu
     private var displayModesSubmenu: some View {
-        ForEach(display.availableModes.prefix(8), id: \.id) { mode in
-            HStack {
-                Text(mode.descriptionString)
-                    .font(.system(size: 10, design: .monospaced))
-                    .foregroundColor(.white.opacity(0.85))
-                Spacer()
-                if mode.isActive {
-                    Image(systemName: "checkmark")
-                        .font(.system(size: 9, weight: .bold))
-                        .foregroundColor(.blue)
+        ScrollView(.vertical, showsIndicators: true) {
+            VStack(spacing: 2) {
+                ForEach(display.availableModes, id: \.id) { mode in
+                    HStack {
+                        Text(mode.descriptionString)
+                            .font(.system(size: 10, design: .monospaced))
+                            .foregroundColor(.white.opacity(0.85))
+                        Spacer()
+                        if mode.isActive {
+                            Image(systemName: "checkmark")
+                                .font(.system(size: 9, weight: .bold))
+                                .foregroundColor(.blue)
+                        }
+                    }
+                    .padding(.vertical, 4)
+                    .padding(.horizontal, 4)
+                    .contentShape(Rectangle())
+                    .onTapGesture {
+                        displayManager.setDisplayMode(for: display, mode: mode)
+                    }
                 }
             }
-            .padding(.vertical, 3)
-            .contentShape(Rectangle())
-            .onTapGesture {
-                displayManager.setDisplayMode(for: display, mode: mode)
-            }
         }
+        .frame(maxHeight: 220)
     }
     
     // Refresh Rate Submenu
     private var refreshRateSubmenu: some View {
-        ForEach([60.0, 75.0, 120.0, 144.0], id: \.self) { rate in
+        let rates: [Double] = Array(Set(display.availableModes.map { $0.refreshRate }.filter { $0 > 0 })).sorted(by: >)
+        let displayRates = rates.isEmpty ? [60.0, 75.0, 120.0, 144.0] : rates
+        
+        return ForEach(displayRates, id: \.self) { rate in
             HStack {
-                Text("\(Int(rate)) Hz")
-                    .font(.system(size: 11))
+                Text("\(Int(round(rate))) Hz")
+                    .font(.system(size: 10, design: .monospaced))
                     .foregroundColor(.white.opacity(0.85))
                 Spacer()
-                if Int(display.currentRefreshRate) == Int(rate) {
+                if Int(round(display.currentRefreshRate)) == Int(round(rate)) {
                     Image(systemName: "checkmark")
                         .font(.system(size: 9, weight: .bold))
                         .foregroundColor(.blue)
@@ -465,7 +500,12 @@ struct DisplayCardView: View {
             .padding(.vertical, 3)
             .contentShape(Rectangle())
             .onTapGesture {
-                if let matchingMode = display.availableModes.first(where: { Int($0.refreshRate) == Int(rate) }) {
+                if let active = display.availableModes.first(where: { $0.isActive }),
+                   let matchingMode = display.availableModes.first(where: {
+                       $0.width == active.width &&
+                       $0.height == active.height &&
+                       Int(round($0.refreshRate)) == Int(round(rate))
+                   }) {
                     displayManager.setDisplayMode(for: display, mode: matchingMode)
                 }
             }
