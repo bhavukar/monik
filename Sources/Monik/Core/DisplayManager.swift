@@ -59,18 +59,17 @@ public class DisplayManager: ObservableObject {
         }
         
         var updatedList: [DisplayInfo] = []
-        let sortedIDs = Array(discoveredIDs).sorted { id1, id2 in
-            // Place main display first, then other online displays, then built-in, then others
-            let isMain1 = CGDisplayIsMain(id1) != 0
-            let isMain2 = CGDisplayIsMain(id2) != 0
-            if isMain1 != isMain2 { return isMain1 }
-            let isOnline1 = CGDisplayIsOnline(id1) != 0
-            let isOnline2 = CGDisplayIsOnline(id2) != 0
-            if isOnline1 != isOnline2 { return isOnline1 }
-            return id1 < id2
-        }
         
-        for (index, displayID) in sortedIDs.enumerated() {
+        // Stable, persistent ordering: preserve the exact current UI display order so cards never jump around
+        var existingOrder: [CGDirectDisplayID] = self.displays.map { $0.id }
+        for id in Array(discoveredIDs).sorted(by: { $0 < $1 }) {
+            if !existingOrder.contains(id) {
+                existingOrder.append(id)
+            }
+        }
+        let stableOrderedIDs = existingOrder.filter { discoveredIDs.contains($0) }
+        
+        for (index, displayID) in stableOrderedIDs.enumerated() {
             let isBuiltIn = CGDisplayIsBuiltin(displayID) != 0
             let isMain = CGDisplayIsMain(displayID) != 0
             let isMirrored = CGDisplayIsInMirrorSet(displayID) != 0
@@ -83,8 +82,6 @@ public class DisplayManager: ObservableObject {
                 badge = "M"
             } else if isBuiltIn {
                 badge = "Built-in"
-            } else if index == 0 || index == 1 {
-                badge = "C"
             }
             
             let display = DisplayInfo(
