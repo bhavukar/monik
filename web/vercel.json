@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "name": "manage-your-display",
+  "cleanUrls": true,
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "/$1"
+    }
+  ]
+}

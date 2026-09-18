@@ -224,6 +224,66 @@ struct DisplayCardView: View {
             // Expanded Settings Menu
             if display.isExpanded {
                 VStack(spacing: 1) {
+                    // Smart Display Tuning & Profile Recommendation Card
+                    let rec = DisplayIntelligenceService.shared.analyzeDisplay(display: display)
+                    VStack(alignment: .leading, spacing: 6) {
+                        HStack {
+                            Image(systemName: "sparkles")
+                                .font(.system(size: 11, weight: .bold))
+                                .foregroundColor(.yellow)
+                            Text("Smart Panel Intelligence")
+                                .font(.system(size: 11, weight: .semibold))
+                                .foregroundColor(.white.opacity(0.9))
+                            Spacer()
+                            Text(rec.panelCategory)
+                                .font(.system(size: 9, weight: .medium))
+                                .padding(.horizontal, 5)
+                                .padding(.vertical, 2)
+                                .background(Color.blue.opacity(0.3))
+                                .cornerRadius(4)
+                                .foregroundColor(.white.opacity(0.9))
+                        }
+                        
+                        Text("Detected: \(String(format: "%.1f", rec.diagonalInches))\" • \(Int(round(rec.ppi))) PPI • \(rec.aspectRatioString)")
+                            .font(.system(size: 10, design: .monospaced))
+                            .foregroundColor(.white.opacity(0.6))
+                        
+                        HStack(spacing: 6) {
+                            VStack(alignment: .leading, spacing: 1) {
+                                Text("Suggested Profile:")
+                                    .font(.system(size: 9))
+                                    .foregroundColor(.white.opacity(0.5))
+                                Text(rec.optimalColorProfile)
+                                    .font(.system(size: 10, weight: .bold))
+                                    .foregroundColor(.white.opacity(0.95))
+                            }
+                            
+                            Spacer()
+                            
+                            Button(action: {
+                                DisplayIntelligenceService.shared.applyRecommendation(display: display, recommendation: rec)
+                            }) {
+                                HStack(spacing: 4) {
+                                    Image(systemName: "wand.and.stars")
+                                        .font(.system(size: 9))
+                                    Text("Apply Optimal")
+                                        .font(.system(size: 10, weight: .semibold))
+                                }
+                                .padding(.horizontal, 8)
+                                .padding(.vertical, 4)
+                                .background(Color.blue)
+                                .cornerRadius(5)
+                                .foregroundColor(.white)
+                            }
+                            .buttonStyle(.plain)
+                        }
+                    }
+                    .padding(8)
+                    .background(Color.white.opacity(0.06))
+                    .cornerRadius(8)
+                    .padding(.horizontal, 6)
+                    .padding(.bottom, 4)
+                    
                     submenuRow(
                         icon: "rectangle.3.group",
                         title: "Display Mode",

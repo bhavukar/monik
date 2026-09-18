@@ -1,81 +1,89 @@
-# Manage Your Display - The Ultimate Multi-Platform Display Controller
+<div align="center">
 
-[![Platform macOS](https://img.shields.io/badge/platform-macOS-black?style=for-the-badge&logo=apple)](https://apple.com/)
-[![Platform Linux](https://img.shields.io/badge/platform-Linux-orange?style=for-the-badge&logo=linux)](https://kernel.org/)
-[![Platform Windows](https://img.shields.io/badge/platform-windows-brightgreen?style=for-the-badge&logo=windows)](https://www.microsoft.com/windows/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](https://opensource.org/licenses/MIT)
+# 🖥️ Manage Your Display
 
-**Manage Your Display** is a complete, open-source display hardware controller, virtual screen manager, and digital KVM utility for **macOS**, **Linux**, and **Windows**.
+### **The Ultimate Open-Source Hardware Display Controller**
+#### *A 100% Free, Full-Featured Alternative to BetterDisplay Pro for macOS, Linux, and Windows.*
 
-It runs seamlessly from your **menu bar / system tray** across all platforms with instant hardware controls, customizable hotkeys, presets, and auto-start on boot.
-
----
-
-## 🍏 macOS Features
-
-* **Menu Bar Popover (Frosted Dark Vibrancy):**
-  * Instant access to all connected & built-in displays (`MacBook Display`, `Acer KG271 C`, `Acer KG271`).
-  * Real-time sliders for **Brightness (Combined)**, **Volume**, and **Resolution**.
-* **Hardware DDC/CI & Power Control:**
-  * Direct DDC/CI hardware brightness (`0x10`), contrast (`0x12`), and speaker volume (`0x62`).
-  * Soft-disconnect and power state switching (`0xD6`) per display.
-  * Clamshell & built-in MacBook display backlight control down to 0%.
-* **Launch on Startup (Login Items):**
-  * Native `SMAppService` background service toggle in Settings.
-* **Customizable Global Hotkeys & OSD HUD:**
-  * Assign hotkeys to toggle display power, cycle resolutions, switch inputs, or adjust brightness/volume.
-  * Floating translucent OSD HUD overlay providing live visual feedback on keypress.
-* **Display Presets & Group Sync:**
-  * 1-Click presets: "Work & Day", "Ultra-Dim Night", "Gaming / Media", and "Single Screen Focus".
-  * Synchronize brightness, volume, and power across display groups.
-* **Virtual Screens (BetterDummy Engine):**
-  * Generate custom virtual displays (16:9, 16:10 MacBook ratio, 21:9 UWQHD, 32:9 Super Ultrawide, 4:3, 1:1) up to 16K.
-* **Multi-Tab Settings Window:**
-  * Displays overview, per-display register inspectors, Display Groups, Application settings, Menu layout customization, Keyboard shortcuts editor, and System specs.
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
+[![macOS](https://img.shields.io/badge/macOS-Apple%20Silicon%20%26%20Intel-black?logo=apple)](https://github.com/bhavukarora/monik)
+[![Linux](https://img.shields.io/badge/Linux-X11%20%26%20Wayland-orange?logo=linux)](https://github.com/bhavukarora/monik)
+[![Windows](https://img.shields.io/badge/Windows-10%20%26%2011-0078D6?logo=windows)](https://github.com/bhavukarora/monik)
+[![Open Source](https://img.shields.io/badge/Free%20%26%20Open%20Source-Forever-emerald)](https://github.com/bhavukarora/monik)
 
 ---
 
-## 🐧 Linux Features (System Tray & CLI)
+</div>
 
-* **System Tray App (`linux/manage_your_display_gui.py`):**
-  * System tray icon with dark popover window matching the macOS design.
-  * Real-time sliders for Brightness, Volume, and Input Switching.
-  * Multi-monitor cards with ON/OFF power toggles.
-* **Hardware DDC/CI via `ddcutil`:**
-  * Adjust hardware brightness, volume, input sources (HDMI/DisplayPort/USB-C), and power states.
-* **Multi-Display Resolution & Refresh Rate Management:**
-  * X11 and Wayland support via `xrandr` / `wlr-randr`.
-* **Laptop Backlight Control:**
-  * Seamless `/sys/class/backlight` hardware brightness adjustments.
-* **CLI & Scripting (`displaycraft` / `manage-your-display`):**
-  * Full CLI suite with `detect`, `set-brightness`, `set-volume`, `set-power`, `set-input`.
+## 🌟 Overview
+
+**Manage Your Display** is a fast, lightweight, and completely open-source hardware display controller. It gives you full low-level control over every connected external monitor and laptop screen directly from your **Menu Bar (macOS)** and **System Tray (Linux & Windows)**.
+
+Control hardware brightness, contrast, volume, input sources, custom resolutions, refresh rates, display scaling, underscan/overscan, and discrete screen power—**without $20 paywalls or subscription restrictions**.
 
 ---
 
-## 🪟 Windows Features (System Tray)
+## ✨ Key Features
 
-* **System Tray Integration:**
-  * Background tray icon with click-to-open controller window.
-  * DDC/CI communication via Windows DXVA2 APIs (`GetVCPFeatureAndVCPFeatureReply`, `SetVCPFeature`).
-  * Multi-monitor brightness, volume, input source switching, and refresh rate adjustments.
+### 🍏 macOS (Native Swift & Apple Silicon DDC Engine)
+* **Frosted Glass Menu Bar Popover**: Instant access to all monitors with smooth macOS vibrancy.
+* **Apple Silicon & Intel DDC/CI**: Direct hardware I2C control for brightness (`0x10`), contrast (`0x12`), audio volume (`0x62`), mute (`0x8D`), input sources (`0x60`), and DPMS power (`0xD6`).
+* **Native Resolution Picker**: Dropdown resolution switcher fetching all hardware modes (HiDPI, Retina pixel doubling, up to 144Hz+).
+* **True Display Power & Clamshell Isolation**: Turn individual displays ON/OFF cleanly using SkyLight window-server disconnection (`CGSConfigureDisplayEnabled`), hardware DPMS power off, and zero-gamma LUT blackout (`CGSetDisplayTransferByTable`).
+* **Underscan & Overscan Sizing**: Adjustable 0%–25% underscan padding and hardware VCP geometry scaling to eliminate TV and projector edge cropping.
+* **Smart Panel Intelligence**: Automated calculation of physical diagonal size, pixel density (PPI), aspect ratio, and optimal color profiles (Display P3 vs sRGB IEC61966-2.1) with 1-click calibration.
+* **Global Hotkeys & Translucent Bezel OSD**: Native on-screen display HUD overlay on keypress with customizable shortcuts.
+* **Multi-Monitor Presets & Group Sync**: 1-Click modes (*Work & Day*, *Ultra-Dim Night*, *Gaming 144Hz*, *Single Screen Focus*) and grouped monitor sync.
+* **Launch on Startup**: Native macOS login item registration via `SMAppService`.
+
+### 🐧 Linux (PyQt6 System Tray & CLI)
+* **System Tray GUI**: Dark-mode popover matching the macOS interface.
+* **Hardware DDC via `ddcutil`**: Real-time control of I2C bus monitors and `/sys/class/backlight` laptop screens.
+* **Display Server Support**: X11 and Wayland resolution and refresh rate switching.
+* **Full CLI Suite (`displaycraft`)**: Scriptable CLI for automated terminal workflows.
+
+### 🪟 Windows (Flutter & DXVA2)
+* **System Tray Integration**: Background tray menu with click-to-open controller.
+* **Hardware DXVA2 DDC/CI**: Direct communication with Windows monitor APIs (`SetVCPFeature`, `GetVCPFeatureAndVCPFeatureReply`).
 
 ---
 
-## 🚀 Building & Running
+## 📊 Feature Comparison
 
-### macOS:
+| Feature | **Manage Your Display** | **BetterDisplay Pro** | **MonitorControl** | **Lunar Pro** |
+| :--- | :---: | :---: | :---: | :---: |
+| **Price** | 🟢 **100% Free (MIT)** | 🔴 **$20.00 Paywall** | 🟢 Free | 🔴 **$23.00 Paywall** |
+| **Apple Silicon DDC Brightness & Volume** | ✅ | ✅ | ✅ | ✅ |
+| **Native Resolution Dropdown & HiDPI** | ✅ | ✅ | ❌ | ❌ |
+| **Discrete Screen Power ON/OFF (SkyLight)** | ✅ | ✅ | ❌ | ✅ |
+| **Underscan & Overscan Sizing** | ✅ | ✅ | ❌ | ❌ |
+| **Smart Panel Intelligence & PPI Math** | ✅ | ❌ | ❌ | ❌ |
+| **Cross-Platform (macOS, Linux, Windows)** | ✅ | ❌ (Mac Only) | ❌ (Mac Only) | ❌ (Mac Only) |
+| **Global Hotkeys & Floating OSD HUD** | ✅ | ✅ | ✅ | ✅ |
+| **Multi-Monitor Presets & Group Sync** | ✅ | ✅ | ❌ | ✅ |
+
+---
+
+## 🚀 Installation & Quick Start
+
+### 🍏 macOS
+
 ```bash
-# Direct run
-swift run
+# Clone the repository
+git clone https://github.com/bhavukarora/monik.git
+cd monik
 
-# Build .app bundle
+# Build the native .app bundle
 ./scripts/build_app.sh
+
+# Launch Manage Your Display
 open "build/Manage Your Display.app"
 ```
 
-### Linux:
+### 🐧 Linux
+
 ```bash
-# Install dependencies & configure I2C
+# Install dependencies & configure I2C permissions
 chmod +x linux/install.sh
 ./linux/install.sh
 
@@ -86,18 +94,48 @@ python3 linux/manage_your_display_gui.py
 displaycraft detect
 ```
 
-### Windows:
+### 🪟 Windows
+
 ```bash
+# Run Windows Flutter app
 flutter run -d windows
 ```
 
 ---
 
-## 📝 License
+## 🌐 Animated Landing Page (Vercel Ready)
 
-Licensed under the **MIT License**. Free and open-source forever.
+The project includes an interactive animated landing page in [`web/`](./web) featuring a live simulator widget.
+
+### Local Preview:
+```bash
+cd web
+npx serve .
+```
+
+### Deploy to Vercel:
+```bash
+# Inside web/ directory
+vercel --prod
+```
 
 ---
 
-Thank you for using **Manage Your Display**!
+## ⌨️ Default Keyboard Shortcuts
 
+| Action | Shortcut |
+| :--- | :--- |
+| **Increase Brightness** | `Cmd + Opt + ↑` |
+| **Decrease Brightness** | `Cmd + Opt + ↓` |
+| **Increase Volume** | `Cmd + Opt + →` |
+| **Decrease Volume** | `Cmd + Opt + ←` |
+| **Toggle Display Power** | `Cmd + Opt + Ctrl + P` |
+| **Cycle Display Preset** | `Cmd + Opt + Ctrl + S` |
+
+---
+
+## 📝 License
+
+Distributed under the **MIT License**. Free for personal and commercial use forever.
+
+Contributions and pull requests are warmly welcomed!

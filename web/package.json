@@ -1,0 +1,12 @@
+{
+  "name": "manage-your-display-website",
+  "version": "2.0.0",
+  "description": "Website for Manage Your Display - Open Source Display Controller",
+  "scripts": {
+    "dev": "npx serve .",
+    "start": "npx serve ."
+  },
+  "keywords": ["betterdisplay", "ddc", "display", "monitor-control", "open-source"],
+  "author": "Manage Your Display Contributors",
+  "license": "MIT"
+}
