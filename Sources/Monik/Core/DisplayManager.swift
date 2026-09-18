@@ -75,6 +75,7 @@ public class DisplayManager: ObservableObject {
             let isMain = CGDisplayIsMain(displayID) != 0
             let isMirrored = CGDisplayIsInMirrorSet(displayID) != 0
             let isOnline = CGDisplayIsOnline(displayID) != 0
+            let isActive = CGDisplayIsActive(displayID) != 0
             let name = resolveDisplayName(displayID: displayID, isBuiltIn: isBuiltIn, index: index)
             
             var badge = ""
@@ -95,7 +96,8 @@ public class DisplayManager: ObservableObject {
                 badge: badge
             )
             
-            display.isPoweredOn = isOnline && !SoftwareDimmer.shared.isDisplayBlackedOut(displayID: displayID)
+            // True power state based on OS active/online state and software blackout
+            display.isPoweredOn = isOnline && isActive && !SoftwareDimmer.shared.isDisplayBlackedOut(displayID: displayID)
             
             // Populate modes
             let modes = DisplayModesService.shared.getAvailableModes(for: displayID)
@@ -123,14 +125,15 @@ public class DisplayManager: ObservableObject {
             updatedList.append(display)
         }
         
-        // Preserve open UI state across refreshes
+        // Preserve open UI card state across refreshes (without overwriting real power state)
         for newDisplay in updatedList {
             if let existing = self.displays.first(where: { $0.id == newDisplay.id }) {
                 newDisplay.isExpanded = existing.isExpanded
                 newDisplay.expandedSubmenu = existing.expandedSubmenu
-                newDisplay.combinedBrightness = existing.combinedBrightness
+                if existing.combinedBrightness > 0 {
+                    newDisplay.combinedBrightness = existing.combinedBrightness
+                }
                 newDisplay.volume = existing.volume
-                newDisplay.isPoweredOn = existing.isPoweredOn
             }
         }
         
@@ -205,25 +208,40 @@ public class DisplayManager: ObservableObject {
         display.isPoweredOn = powerOn
         
         if powerOn {
-            // Power ON / Connect / Wake
-            SoftwareDimmer.shared.setBlackout(displayID: display.id, isBlackout: false)
-            if display.isBuiltIn {
+            // 1. Re-enable in SkyLight / CoreGraphics / displayplacer
+            _ = DisplayModesService.shared.setDisplayEnabled(displayID: display.id, enabled: true)
+            
+            // 2. Hardware DDC power on & brightness restore
+            if !display.isBuiltIn {
+                _ = DDCService.shared.setPower(displayID: display.id, powerOn: true)
+                let targetB = display.combinedBrightness > 0.05 ? display.combinedBrightness : 0.8
+                _ = DDCService.shared.setBrightness(displayID: display.id, value: Int(round(targetB * 100)))
+            } else {
                 let targetB = display.combinedBrightness > 0.05 ? display.combinedBrightness : 0.8
                 CoreDisplay_Display_SetUserBrightness(display.id, targetB)
-            } else {
-                _ = DDCService.shared.setPower(displayID: display.id, powerOn: true)
-                let targetB = display.combinedBrightness > 0.05 ? display.combinedBrightness : 0.75
-                _ = DDCService.shared.setBrightness(displayID: display.id, value: Int(round(targetB * 100)))
             }
+            
+            // 3. Remove software blackout & restore gamma LUT
+            SoftwareDimmer.shared.setBlackout(displayID: display.id, isBlackout: false)
         } else {
-            // Power OFF / Disconnect / Sleep
-            if display.isBuiltIn {
-                CoreDisplay_Display_SetUserBrightness(display.id, 0.0)
-            } else {
+            // 1. Hardware DDC power off & brightness 0
+            if !display.isBuiltIn {
                 _ = DDCService.shared.setPower(displayID: display.id, powerOn: false)
                 _ = DDCService.shared.setBrightness(displayID: display.id, value: 0)
+            } else {
+                CoreDisplay_Display_SetUserBrightness(display.id, 0.0)
             }
+            
+            // 2. Software blackout & zero gamma LUT
             SoftwareDimmer.shared.setBlackout(displayID: display.id, isBlackout: true)
+            
+            // 3. Disable in SkyLight / CoreGraphics / displayplacer
+            _ = DisplayModesService.shared.setDisplayEnabled(displayID: display.id, enabled: false)
+        }
+        
+        // Refresh display list after power state change
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+            self.refreshDisplays()
         }
     }
     

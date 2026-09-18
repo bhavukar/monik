@@ -101,4 +101,55 @@ public class DisplayModesService {
         let result = CGCompleteDisplayConfiguration(cfg, .permanently)
         return result == .success
     }
+    
+    public func setDisplayEnabled(displayID: CGDirectDisplayID, enabled: Bool) -> Bool {
+        // 1. Try native SkyLight CGSConfigureDisplayEnabled
+        var config: CGDisplayConfigRef?
+        if CGBeginDisplayConfiguration(&config) == .success, let cfg = config {
+            let sym = dlsym(UnsafeMutableRawPointer(bitPattern: -2), "CGSConfigureDisplayEnabled")
+            if let sym = sym {
+                typealias CGSConfigureDisplayEnabled_Func = @convention(c) (CGDisplayConfigRef, CGDirectDisplayID, Bool) -> CGError
+                let fn = unsafeBitCast(sym, to: CGSConfigureDisplayEnabled_Func.self)
+                let cgsErr = fn(cfg, displayID, enabled)
+                if cgsErr == .success {
+                    let result = CGCompleteDisplayConfiguration(cfg, .permanently)
+                    if result == .success {
+                        return true
+                    }
+                }
+            }
+            CGCancelDisplayConfiguration(cfg)
+        }
+        
+        // 2. Try CLI displayplacer integration
+        if let uuid = getDisplayUUID(for: displayID) {
+            let displayplacerPaths = ["/opt/homebrew/bin/displayplacer", "/usr/local/bin/displayplacer"]
+            for path in displayplacerPaths {
+                if FileManager.default.fileExists(atPath: path) {
+                    let task = Process()
+                    task.executableURL = URL(fileURLWithPath: path)
+                    task.arguments = ["id:\(uuid) enabled:\(enabled ? "true" : "false")"]
+                    try? task.run()
+                    task.waitUntilExit()
+                    if task.terminationStatus == 0 {
+                        return true
+                    }
+                }
+            }
+        }
+        
+        return false
+    }
+    
+    public func getDisplayUUID(for displayID: CGDirectDisplayID) -> String? {
+        let sym = dlsym(UnsafeMutableRawPointer(bitPattern: -2), "CGDisplayCreateUUIDFromDisplayID")
+        if let sym = sym {
+            typealias CGDisplayCreateUUIDFromDisplayID_Func = @convention(c) (CGDirectDisplayID) -> CFUUID?
+            let fn = unsafeBitCast(sym, to: CGDisplayCreateUUIDFromDisplayID_Func.self)
+            if let cfUuid = fn(displayID) {
+                return CFUUIDCreateString(kCFAllocatorDefault, cfUuid) as String
+            }
+        }
+        return nil
+    }
 }
