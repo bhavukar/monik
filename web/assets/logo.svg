@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#18181b"/>
+      <stop offset="100%" stop-color="#09090b"/>
+    </linearGradient>
+    <linearGradient id="screenGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fdfdfc"/>
+      <stop offset="100%" stop-color="#e4e4e7"/>
+    </linearGradient>
+    <linearGradient id="glowGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.15"/>
+      <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Squircle Base -->
+  <rect x="32" y="32" width="448" height="448" rx="112" fill="url(#bgGrad)" stroke="rgba(255,255,255,0.14)" stroke-width="8"/>
+
+  <!-- Subtle Glass Highlight -->
+  <path d="M36 144 C36 84 84 36 144 36 L368 36 C428 36 476 84 476 144 L476 220 L36 220 Z" fill="url(#glowGrad)"/>
+
+  <!-- Outer Display Monitor Frame -->
+  <rect x="116" y="116" width="280" height="196" rx="28" fill="none" stroke="#f7f7f5" stroke-width="22" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <!-- Inner Display Active Panel -->
+  <rect x="158" y="156" width="196" height="116" rx="16" fill="url(#screenGrad)"/>
+
+  <!-- Precision Hardware Control Slider in Screen -->
+  <line x1="196" y1="214" x2="316" y2="214" stroke="#09090b" stroke-width="12" stroke-linecap="round"/>
+  <circle cx="272" cy="214" r="13" fill="#09090b"/>
+
+  <!-- Monitor Stand Neck & Base Foot -->
+  <path d="M256 312 V358" stroke="#f7f7f5" stroke-width="22" stroke-linecap="round"/>
+  <line x1="188" y1="366" x2="324" y2="366" stroke="#f7f7f5" stroke-width="22" stroke-linecap="round"/>
+</svg>

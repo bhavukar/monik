@@ -3,8 +3,63 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Manage Your Display — Minimal Hardware Display Controller</title>
-  <meta name="description" content="The clean, open-source hardware display controller for macOS, Linux, and Windows. DDC/CI control, native resolution switching, and per-display power management.">
+  
+  <!-- Primary SEO Meta Tags -->
+  <title>Manage Your Display — Free, Open Source BetterDisplay Alternative</title>
+  <meta name="title" content="Manage Your Display — Free, Open Source BetterDisplay Alternative">
+  <meta name="description" content="The 100% free, open-source display controller for macOS, Linux, and Windows under the MIT license. Direct DDC/CI hardware brightness, contrast, volume, per-display power, and HiDPI Retina scaling.">
+  <meta name="keywords" content="BetterDisplay alternative, Manage Your Display, macOS display controller, DDC/CI Mac, monitor brightness control mac, MonitorControl alternative, HiDPI Retina scaling, Display P3 calibration, open source display manager">
+  <meta name="author" content="Manage Your Display">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://manageyourdisplay.app/">
+
+  <!-- Favicon & Touch Icons -->
+  <meta name="theme-color" content="#000000">
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+
+  <!-- Open Graph / Facebook / Discord / Slack / LinkedIn -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://manageyourdisplay.app/">
+  <meta property="og:site_name" content="Manage Your Display">
+  <meta property="og:title" content="Manage Your Display — Hardware display control, crafted with simplicity.">
+  <meta property="og:description" content="Free, open-source BetterDisplay alternative for macOS, Linux, and Windows. Native DDC/CI brightness, volume, per-display power, HiDPI scaling, and refresh rates.">
+  <meta property="og:image" content="https://raw.githubusercontent.com/bhavukarora/monik/master/web/assets/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Manage Your Display macOS App Interface">
+
+  <!-- Twitter / X -->
+  <meta property="twitter:card" content="summary_large_image">
+  <meta property="twitter:url" content="https://manageyourdisplay.app/">
+  <meta property="twitter:title" content="Manage Your Display — Hardware display control, crafted with simplicity.">
+  <meta property="twitter:description" content="100% free & open-source BetterDisplay alternative. Native DDC/CI monitor brightness, volume, HiDPI scaling, and power management under MIT license.">
+  <meta property="twitter:image" content="https://raw.githubusercontent.com/bhavukarora/monik/master/web/assets/og-image.png">
+
+  <!-- JSON-LD Structured Data for Search Engines -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "Manage Your Display",
+    "operatingSystem": "macOS 12+, Windows 10+, Linux",
+    "applicationCategory": "UtilitiesApplication",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    },
+    "license": "https://opensource.org/licenses/MIT",
+    "description": "The 100% free, open-source display controller for macOS, Linux, and Windows under the MIT license. Direct DDC/CI hardware brightness, contrast, volume, per-display power, and HiDPI Retina scaling.",
+    "screenshot": "https://raw.githubusercontent.com/bhavukarora/monik/master/web/assets/app_screenshot.png",
+    "softwareVersion": "1.0.0",
+    "downloadUrl": "https://github.com/bhavukarora/monik/releases",
+    "url": "https://manageyourdisplay.app/"
+  }
+  </script>
+
+  <!-- Typography & Styles -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
@@ -16,14 +71,8 @@
   <header class="navbar-wrapper">
     <div class="navbar-pill">
       <a href="#" class="nav-brand">
-        <!-- Rotato-Inspired Minimal Geometric Logo Badge -->
-        <svg class="brand-logo" viewBox="0 0 38 38" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <circle cx="19" cy="19" r="19" fill="#F7F7F5"/>
-          <rect x="9.5" y="11" width="19" height="13" rx="2.5" fill="#09090B"/>
-          <rect x="11.5" y="13" width="15" height="9" rx="1.5" fill="#F7F7F5"/>
-          <path d="M15 27.5H23" stroke="#09090B" stroke-width="2" stroke-linecap="round"/>
-          <path d="M19 24V27.5" stroke="#09090B" stroke-width="2" stroke-linecap="round"/>
-        </svg>
+        <!-- Minimal Geometric Vector Logo -->
+        <img src="assets/logo.svg" alt="Manage Your Display Logo" class="brand-logo" />
         <span class="brand-name">manage your display</span>
       </a>
 
@@ -286,7 +335,8 @@ python3 linux/manage_your_display_gui.py</code></pre>
   <footer class="footer">
     <div class="footer-container">
       <div class="footer-left">
-        <span>manage your display • Released under the MIT License</span>
+        <img src="assets/logo.svg" alt="Manage Your Display Logo" class="footer-logo" />
+        <span>manage your display • Free & Open Source under the MIT License</span>
       </div>
       <div class="footer-links">
         <a href="https://github.com/bhavukarora/monik">GitHub</a>
