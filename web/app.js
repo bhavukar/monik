@@ -1,4 +1,4 @@
-// Manage Your Display Interactive Simulator & Landing Page Scripts
+// Manage Your Display Minimalist Simulator & Interactive Script
 
 document.addEventListener('DOMContentLoaded', () => {
   // Brightness Sliders
@@ -45,7 +45,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // Presets Bar
-  const presetButtons = document.querySelectorAll('.preset-btn');
+  const presetButtons = document.querySelectorAll('.preset-pill');
   presetButtons.forEach(btn => {
     btn.addEventListener('click', () => {
       presetButtons.forEach(b => b.classList.remove('active'));
@@ -71,8 +71,8 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   // Platform Tabs Switcher
-  const tabButtons = document.querySelectorAll('.tab-btn');
-  const tabContents = document.querySelectorAll('.platform-content');
+  const tabButtons = document.querySelectorAll('.tab-pill');
+  const tabContents = document.querySelectorAll('.terminal-card');
 
   tabButtons.forEach(btn => {
     btn.addEventListener('click', () => {

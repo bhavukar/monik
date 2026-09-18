@@ -3,472 +3,380 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Manage Your Display — The Open Source Hardware Display Controller</title>
-  <meta name="description" content="The ultimate free and open-source hardware display controller for macOS, Linux, and Windows. Full DDC/CI control, HiDPI resolution switching, presets, and clamshell management.">
+  <title>Manage Your Display — Minimal Hardware Display Controller</title>
+  <meta name="description" content="The clean, open-source hardware display controller for macOS, Linux, and Windows. DDC/CI control, native resolution switching, and per-display power management.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <!-- Background Glow & Mesh -->
-  <div class="glow-sphere sphere-1"></div>
-  <div class="glow-sphere sphere-2"></div>
-  <div class="glow-sphere sphere-3"></div>
-  <div class="grid-overlay"></div>
 
   <!-- Navigation -->
   <header class="navbar">
     <div class="nav-container">
       <a href="#" class="nav-brand">
-        <div class="brand-icon">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
-            <line x1="8" y1="21" x2="16" y2="21"></line>
-            <line x1="12" y1="17" x2="12" y2="21"></line>
-          </svg>
-        </div>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+          <line x1="8" y1="21" x2="16" y2="21"></line>
+          <line x1="12" y1="17" x2="12" y2="21"></line>
+        </svg>
         <span>Manage Your Display</span>
       </a>
+
       <nav class="nav-links">
         <a href="#features">Features</a>
-        <a href="#demo">Live Demo</a>
-        <a href="#comparison">Comparison</a>
+        <a href="#demo">Demo</a>
+        <a href="#comparison">Compare</a>
         <a href="#platforms">Platforms</a>
-        <a href="#download" class="nav-cta">Download Free</a>
-        <a href="https://github.com/bhavukar/monik" target="_blank" class="github-star-btn">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+        <a href="#download" class="nav-btn-solid">Download</a>
+        <a href="https://github.com/bhavukar/monik" target="_blank" class="nav-btn-outline">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
             <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
           </svg>
-          <span>Star on GitHub</span>
+          <span>GitHub</span>
         </a>
       </nav>
     </div>
   </header>
 
-  <!-- Hero Section -->
-  <section class="hero">
-    <div class="hero-badge">
-      <span class="badge-dot"></span>
-      <span>100% Free & Open Source • BetterDisplay Pro Alternative</span>
-    </div>
-    <h1 class="hero-title">
-      Hardware control for <br>
-      <span class="gradient-text">every monitor on your desk.</span>
-    </h1>
-    <p class="hero-subtitle">
-      Control external monitor brightness, volume, contrast, input sources, resolution, and power via DDC/CI & Apple Silicon hardware protocols. No $20 paywalls.
-    </p>
+  <main>
+    <!-- Hero Section -->
+    <section class="hero">
+      <div class="hero-tag">
+        <span class="tag-badge">Open Source</span>
+        <span>BetterDisplay Pro Alternative • MIT License</span>
+      </div>
 
-    <div class="hero-buttons">
-      <a href="#download" class="btn btn-primary">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-          <polyline points="7 10 12 15 17 10"></polyline>
-          <line x1="12" y1="15" x2="12" y2="3"></line>
-        </svg>
-        <span>Download for macOS</span>
-        <span class="btn-tag">v2.0.0</span>
-      </a>
-      <a href="https://github.com/bhavukar/monik" target="_blank" class="btn btn-secondary">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-          <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
-        </svg>
-        <span>View Source</span>
-      </a>
-    </div>
+      <h1 class="hero-heading">
+        Hardware display control,<br>
+        crafted with simplicity.
+      </h1>
 
-    <!-- Live Interactive App Simulator -->
-    <div id="demo" class="simulator-wrapper">
-      <div class="simulator-card">
-        <!-- Menu Bar Header Mockup -->
-        <div class="menubar-mockup">
-          <div class="mac-buttons">
-            <span class="dot red"></span>
-            <span class="dot yellow"></span>
-            <span class="dot green"></span>
-          </div>
-          <div class="menubar-icons">
-            <span class="tray-icon active">
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
-                <line x1="8" y1="21" x2="16" y2="21"></line>
-                <line x1="12" y1="17" x2="12" y2="21"></line>
-              </svg>
-            </span>
-            <span class="menubar-time">Mon 18 Sep 7:00 PM</span>
-          </div>
-        </div>
+      <p class="hero-description">
+        Manage brightness, audio volume, custom resolutions, refresh rates, underscan, and power across all your external monitors and built-in screens. 100% free forever.
+      </p>
 
-        <!-- Simulated Popover -->
-        <div class="popover-ui">
-          <!-- Presets Quick Bar -->
-          <div class="presets-bar">
-            <button class="preset-btn active" data-preset="work">
-              <span>☀️</span> Work & Day
-            </button>
-            <button class="preset-btn" data-preset="night">
-              <span>🌙</span> Ultra-Dim Night
-            </button>
-            <button class="preset-btn" data-preset="gaming">
-              <span>🎮</span> Gaming (144Hz)
-            </button>
-            <button class="preset-btn" data-preset="focus">
-              <span>🎯</span> Single Screen
-            </button>
+      <div class="hero-actions">
+        <a href="#download" class="btn btn-black">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+            <polyline points="7 10 12 15 17 10"></polyline>
+            <line x1="12" y1="15" x2="12" y2="3"></line>
+          </svg>
+          <span>Download for macOS</span>
+        </a>
+        <a href="https://github.com/bhavukarora/monik" target="_blank" class="btn btn-white">
+          <span>View on GitHub</span>
+          <span class="btn-arrow">→</span>
+        </a>
+      </div>
+
+      <!-- Minimalist Interactive Popover Simulator -->
+      <div id="demo" class="demo-container">
+        <div class="simulator">
+          <!-- Window Header -->
+          <div class="sim-header">
+            <div class="sim-dots">
+              <span></span><span></span><span></span>
+            </div>
+            <div class="sim-title">Manage Your Display — Menu Bar Popover</div>
+            <div class="sim-status">Connected: 2 Displays</div>
           </div>
 
-          <!-- Display 1 Card (Main Monitor) -->
-          <div class="display-card" id="card-1">
-            <div class="card-header">
-              <div class="header-left">
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
-                  <line x1="8" y1="21" x2="16" y2="21"></line>
-                  <line x1="12" y1="17" x2="12" y2="21"></line>
-                </svg>
-                <span class="display-name">Acer KG271</span>
-                <span class="badge badge-main">M</span>
-              </div>
-              <div class="header-right">
-                <label class="switch">
+          <!-- Popover Body -->
+          <div class="sim-body">
+            <!-- Preset Pills -->
+            <div class="sim-presets">
+              <button class="preset-pill active" data-preset="work">Work & Day</button>
+              <button class="preset-pill" data-preset="night">Ultra-Dim Night</button>
+              <button class="preset-pill" data-preset="gaming">Gaming 144Hz</button>
+              <button class="preset-pill" data-preset="focus">Focus Mode</button>
+            </div>
+
+            <!-- Card 1: External Monitor -->
+            <div class="sim-card" id="card-1">
+              <div class="card-top">
+                <div class="display-identity">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+                    <line x1="8" y1="21" x2="16" y2="21"></line>
+                    <line x1="12" y1="17" x2="12" y2="21"></line>
+                  </svg>
+                  <span class="name">Acer KG271</span>
+                  <span class="badge-main">Main</span>
+                </div>
+                <label class="toggle-switch">
                   <input type="checkbox" id="power-toggle-1" checked>
-                  <span class="slider round"></span>
+                  <span class="toggle-track"></span>
                 </label>
               </div>
-            </div>
 
-            <div class="control-row">
-              <div class="control-labels">
-                <span>Brightness (Combined)</span>
-                <span class="val" id="brightness-val-1">100%</span>
+              <!-- Brightness -->
+              <div class="control-item">
+                <div class="control-header">
+                  <span class="label">Brightness</span>
+                  <span class="value" id="brightness-val-1">100%</span>
+                </div>
+                <input type="range" min="0" max="100" value="100" class="clean-slider" id="brightness-slider-1">
               </div>
-              <div class="slider-wrapper">
-                <span class="icon">☀️</span>
-                <input type="range" min="0" max="100" value="100" class="range-slider" id="brightness-slider-1">
-              </div>
-            </div>
 
-            <div class="control-row">
-              <div class="control-labels">
-                <span>Volume</span>
-                <span class="val" id="volume-val-1">80%</span>
+              <!-- Volume -->
+              <div class="control-item">
+                <div class="control-header">
+                  <span class="label">Volume</span>
+                  <span class="value" id="volume-val-1">80%</span>
+                </div>
+                <input type="range" min="0" max="100" value="80" class="clean-slider" id="volume-slider-1">
               </div>
-              <div class="slider-wrapper">
-                <span class="icon">🔊</span>
-                <input type="range" min="0" max="100" value="80" class="range-slider" id="volume-slider-1">
-              </div>
-            </div>
 
-            <div class="control-row resolution-row">
-              <div class="res-left">
-                <span class="icon">📐</span>
+              <!-- Resolution -->
+              <div class="control-item-inline">
                 <span class="label">Resolution</span>
-              </div>
-              <div class="res-picker-wrapper">
-                <select id="res-select-1" class="res-select">
+                <select id="res-select-1" class="clean-select">
                   <option value="1920x1080@144">1920 x 1080 @ 144Hz (HiDPI)</option>
                   <option value="1920x1080@120">1920 x 1080 @ 120Hz</option>
                   <option value="1920x1080@75">1920 x 1080 @ 75Hz</option>
                   <option value="1600x900@144">1600 x 900 @ 144Hz</option>
-                  <option value="1280x720@144">1280 x 720 @ 144Hz (HD)</option>
                 </select>
               </div>
+
+              <!-- Panel Intel -->
+              <div class="intel-box">
+                <div class="intel-row">
+                  <span class="intel-label">Panel Math</span>
+                  <span class="intel-data">27.2" • 81 PPI • 16:9 • sRGB IEC61966-2.1</span>
+                </div>
+              </div>
             </div>
 
-            <!-- Smart Panel Intelligence Badge -->
-            <div class="intelligence-card">
-              <div class="intel-header">
-                <span class="sparkle">✨</span>
-                <span class="intel-title">Smart Panel Intelligence</span>
-                <span class="intel-pill">27" 144Hz Fast Gaming</span>
-              </div>
-              <div class="intel-details">
-                Detected: 27.2" • 81 PPI • 16:9 • Suggested: sRGB IEC61966-2.1
-              </div>
-            </div>
-          </div>
-
-          <!-- Display 2 Card (MacBook Built-in Screen) -->
-          <div class="display-card" id="card-2">
-            <div class="card-header">
-              <div class="header-left">
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <rect x="3" y="4" width="18" height="12" rx="2"></rect>
-                  <path d="M2 20h20"></path>
-                </svg>
-                <span class="display-name">MacBook Display</span>
-                <span class="badge badge-builtin">Built-in</span>
-              </div>
-              <div class="header-right">
-                <label class="switch">
+            <!-- Card 2: MacBook Screen -->
+            <div class="sim-card" id="card-2">
+              <div class="card-top">
+                <div class="display-identity">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="3" y="4" width="18" height="12" rx="2"></rect>
+                    <path d="M2 20h20"></path>
+                  </svg>
+                  <span class="name">MacBook Display</span>
+                  <span class="badge-sub">Built-in</span>
+                </div>
+                <label class="toggle-switch">
                   <input type="checkbox" id="power-toggle-2" checked>
-                  <span class="slider round"></span>
+                  <span class="toggle-track"></span>
                 </label>
               </div>
-            </div>
 
-            <div class="control-row">
-              <div class="control-labels">
-                <span>Brightness (Combined)</span>
-                <span class="val" id="brightness-val-2">80%</span>
+              <div class="control-item">
+                <div class="control-header">
+                  <span class="label">Brightness</span>
+                  <span class="value" id="brightness-val-2">80%</span>
+                </div>
+                <input type="range" min="0" max="100" value="80" class="clean-slider" id="brightness-slider-2">
               </div>
-              <div class="slider-wrapper">
-                <span class="icon">☀️</span>
-                <input type="range" min="0" max="100" value="80" class="range-slider" id="brightness-slider-2">
-              </div>
-            </div>
 
-            <div class="control-row resolution-row">
-              <div class="res-left">
-                <span class="icon">📐</span>
+              <div class="control-item-inline">
                 <span class="label">Resolution</span>
-              </div>
-              <div class="res-picker-wrapper">
-                <select id="res-select-2" class="res-select">
-                  <option value="1512x982">1512 x 982 (Default Retina)</option>
-                  <option value="1800x1169">1800 x 1169 (More Space)</option>
-                  <option value="3024x1964">3024 x 1964 (Native Physical)</option>
+                <select id="res-select-2" class="clean-select">
+                  <option value="1512x982">1512 x 982 (Retina 2x)</option>
+                  <option value="1800x1169">1800 x 1169 (Scaled)</option>
+                  <option value="3024x1964">3024 x 1964 (Native)</option>
                 </select>
               </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- Features Grid Section -->
-  <section id="features" class="features-section">
-    <div class="section-header">
-      <h2 class="section-title">Everything BetterDisplay Pro Has. <br><span class="gradient-text">100% Free Forever.</span></h2>
-      <p class="section-subtitle">Engineered with low-level Apple Silicon I2C DDC/CI, SkyLight private APIs, and cross-platform native drivers.</p>
-    </div>
-
-    <div class="features-grid">
-      <div class="feature-card">
-        <div class="feature-icon">⚡</div>
-        <h3>Hardware DDC/CI Control</h3>
-        <p>Direct Apple Silicon & Intel hardware communication for brightness, contrast, audio volume, mute, and input switching over HDMI/DisplayPort/USB-C.</p>
+    <!-- Features Section -->
+    <section id="features" class="section">
+      <div class="section-intro">
+        <h2 class="section-title">Essential capabilities. Zero clutter.</h2>
+        <p class="section-subtitle">Everything you need to orchestrate multi-monitor desks with low-level precision.</p>
       </div>
 
-      <div class="feature-card">
-        <div class="feature-icon">📐</div>
-        <h3>Native Resolution & HiDPI</h3>
-        <p>Switch between all available display modes with live refresh rate tracking, Retina pixel doubling, and ultra-wide aspect ratios.</p>
-      </div>
-
-      <div class="feature-card">
-        <div class="feature-icon">🔌</div>
-        <h3>True Display Power & Sleep</h3>
-        <p>Turn individual screens on/off without affecting other displays. Uses hardware DPMS, SkyLight window server disconnection, and zero-gamma LUT blackout.</p>
-      </div>
-
-      <div class="feature-card">
-        <div class="feature-icon">📺</div>
-        <h3>Underscan & Overscan Sizing</h3>
-        <p>Compensate for cropped TV/Projector bezels with adjustable 0%–25% underscan framing and hardware VCP geometry scaling.</p>
-      </div>
-
-      <div class="feature-card">
-        <div class="feature-icon">✨</div>
-        <h3>Smart Panel Intelligence</h3>
-        <p>Automated PPI, diagonal size, aspect ratio, and panel gamut calculation with 1-click optimal color profile & refresh rate calibration.</p>
-      </div>
-
-      <div class="feature-card">
-        <div class="feature-icon">⌨️</div>
-        <h3>Global Shortcuts & Bezel OSD</h3>
-        <p>Control brightness, volume, power, and presets with customizable keyboard hotkeys and macOS-native translucent on-screen display HUDs.</p>
-      </div>
-
-      <div class="feature-card">
-        <div class="feature-icon">🎭</div>
-        <h3>Display Presets & Groups</h3>
-        <p>Switch between Day, Night, Gaming, and Focus modes instantly, or synchronize brightness & volume across custom display groups.</p>
-      </div>
-
-      <div class="feature-card">
-        <div class="feature-icon">🌐</div>
-        <h3>macOS, Linux & Windows</h3>
-        <p>Full cross-platform support with system tray popovers, CLI automation, and native hardware drivers on all 3 major operating systems.</p>
-      </div>
-    </div>
-  </section>
-
-  <!-- Comparison Table Section -->
-  <section id="comparison" class="comparison-section">
-    <div class="section-header">
-      <h2 class="section-title">Why Settle for Paid Paywalls?</h2>
-      <p class="section-subtitle">See how Manage Your Display compares against the alternatives.</p>
-    </div>
-
-    <div class="table-container">
-      <table class="comp-table">
-        <thead>
-          <tr>
-            <th>Feature</th>
-            <th class="highlight">Manage Your Display</th>
-            <th>BetterDisplay Pro</th>
-            <th>MonitorControl</th>
-            <th>Lunar Pro</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>Price</td>
-            <td class="highlight green-text">100% Free (MIT)</td>
-            <td class="red-text">$20 Paywall</td>
-            <td>Free</td>
-            <td class="red-text">$23 Paywall</td>
-          </tr>
-          <tr>
-            <td>Hardware DDC Brightness & Volume</td>
-            <td class="highlight check">✓</td>
-            <td class="check">✓</td>
-            <td class="check">✓</td>
-            <td class="check">✓</td>
-          </tr>
-          <tr>
-            <td>Apple Silicon M1/M2/M3/M4 Native</td>
-            <td class="highlight check">✓</td>
-            <td class="check">✓</td>
-            <td class="check">✓</td>
-            <td class="check">✓</td>
-          </tr>
-          <tr>
-            <td>Discrete Display Power On/Off</td>
-            <td class="highlight check">✓</td>
-            <td class="check">✓</td>
-            <td class="cross">✕</td>
-            <td class="check">✓</td>
-          </tr>
-          <tr>
-            <td>Underscan & Overscan Sizing</td>
-            <td class="highlight check">✓</td>
-            <td class="check">✓</td>
-            <td class="cross">✕</td>
-            <td class="cross">✕</td>
-          </tr>
-          <tr>
-            <td>Display Intelligence & AI Calibration</td>
-            <td class="highlight check">✓</td>
-            <td class="cross">✕</td>
-            <td class="cross">✕</td>
-            <td class="cross">✕</td>
-          </tr>
-          <tr>
-            <td>Cross-Platform (macOS, Linux, Windows)</td>
-            <td class="highlight check">✓</td>
-            <td class="cross">✕ (Mac only)</td>
-            <td class="cross">✕ (Mac only)</td>
-            <td class="cross">✕ (Mac only)</td>
-          </tr>
-          <tr>
-            <td>Global Hotkeys & Floating OSD HUD</td>
-            <td class="highlight check">✓</td>
-            <td class="check">✓</td>
-            <td class="check">✓</td>
-            <td class="check">✓</td>
-          </tr>
-          <tr>
-            <td>Virtual Displays & Picture in Picture</td>
-            <td class="highlight check">✓</td>
-            <td class="check">✓</td>
-            <td class="cross">✕</td>
-            <td class="cross">✕</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </section>
-
-  <!-- Platforms Section -->
-  <section id="platforms" class="platforms-section">
-    <div class="section-header">
-      <h2 class="section-title">Built for Every Desktop OS</h2>
-      <p class="section-subtitle">Identical system tray experience and hardware control wherever you work.</p>
-    </div>
-
-    <div class="platform-tabs">
-      <button class="tab-btn active" data-tab="mac">🍏 macOS</button>
-      <button class="tab-btn" data-tab="linux">🐧 Linux</button>
-      <button class="tab-btn" data-tab="win">🪟 Windows</button>
-    </div>
-
-    <div class="platform-content active" id="tab-mac">
-      <div class="terminal-box">
-        <div class="terminal-header">
-          <span class="terminal-dot red"></span>
-          <span class="terminal-dot yellow"></span>
-          <span class="terminal-dot green"></span>
-          <span class="terminal-title">macOS Quick Run</span>
+      <div class="grid-3">
+        <div class="card">
+          <div class="card-number">01</div>
+          <h3 class="card-title">Hardware DDC/CI Engine</h3>
+          <p class="card-desc">Control external monitor brightness, contrast, volume, input selection, and DPMS sleep over HDMI, DisplayPort, and USB-C.</p>
         </div>
-        <pre><code># Build & run directly on macOS (Apple Silicon & Intel)
+
+        <div class="card">
+          <div class="card-number">02</div>
+          <h3 class="card-title">Discrete Screen Power</h3>
+          <p class="card-desc">Toggle any display ON or OFF independently without affecting others via SkyLight window-server and zero-gamma LUT blackout.</p>
+        </div>
+
+        <div class="card">
+          <div class="card-number">03</div>
+          <h3 class="card-title">Native Resolution Dropdown</h3>
+          <p class="card-desc">Instantly switch between native, HiDPI Retina, and high-refresh rates (up to 144Hz+) using a clean, accessible dropdown selector.</p>
+        </div>
+
+        <div class="card">
+          <div class="card-number">04</div>
+          <h3 class="card-title">Underscan & Overscan Sizing</h3>
+          <p class="card-desc">Compensate for cropped TV or projector bezels with adjustable 0%–25% edge padding and hardware VCP geometry scaling.</p>
+        </div>
+
+        <div class="card">
+          <div class="card-number">05</div>
+          <h3 class="card-title">Smart Panel Intelligence</h3>
+          <p class="card-desc">Automated calculation of screen diagonal inches, pixel density (PPI), and aspect ratio with 1-click optimal color profile tuning.</p>
+        </div>
+
+        <div class="card">
+          <div class="card-number">06</div>
+          <h3 class="card-title">Global Hotkeys & Bezel OSD</h3>
+          <p class="card-desc">Adjust brightness and volume or switch presets globally with keyboard shortcuts and translucent macOS bezel HUD feedback.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Comparison Section -->
+    <section id="comparison" class="section">
+      <div class="section-intro">
+        <h2 class="section-title">Transparent comparison.</h2>
+        <p class="section-subtitle">A direct side-by-side view against the leading alternatives.</p>
+      </div>
+
+      <div class="table-wrapper">
+        <table class="minimal-table">
+          <thead>
+            <tr>
+              <th>Feature</th>
+              <th class="primary-col">Manage Your Display</th>
+              <th>BetterDisplay Pro</th>
+              <th>MonitorControl</th>
+              <th>Lunar Pro</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>License & Cost</td>
+              <td class="primary-col bold">Free (MIT)</td>
+              <td>$20 Paywall</td>
+              <td>Free</td>
+              <td>$23 Paywall</td>
+            </tr>
+            <tr>
+              <td>Hardware DDC/CI (Apple Silicon)</td>
+              <td class="primary-col">✓</td>
+              <td>✓</td>
+              <td>✓</td>
+              <td>✓</td>
+            </tr>
+            <tr>
+              <td>Discrete Display Power On/Off</td>
+              <td class="primary-col">✓</td>
+              <td>✓</td>
+              <td>—</td>
+              <td>✓</td>
+            </tr>
+            <tr>
+              <td>Native Resolution Dropdown & HiDPI</td>
+              <td class="primary-col">✓</td>
+              <td>✓</td>
+              <td>—</td>
+              <td>—</td>
+            </tr>
+            <tr>
+              <td>Underscan & Overscan Sizing</td>
+              <td class="primary-col">✓</td>
+              <td>✓</td>
+              <td>—</td>
+              <td>—</td>
+            </tr>
+            <tr>
+              <td>Smart Panel Intelligence (PPI & Gamut)</td>
+              <td class="primary-col">✓</td>
+              <td>—</td>
+              <td>—</td>
+              <td>—</td>
+            </tr>
+            <tr>
+              <td>Multi-Platform (macOS, Linux, Windows)</td>
+              <td class="primary-col">✓</td>
+              <td>—</td>
+              <td>—</td>
+              <td>—</td>
+            </tr>
+            <tr>
+              <td>Multi-Monitor Presets & Group Sync</td>
+              <td class="primary-col">✓</td>
+              <td>✓</td>
+              <td>—</td>
+              <td>✓</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Platforms Section -->
+    <section id="platforms" class="section">
+      <div class="section-intro">
+        <h2 class="section-title">Cross-platform installation.</h2>
+        <p class="section-subtitle">Runs natively across macOS, Linux, and Windows.</p>
+      </div>
+
+      <div class="platform-tabs">
+        <button class="tab-pill active" data-tab="mac">macOS</button>
+        <button class="tab-pill" data-tab="linux">Linux</button>
+        <button class="tab-pill" data-tab="win">Windows</button>
+      </div>
+
+      <div class="terminal-card active" id="tab-mac">
+        <div class="terminal-bar">
+          <span>macOS • Native Swift Release</span>
+        </div>
+        <pre><code># Clone and build native .app bundle
 git clone https://github.com/bhavukar/monik.git
 cd monik
 ./scripts/build_app.sh
 open "build/Manage Your Display.app"</code></pre>
       </div>
-    </div>
 
-    <div class="platform-content" id="tab-linux">
-      <div class="terminal-box">
-        <div class="terminal-header">
-          <span class="terminal-dot red"></span>
-          <span class="terminal-dot yellow"></span>
-          <span class="terminal-dot green"></span>
-          <span class="terminal-title">Linux System Tray & CLI</span>
+      <div class="terminal-card" id="tab-linux">
+        <div class="terminal-bar">
+          <span>Linux • PyQt6 & ddcutil</span>
         </div>
-        <pre><code># Install I2C dependencies and run system tray GUI
+        <pre><code># Install I2C modules and run system tray GUI
 chmod +x linux/install.sh
 ./linux/install.sh
-python3 linux/manage_your_display_gui.py
-
-# Or use CLI
-displaycraft detect</code></pre>
+python3 linux/manage_your_display_gui.py</code></pre>
       </div>
-    </div>
 
-    <div class="platform-content" id="tab-win">
-      <div class="terminal-box">
-        <div class="terminal-header">
-          <span class="terminal-dot red"></span>
-          <span class="terminal-dot yellow"></span>
-          <span class="terminal-dot green"></span>
-          <span class="terminal-title">Windows System Tray</span>
+      <div class="terminal-card" id="tab-win">
+        <div class="terminal-bar">
+          <span>Windows • DXVA2 & Flutter</span>
         </div>
-        <pre><code># Run Windows Flutter controller
+        <pre><code># Run Windows system tray application
 flutter run -d windows</code></pre>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- Download CTA Section -->
-  <section id="download" class="cta-section">
-    <div class="cta-card">
-      <h2>Take Control of Your Displays Today</h2>
-      <p>Free and open source forever under the MIT License.</p>
-      <div class="cta-buttons">
-        <a href="https://github.com/bhavukar/monik/releases" target="_blank" class="btn btn-primary">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-            <polyline points="7 10 12 15 17 10"></polyline>
-            <line x1="12" y1="15" x2="12" y2="3"></line>
-          </svg>
-          <span>Download Manage Your Display</span>
-        </a>
-        <a href="https://github.com/bhavukar/monik" target="_blank" class="btn btn-secondary">
-          <span>Explore on GitHub</span>
-        </a>
+    <!-- Download Section -->
+    <section id="download" class="section download-section">
+      <div class="download-box">
+        <h2 class="download-title">Ready to take control?</h2>
+        <p class="download-desc">Free and open source. No telemetry. No registration.</p>
+        <div class="download-actions">
+          <a href="https://github.com/bhavukar/monik/releases" target="_blank" class="btn btn-black">Download Latest Release</a>
+          <a href="https://github.com/bhavukar/monik" target="_blank" class="btn btn-white">Browse Source Code</a>
+        </div>
       </div>
-    </div>
-  </section>
+    </section>
+  </main>
 
   <!-- Footer -->
   <footer class="footer">
     <div class="footer-container">
-      <p>© 2026 Manage Your Display Contributors. Released under the MIT License.</p>
+      <div class="footer-left">
+        <span>Manage Your Display • Released under the MIT License</span>
+      </div>
       <div class="footer-links">
         <a href="https://github.com/bhavukar/monik">GitHub</a>
         <a href="https://github.com/bhavukar/monik/issues">Issues</a>
