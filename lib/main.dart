@@ -16,7 +16,7 @@ void main() async {
     backgroundColor: Colors.transparent,
     skipTaskbar: false,
     titleBarStyle: TitleBarStyle.normal,
-    title: "Monik",
+    title: "Manage Your Display",
   );
 
   // Set window options
@@ -72,7 +72,7 @@ class _MyAppState extends State<MyApp> with WindowListener {
   @override
   Widget build(BuildContext context) {
     return FluentApp(
-      title: 'Monik',
+      title: 'Manage Your Display',
       themeMode: ThemeMode.system,
       debugShowCheckedModeBanner: false,
       darkTheme: FluentThemeData(

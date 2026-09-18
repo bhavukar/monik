@@ -1,64 +1,103 @@
-# Monik - Your Digital KVM & Display Control Hub for Windows, macOS, and Linux
+# Manage Your Display - The Ultimate Multi-Platform Display Controller
 
+[![Platform macOS](https://img.shields.io/badge/platform-macOS-black?style=for-the-badge&logo=apple)](https://apple.com/)
+[![Platform Linux](https://img.shields.io/badge/platform-Linux-orange?style=for-the-badge&logo=linux)](https://kernel.org/)
 [![Platform Windows](https://img.shields.io/badge/platform-windows-brightgreen?style=for-the-badge&logo=windows)](https://www.microsoft.com/windows/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](https://opensource.org/licenses/MIT)
 
+**Manage Your Display** is a complete, open-source display hardware controller, virtual screen manager, and digital KVM utility for **macOS**, **Linux**, and **Windows**.
 
-![Monik Screenshot](https://github.com/bhavukar/monik/raw/master/preview.png)
-
-
-**Monik** is a lightweight Windows application that gives you convenient control over your monitor's settings and provides insights into your system hardware. It acts as a software-based alternative for common KVM switch functionalities, display adjustments, and system information utilities. Easily manage brightness, switch input sources, adjust refresh rates, and view detailed system specifications directly from your desktop.
-Currently, Monik is available for **Windows**, with future plans to support macOS and Linux.
-
-## ✨ Features
-
-* **Monitor Control:**
-    * **Brightness Adjustment:** Quickly adjust the brightness levels of your connected monitor(s) without fumbling with physical buttons.
-    * **Input Source Switching:** Seamlessly switch between different input sources on your monitor (e.g., HDMI-1, HDMI-2, DisplayPort).
-    * **Refresh Rate Configuration:** Change the refresh rate of your display for smoother visuals or battery saving.
-    * **(Planned) Contrast Adjustment:** Fine-tune monitor contrast.
-    * **(Planned) Volume Control:** Adjust built-in monitor speaker volume (if applicable).
-    * **(Planned) Power Management:** Control monitor power states.
-* **System Information:**
-    * **Hardware Details:** Fetch and display comprehensive system information, similar to CPU-Z (e.g., CPU, GPU, RAM, Motherboard details).
-* **Usability:**
-    * **Monitor Detection:** Automatically identifies connected displays compatible with DDC/CI.
-    * **(Planned) Custom Profiles:** Save and load your preferred display and system settings.
-
-## 🚀 Download & Installation
-
-Get the latest version of Monik for Windows from our **[GitHub Releases](https://github.com/bhavukar/monik/releases)** page.
-1.  Go to the [Releases](https://github.com/YOUR_USERNAME/YOUR_REPONAME/releases) page.
-2.  Download the latest Windows installer (`.exe` or `.msi`) or portable version (`.zip`).
-3.  **For the installer:** Run the downloaded installer and follow the on-screen instructions.
-4.  **For the portable version:** Extract the ZIP archive to your desired location and run `Monik.exe`.
-
-## 💡 How It Works
-
-Monik communicates with your monitors using the **Display Data Channel/Command Interface (DDC/CI)** protocol for display adjustments. For system information, it utilizes native Windows APIs to query hardware details.
-
-**Requirements:**
-* Windows 10 or newer.
-* For display control: A monitor that supports DDC/CI (most modern monitors do).
-
-## 🖥️ Supported Platforms
-
-* **Windows:** ✅ (Actively supported)
-* **macOS:** 🟡 (Planned for future release)
-* **Linux:** 🟡 (Planned for future release)
-
-## 🤝 Contributing & Feedback
-
-While this repository primarily hosts the compiled application, contributions to the underlying source code (if made public/separate) or suggestions for this application are welcome!
-
-* **Found a bug or have a feature request?** Please [open an issue](https://github.com/bhavukar/monik/issues).
-* **Want to contribute to development?** (Details for contributing to the source code project would go here, or link to the source code repository if it's different from where the releases are hosted).
-
-## 📝 License
-
-This application is licensed under the **MIT License**. See the `LICENSE.txt` file included with the application for details.
-(You'll need to include a `LICENSE.txt` file with the MIT license text in your release archives/installers).
+It runs seamlessly from your **menu bar / system tray** across all platforms with instant hardware controls, customizable hotkeys, presets, and auto-start on boot.
 
 ---
 
-Thank you for using Monik! We hope it makes managing your display settings and understanding your system easier.
+## 🍏 macOS Features
+
+* **Menu Bar Popover (Frosted Dark Vibrancy):**
+  * Instant access to all connected & built-in displays (`MacBook Display`, `Acer KG271 C`, `Acer KG271`).
+  * Real-time sliders for **Brightness (Combined)**, **Volume**, and **Resolution**.
+* **Hardware DDC/CI & Power Control:**
+  * Direct DDC/CI hardware brightness (`0x10`), contrast (`0x12`), and speaker volume (`0x62`).
+  * Soft-disconnect and power state switching (`0xD6`) per display.
+  * Clamshell & built-in MacBook display backlight control down to 0%.
+* **Launch on Startup (Login Items):**
+  * Native `SMAppService` background service toggle in Settings.
+* **Customizable Global Hotkeys & OSD HUD:**
+  * Assign hotkeys to toggle display power, cycle resolutions, switch inputs, or adjust brightness/volume.
+  * Floating translucent OSD HUD overlay providing live visual feedback on keypress.
+* **Display Presets & Group Sync:**
+  * 1-Click presets: "Work & Day", "Ultra-Dim Night", "Gaming / Media", and "Single Screen Focus".
+  * Synchronize brightness, volume, and power across display groups.
+* **Virtual Screens (BetterDummy Engine):**
+  * Generate custom virtual displays (16:9, 16:10 MacBook ratio, 21:9 UWQHD, 32:9 Super Ultrawide, 4:3, 1:1) up to 16K.
+* **Multi-Tab Settings Window:**
+  * Displays overview, per-display register inspectors, Display Groups, Application settings, Menu layout customization, Keyboard shortcuts editor, and System specs.
+
+---
+
+## 🐧 Linux Features (System Tray & CLI)
+
+* **System Tray App (`linux/manage_your_display_gui.py`):**
+  * System tray icon with dark popover window matching the macOS design.
+  * Real-time sliders for Brightness, Volume, and Input Switching.
+  * Multi-monitor cards with ON/OFF power toggles.
+* **Hardware DDC/CI via `ddcutil`:**
+  * Adjust hardware brightness, volume, input sources (HDMI/DisplayPort/USB-C), and power states.
+* **Multi-Display Resolution & Refresh Rate Management:**
+  * X11 and Wayland support via `xrandr` / `wlr-randr`.
+* **Laptop Backlight Control:**
+  * Seamless `/sys/class/backlight` hardware brightness adjustments.
+* **CLI & Scripting (`displaycraft` / `manage-your-display`):**
+  * Full CLI suite with `detect`, `set-brightness`, `set-volume`, `set-power`, `set-input`.
+
+---
+
+## 🪟 Windows Features (System Tray)
+
+* **System Tray Integration:**
+  * Background tray icon with click-to-open controller window.
+  * DDC/CI communication via Windows DXVA2 APIs (`GetVCPFeatureAndVCPFeatureReply`, `SetVCPFeature`).
+  * Multi-monitor brightness, volume, input source switching, and refresh rate adjustments.
+
+---
+
+## 🚀 Building & Running
+
+### macOS:
+```bash
+# Direct run
+swift run
+
+# Build .app bundle
+./scripts/build_app.sh
+open "build/Manage Your Display.app"
+```
+
+### Linux:
+```bash
+# Install dependencies & configure I2C
+chmod +x linux/install.sh
+./linux/install.sh
+
+# Run System Tray GUI
+python3 linux/manage_your_display_gui.py
+
+# Or use CLI
+displaycraft detect
+```
+
+### Windows:
+```bash
+flutter run -d windows
+```
+
+---
+
+## 📝 License
+
+Licensed under the **MIT License**. Free and open-source forever.
+
+---
+
+Thank you for using **Manage Your Display**!
+

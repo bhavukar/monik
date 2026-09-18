@@ -1,0 +1,4 @@
+module MonikBridge {
+    header "MonikBridge.h"
+    export *
+}
