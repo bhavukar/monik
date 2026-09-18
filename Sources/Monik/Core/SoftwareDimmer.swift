@@ -100,6 +100,46 @@ public class SoftwareDimmer {
         return window
     }
     
+    private var underscanWindows: [CGDirectDisplayID: [NSWindow]] = [:]
+    
+    public func setUnderscanBorder(displayID: CGDirectDisplayID, paddingPercent: Double) {
+        DispatchQueue.main.async {
+            // Remove previous borders for this display
+            if let old = self.underscanWindows[displayID] {
+                for w in old { w.orderOut(nil) }
+                self.underscanWindows[displayID] = nil
+            }
+            
+            guard paddingPercent > 0.001 else { return }
+            guard let screen = NSScreen.screens.first(where: {
+                ($0.deviceDescription[NSDeviceDescriptionKey("NSScreenNumber")] as? CGDirectDisplayID) == displayID
+            }) else { return }
+            
+            let frame = screen.frame
+            let padW = frame.width * CGFloat(paddingPercent) / 2.0
+            let padH = frame.height * CGFloat(paddingPercent) / 2.0
+            
+            let topRect = NSRect(x: frame.minX, y: frame.maxY - padH, width: frame.width, height: padH)
+            let bottomRect = NSRect(x: frame.minX, y: frame.minY, width: frame.width, height: padH)
+            let leftRect = NSRect(x: frame.minX, y: frame.minY, width: padW, height: frame.height)
+            let rightRect = NSRect(x: frame.maxX - padW, y: frame.minY, width: padW, height: frame.height)
+            
+            var borders: [NSWindow] = []
+            for rect in [topRect, bottomRect, leftRect, rightRect] {
+                let win = NSWindow(contentRect: rect, styleMask: [.borderless], backing: .buffered, defer: false)
+                win.isOpaque = true
+                win.backgroundColor = .black
+                win.ignoresMouseEvents = true
+                win.level = NSWindow.Level(Int(CGWindowLevelForKey(.mainMenuWindow)) - 1)
+                win.collectionBehavior = [.canJoinAllSpaces, .stationary, .ignoresCycle]
+                win.hasShadow = false
+                win.orderFrontRegardless()
+                borders.append(win)
+            }
+            self.underscanWindows[displayID] = borders
+        }
+    }
+    
     public func removeAll() {
         DispatchQueue.main.async {
             CGDisplayRestoreColorSyncSettings()
@@ -109,8 +149,12 @@ public class SoftwareDimmer {
             for (_, window) in self.blackoutWindows {
                 window.orderOut(nil)
             }
+            for (_, windows) in self.underscanWindows {
+                for w in windows { w.orderOut(nil) }
+            }
             self.overlayWindows.removeAll()
             self.blackoutWindows.removeAll()
+            self.underscanWindows.removeAll()
             self.blackedOutDisplays.removeAll()
         }
     }

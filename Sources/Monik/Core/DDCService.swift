@@ -112,6 +112,27 @@ public class DDCService {
         }
     }
     
+    // Geometry, Size & Underscan VCP commands
+    public func setHorizontalSize(displayID: CGDirectDisplayID, value: Int) -> Bool {
+        return writeVCP(displayID: displayID, command: 0x22, value: UInt16(clamping: value))
+    }
+    
+    public func setVerticalSize(displayID: CGDirectDisplayID, value: Int) -> Bool {
+        return writeVCP(displayID: displayID, command: 0x32, value: UInt16(clamping: value))
+    }
+    
+    public func setHorizontalPosition(displayID: CGDirectDisplayID, value: Int) -> Bool {
+        return writeVCP(displayID: displayID, command: 0x20, value: UInt16(clamping: value))
+    }
+    
+    public func setVerticalPosition(displayID: CGDirectDisplayID, value: Int) -> Bool {
+        return writeVCP(displayID: displayID, command: 0x30, value: UInt16(clamping: value))
+    }
+    
+    public func setDisplayScaling(displayID: CGDirectDisplayID, modeCode: UInt16) -> Bool {
+        return writeVCP(displayID: displayID, command: 0x86, value: modeCode)
+    }
+    
     public func writeVCP(displayID: CGDirectDisplayID, command: UInt8, value: UInt16) -> Bool {
         guard let service = displayServices[displayID] else {
             return false

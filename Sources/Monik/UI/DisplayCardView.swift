@@ -289,6 +289,14 @@ struct DisplayCardView: View {
                     }
                     
                     submenuRow(
+                        icon: "arrow.up.left.and.arrow.down.right.rectangle",
+                        title: "Underscan & Overscan",
+                        submenuKey: "underscan"
+                    ) {
+                        underscanSubmenu
+                    }
+                    
+                    submenuRow(
                         icon: "power",
                         title: "Device Control",
                         submenuKey: "deviceControl"
@@ -734,5 +742,122 @@ struct DisplayCardView: View {
                 }
             }
         }
+    }
+    
+    // Underscan & Overscan Submenu
+    private var underscanSubmenu: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            // Underscan Slider
+            VStack(alignment: .leading, spacing: 3) {
+                HStack {
+                    Text("Underscan Padding")
+                        .font(.system(size: 11))
+                        .foregroundColor(.white.opacity(0.8))
+                    Spacer()
+                    Text("\(Int(round(display.underscan * 100)))%")
+                        .font(.system(size: 11, design: .monospaced))
+                        .foregroundColor(.white.opacity(0.9))
+                }
+                
+                HStack(spacing: 8) {
+                    Image(systemName: "arrow.down.right.and.arrow.up.left")
+                        .font(.system(size: 11))
+                        .foregroundColor(.white.opacity(0.7))
+                    
+                    Slider(
+                        value: Binding(
+                            get: { display.underscan },
+                            set: { displayManager.setUnderscan(for: display, value: $0) }
+                        ),
+                        in: 0.0...0.25,
+                        step: 0.01
+                    )
+                    .tint(.blue)
+                }
+                
+                // Quick Underscan preset chips
+                HStack(spacing: 6) {
+                    ForEach([0.0, 0.05, 0.10, 0.15, 0.20], id: \.self) { pct in
+                        Button(action: {
+                            displayManager.setUnderscan(for: display, value: pct)
+                        }) {
+                            Text(pct == 0.0 ? "0% (Off)" : "\(Int(pct * 100))%")
+                                .font(.system(size: 9, weight: display.underscan == pct ? .bold : .regular))
+                                .padding(.horizontal, 6)
+                                .padding(.vertical, 2)
+                                .background(display.underscan == pct ? Color.blue.opacity(0.4) : Color.white.opacity(0.1))
+                                .cornerRadius(4)
+                                .foregroundColor(.white)
+                        }
+                        .buttonStyle(.plain)
+                    }
+                }
+                .padding(.top, 2)
+            }
+            
+            Divider().background(Color.white.opacity(0.1))
+            
+            // Overscan Toggle
+            HStack {
+                VStack(alignment: .leading, spacing: 1) {
+                    Text("Overscan Compensation")
+                        .font(.system(size: 11))
+                        .foregroundColor(.white.opacity(0.9))
+                    Text("Crop or expand TV & projector signal edges")
+                        .font(.system(size: 9))
+                        .foregroundColor(.white.opacity(0.5))
+                }
+                Spacer()
+                Toggle("", isOn: Binding(
+                    get: { display.overscanEnabled },
+                    set: { displayManager.setOverscan(for: display, enabled: $0) }
+                ))
+                .labelsHidden()
+                .toggleStyle(SwitchToggleStyle(tint: .blue))
+                .scaleEffect(0.7)
+            }
+            
+            Divider().background(Color.white.opacity(0.1))
+            
+            // Display Scaling Mode
+            VStack(alignment: .leading, spacing: 4) {
+                Text("Scaling & Aspect Ratio")
+                    .font(.system(size: 11))
+                    .foregroundColor(.white.opacity(0.8))
+                
+                HStack(spacing: 4) {
+                    ForEach(["Full Screen", "Aspect Ratio", "1:1 Pixel", "Overscan"], id: \.self) { mode in
+                        Button(action: {
+                            displayManager.setDisplayScalingMode(for: display, mode: mode)
+                        }) {
+                            Text(mode)
+                                .font(.system(size: 9, weight: display.displayScalingMode == mode ? .bold : .regular))
+                                .padding(.horizontal, 5)
+                                .padding(.vertical, 3)
+                                .background(display.displayScalingMode == mode ? Color.blue.opacity(0.4) : Color.white.opacity(0.08))
+                                .cornerRadius(4)
+                                .foregroundColor(.white)
+                        }
+                        .buttonStyle(.plain)
+                    }
+                }
+            }
+            
+            // Geometry Reset Button
+            Button(action: {
+                displayManager.resetGeometry(for: display)
+            }) {
+                HStack {
+                    Image(systemName: "arrow.counterclockwise")
+                        .font(.system(size: 10))
+                    Text("Reset Underscan & Geometry")
+                        .font(.system(size: 10))
+                }
+                .foregroundColor(.white.opacity(0.6))
+                .padding(.top, 2)
+            }
+            .buttonStyle(.plain)
+        }
+        .padding(.vertical, 4)
     }
 }

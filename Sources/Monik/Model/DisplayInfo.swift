@@ -51,6 +51,15 @@ public class DisplayInfo: ObservableObject, Identifiable {
     @Published public var currentInputSource: String = "HDMI 1"
     @Published public var currentColorProfile: String = "Default"
     
+    // Underscan, Overscan & Geometry
+    @Published public var underscan: Double = 0.0 // 0.0 to 0.25 (0% to 25%)
+    @Published public var overscanEnabled: Bool = false
+    @Published public var horizontalSize: Int = 100 // 50 to 150
+    @Published public var verticalSize: Int = 100 // 50 to 150
+    @Published public var horizontalPosition: Int = 50 // 0 to 100
+    @Published public var verticalPosition: Int = 50 // 0 to 100
+    @Published public var displayScalingMode: String = "Full Screen"
+    
     @Published public var availableModes: [DisplayModeItem] = []
     @Published public var availableRefreshRates: [Double] = [60, 75, 120, 144]
     

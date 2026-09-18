@@ -252,4 +252,97 @@ public class DisplayManager: ObservableObject {
         display.currentInputSource = name
         _ = DDCService.shared.setInputSource(displayID: display.id, code: code)
     }
+    
+    // Underscan, Overscan & Geometry
+    public func setUnderscan(for display: DisplayInfo, value: Double) {
+        display.underscan = value
+        
+        // 1. Hardware MonitorPanel Underscan if available
+        dlopen("/System/Library/PrivateFrameworks/MonitorPanel.framework/MonitorPanel", RTLD_NOW)
+        if let MPDisplayClass = NSClassFromString("MPDisplay") as? NSObject.Type {
+            let selInit = NSSelectorFromString("initWithCGSDisplayID:")
+            if MPDisplayClass.instancesRespond(to: selInit) {
+                let alloc = MPDisplayClass.perform(NSSelectorFromString("alloc")).takeUnretainedValue()
+                let disp = unsafeBitCast(alloc.perform(selInit, with: display.id), to: AnyObject?.self)
+                let selSetU = NSSelectorFromString("setUnderscan:")
+                if let d = disp, d.responds(to: selSetU) {
+                    _ = d.perform(selSetU, with: Int32(round(value * 100)))
+                }
+            }
+        }
+        
+        // 2. Hardware DDC size scaling for external monitors
+        if !display.isBuiltIn {
+            let sizeVal = Int(round((1.0 - (value * 0.4)) * 100))
+            _ = DDCService.shared.setHorizontalSize(displayID: display.id, value: sizeVal)
+            _ = DDCService.shared.setVerticalSize(displayID: display.id, value: sizeVal)
+        }
+        
+        // 3. Software framing overlay
+        SoftwareDimmer.shared.setUnderscanBorder(displayID: display.id, paddingPercent: value)
+    }
+    
+    public func setOverscan(for display: DisplayInfo, enabled: Bool) {
+        display.overscanEnabled = enabled
+        
+        // MonitorPanel overscan
+        dlopen("/System/Library/PrivateFrameworks/MonitorPanel.framework/MonitorPanel", RTLD_NOW)
+        if let MPDisplayClass = NSClassFromString("MPDisplay") as? NSObject.Type {
+            let selInit = NSSelectorFromString("initWithCGSDisplayID:")
+            if MPDisplayClass.instancesRespond(to: selInit) {
+                let alloc = MPDisplayClass.perform(NSSelectorFromString("alloc")).takeUnretainedValue()
+                let disp = unsafeBitCast(alloc.perform(selInit, with: display.id), to: AnyObject?.self)
+                let selSetO = NSSelectorFromString("setOverscanEnabled:")
+                if let d = disp, d.responds(to: selSetO) {
+                    _ = d.perform(selSetO, with: enabled)
+                }
+            }
+        }
+        
+        if !display.isBuiltIn {
+            _ = DDCService.shared.setDisplayScaling(displayID: display.id, modeCode: enabled ? 4 : 1)
+        }
+    }
+    
+    public func setHorizontalSize(for display: DisplayInfo, value: Int) {
+        display.horizontalSize = value
+        _ = DDCService.shared.setHorizontalSize(displayID: display.id, value: value)
+    }
+    
+    public func setVerticalSize(for display: DisplayInfo, value: Int) {
+        display.verticalSize = value
+        _ = DDCService.shared.setVerticalSize(displayID: display.id, value: value)
+    }
+    
+    public func setHorizontalPosition(for display: DisplayInfo, value: Int) {
+        display.horizontalPosition = value
+        _ = DDCService.shared.setHorizontalPosition(displayID: display.id, value: value)
+    }
+    
+    public func setVerticalPosition(for display: DisplayInfo, value: Int) {
+        display.verticalPosition = value
+        _ = DDCService.shared.setVerticalPosition(displayID: display.id, value: value)
+    }
+    
+    public func setDisplayScalingMode(for display: DisplayInfo, mode: String) {
+        display.displayScalingMode = mode
+        var code: UInt16 = 1
+        switch mode {
+        case "Aspect Ratio": code = 2
+        case "1:1 Pixel Mapping": code = 3
+        case "Overscan": code = 4
+        default: code = 1 // Full Screen
+        }
+        _ = DDCService.shared.setDisplayScaling(displayID: display.id, modeCode: code)
+    }
+    
+    public func resetGeometry(for display: DisplayInfo) {
+        setUnderscan(for: display, value: 0.0)
+        setOverscan(for: display, enabled: false)
+        setHorizontalSize(for: display, value: 100)
+        setVerticalSize(for: display, value: 100)
+        setHorizontalPosition(for: display, value: 50)
+        setVerticalPosition(for: display, value: 50)
+        setDisplayScalingMode(for: display, mode: "Full Screen")
+    }
 }
