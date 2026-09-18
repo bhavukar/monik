@@ -2,27 +2,77 @@
 import { createPrism } from './prism.js';
 
 document.addEventListener('DOMContentLoaded', () => {
-  // 1. Initialize React Bits Prism Component
+  // 1. Initialize React Bits Prism Component with Refined Non-Zoomed, Silky Smooth Settings
   const prismContainer = document.getElementById('prism-canvas-container');
   if (prismContainer) {
     createPrism(prismContainer, {
       animationType: 'hover',
-      timeScale: 0.5,
+      timeScale: 0.35,
       height: 3.5,
       baseWidth: 5.5,
-      scale: 3.6,
+      scale: 1.55,
       hueShift: 0,
-      colorFrequency: 1,
-      noise: 0.5,
-      glow: 1,
-      bloom: 1,
+      colorFrequency: 1.0,
+      noise: 0.02,
+      glow: 1.1,
+      bloom: 1.15,
       transparent: true,
-      hoverStrength: 2,
-      inertia: 0.05
+      hoverStrength: 1.6,
+      inertia: 0.06
     });
   }
 
-  // 2. Live Clock in macOS Menu Bar
+  // 2. View Switcher (Popover View vs Settings Window View)
+  const btnViewPopover = document.getElementById('btn-view-popover');
+  const btnViewSettings = document.getElementById('btn-view-settings');
+  const viewPopover = document.getElementById('view-popover');
+  const viewSettings = document.getElementById('view-settings');
+  const menubarAppBtn = document.getElementById('menubar-app-btn');
+
+  const showPopover = () => {
+    if (btnViewPopover) btnViewPopover.classList.add('active');
+    if (btnViewSettings) btnViewSettings.classList.remove('active');
+    if (viewPopover) viewPopover.classList.add('active');
+    if (viewSettings) viewSettings.classList.remove('active');
+  };
+
+  const showSettings = () => {
+    if (btnViewPopover) btnViewPopover.classList.remove('active');
+    if (btnViewSettings) btnViewSettings.classList.add('active');
+    if (viewPopover) viewPopover.classList.remove('active');
+    if (viewSettings) viewSettings.classList.add('active');
+  };
+
+  if (btnViewPopover) btnViewPopover.addEventListener('click', showPopover);
+  if (btnViewSettings) btnViewSettings.addEventListener('click', showSettings);
+  if (menubarAppBtn) {
+    menubarAppBtn.addEventListener('click', () => {
+      if (viewPopover && viewPopover.classList.contains('active')) {
+        showSettings();
+      } else {
+        showPopover();
+      }
+    });
+  }
+
+  // 3. Settings Window Sidebar & Display Tabs Interaction
+  const sidebarItems = document.querySelectorAll('.sidebar-item');
+  sidebarItems.forEach(item => {
+    item.addEventListener('click', () => {
+      sidebarItems.forEach(i => i.classList.remove('active'));
+      item.classList.add('active');
+    });
+  });
+
+  const dispTabs = document.querySelectorAll('.disp-tab');
+  dispTabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      dispTabs.forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+    });
+  });
+
+  // 4. Live Clock in macOS Menu Bar
   const clockEl = document.getElementById('sim-clock');
   const updateClock = () => {
     if (!clockEl) return;
@@ -38,7 +88,7 @@ document.addEventListener('DOMContentLoaded', () => {
   updateClock();
   setInterval(updateClock, 30000);
 
-  // 3. Brightness & Volume Sliders
+  // 5. Brightness & Volume Sliders
   const bSlider1 = document.getElementById('brightness-slider-1');
   const bVal1 = document.getElementById('brightness-val-1');
   if (bSlider1 && bVal1) {
@@ -63,7 +113,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // 4. Per-Display Power Toggles (SkyLight Zero-LUT Blackout Simulator)
+  // 6. Per-Display Power Toggles (SkyLight Zero-LUT Blackout Simulator)
   const powerToggle1 = document.getElementById('power-toggle-1');
   const card1 = document.getElementById('card-1');
   if (powerToggle1 && card1) {
@@ -82,7 +132,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // 5. Presets Switcher
+  // 7. Presets Switcher
   const presetButtons = document.querySelectorAll('.preset-btn');
   presetButtons.forEach(btn => {
     btn.addEventListener('click', () => {
@@ -110,7 +160,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // 6. Platform Installation Tabs
+  // 8. Platform Installation Tabs
   const tabButtons = document.querySelectorAll('.tab-pill');
   const tabContents = document.querySelectorAll('.terminal-card');
 
