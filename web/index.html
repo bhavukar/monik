@@ -7,7 +7,7 @@
   <meta name="description" content="The clean, open-source hardware display controller for macOS, Linux, and Windows. DDC/CI control, native resolution switching, and per-display power management.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700;800&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700;800;900&family=Geist+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -16,24 +16,15 @@
   <header class="navbar">
     <div class="nav-container">
       <a href="#" class="nav-brand">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
-          <line x1="8" y1="21" x2="16" y2="21"></line>
-          <line x1="12" y1="17" x2="12" y2="21"></line>
-        </svg>
         <span>Manage Your Display</span>
       </a>
 
       <nav class="nav-links">
         <a href="#features">Features</a>
-        <a href="#demo">Preview</a>
         <a href="#comparison">Compare</a>
         <a href="#platforms">Platforms</a>
         <a href="#download" class="nav-btn-solid">Download</a>
         <a href="https://github.com/bhavukarora/monik" target="_blank" class="nav-btn-outline">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
-          </svg>
           <span>GitHub</span>
         </a>
       </nav>
@@ -61,19 +52,14 @@
         </p>
 
         <div class="hero-actions">
-          <a href="#download" class="btn btn-hero-primary">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M15.97 4.11c.61-.75 1.04-1.8 0.92-2.85-.92.04-2.02.62-2.67 1.38-.58.67-.99 1.74-.86 2.76 1.03.08 2.02-.54 2.61-1.29z"/>
-            </svg>
-            <span>Download for macOS</span>
-          </a>
+          <a href="#download" class="btn btn-hero-primary">Download for macOS</a>
           <a href="https://github.com/bhavukarora/monik" target="_blank" class="btn btn-hero-secondary">
             <span>View on GitHub</span>
             <span class="btn-arrow">→</span>
           </a>
         </div>
 
-        <!-- Clean, Realistic Floating MacBook Mockup -->
+        <!-- Ultra-Clean Floating MacBook Mockup -->
         <div id="demo" class="macbook-wrapper">
           <div class="macbook-mockup">
             <!-- Screen Lid -->
@@ -91,82 +77,57 @@
                   <span class="menu-item hide-mobile">File</span>
                   <span class="menu-item hide-mobile">Edit</span>
                   <span class="menu-item hide-mobile">View</span>
-                  <span class="menu-item hide-mobile">Go</span>
                   <span class="menu-item hide-mobile">Window</span>
                   <span class="menu-item hide-mobile">Help</span>
                 </div>
                 <div class="menubar-right">
-                  <!-- Manage Your Display Trigger Icon -->
-                  <div class="menubar-item-active" title="Manage Your Display Controller">
-                    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4">
-                      <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
-                      <line x1="8" y1="21" x2="16" y2="21"></line>
-                      <line x1="12" y1="17" x2="12" y2="21"></line>
-                    </svg>
-                  </div>
-                  <span class="status-icon hide-mobile">
-                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                      <path d="M5 12.55a11 11 0 0 1 14.08 0"></path>
-                      <path d="M1.42 9a16 16 0 0 1 21.16 0"></path>
-                      <path d="M8.53 16.11a6 6 0 0 1 6.95 0"></path>
-                      <line x1="12" y1="20" x2="12.01" y2="20"></line>
-                    </svg>
-                  </span>
+                  <span class="menubar-item-active">Manage Your Display</span>
                   <span class="status-text hide-mobile">100%</span>
-                  <span class="status-time" id="sim-clock">Fri 18 Sep 7:45 PM</span>
+                  <span class="status-time" id="sim-clock">Fri 7:45 PM</span>
                 </div>
               </div>
 
-              <!-- Screen Desktop Workspace (Clean Minimalist Atmosphere) -->
+              <!-- Clean Desktop Screen (Pure minimal aesthetic) -->
               <div class="macbook-display-content">
                 
-                <!-- Live Browser Display Intelligence Tag (Desktop Watermark) -->
+                <!-- Live Display Info Watermark -->
                 <div class="desktop-intel-badge">
-                  <div class="intel-dot"></div>
-                  <div class="intel-col">
-                    <span class="intel-live-title">Live Hardware Auto-Detected</span>
-                    <span class="intel-live-details" id="live-detected-details">Detecting your display...</span>
-                  </div>
+                  <span class="intel-live-title">Auto-Detected Display</span>
+                  <span class="intel-live-details" id="live-detected-details">Calibrating...</span>
                 </div>
 
-                <!-- Single Compact, Razor-Sharp Native Popover Menu -->
+                <!-- Compact, Razor-Sharp Native Popover -->
                 <div class="native-popover">
-                  <!-- Presets Top Row -->
+                  <!-- Presets Top Row (Text Only, No Emojis) -->
                   <div class="popover-presets">
-                    <button class="pill-btn active" data-preset="work">☀ Work & Day</button>
-                    <button class="pill-btn" data-preset="night">🌙 Ultra-Dim</button>
-                    <button class="pill-btn" data-preset="gaming">🎮 Gaming</button>
+                    <button class="pill-btn active" data-preset="work">Work & Day</button>
+                    <button class="pill-btn" data-preset="night">Ultra-Dim</button>
+                    <button class="pill-btn" data-preset="gaming">Gaming 144Hz</button>
                   </div>
 
-                  <!-- Popover Display List -->
+                  <!-- Display Cards List -->
                   <div class="popover-cards-list">
                     
-                    <!-- Card 1: User's Live Detected Display -->
+                    <!-- Card 1: User's Live Display -->
                     <div class="native-card" id="pop-card-1">
                       <div class="card-head">
                         <div class="head-left">
-                          <span class="icon-device">💻</span>
-                          <span class="card-name" id="card-name-1">Primary Display</span>
-                          <span class="badge-m">Live</span>
+                          <span class="card-name" id="card-name-1">MacBook Display</span>
+                          <span class="badge-m">Main</span>
                         </div>
-                        <div class="head-right">
-                          <label class="mac-switch" title="Toggle Power">
-                            <input type="checkbox" id="power-toggle-1" checked>
-                            <span class="mac-slider"></span>
-                          </label>
-                        </div>
+                        <label class="mac-switch" title="Toggle Power">
+                          <input type="checkbox" id="power-toggle-1" checked>
+                          <span class="mac-slider"></span>
+                        </label>
                       </div>
 
                       <!-- Brightness -->
                       <div class="row-slider">
                         <div class="row-title">
-                          <span class="row-label">Brightness (Combined)</span>
+                          <span class="row-label">Brightness</span>
                           <span class="row-val" id="brightness-val-1">100%</span>
                         </div>
-                        <div class="slider-track-wrap">
-                          <span class="icon-sun">☼</span>
-                          <input type="range" min="0" max="100" value="100" class="real-slider" id="brightness-slider-1">
-                        </div>
+                        <input type="range" min="0" max="100" value="100" class="real-slider" id="brightness-slider-1">
                       </div>
 
                       <!-- Volume -->
@@ -175,47 +136,38 @@
                           <span class="row-label">Volume</span>
                           <span class="row-val" id="volume-val-1">100%</span>
                         </div>
-                        <div class="slider-track-wrap">
-                          <span class="icon-sun">🔊</span>
-                          <input type="range" min="0" max="100" value="100" class="real-slider" id="volume-slider-1">
-                        </div>
+                        <input type="range" min="0" max="100" value="100" class="real-slider" id="volume-slider-1">
                       </div>
 
-                      <!-- Resolution Dropdown (Live Dynamically Populated) -->
+                      <!-- Resolution Dropdown -->
                       <div class="row-res">
                         <span class="res-label">Resolution</span>
                         <select class="native-select" id="res-select-1">
-                          <option value="detected">Native Resolution</option>
+                          <option value="native">Native Resolution</option>
                         </select>
                       </div>
                     </div>
 
-                    <!-- Card 2: External Monitor (DDC/CI Hardware) -->
+                    <!-- Card 2: External Display -->
                     <div class="native-card" id="pop-card-2">
                       <div class="card-head">
                         <div class="head-left">
-                          <span class="icon-device">🖥</span>
-                          <span class="card-name">External Monitor</span>
+                          <span class="card-name">Acer KG271</span>
                           <span class="badge-ddc">DDC</span>
                         </div>
-                        <div class="head-right">
-                          <label class="mac-switch" title="Toggle Power">
-                            <input type="checkbox" id="power-toggle-2" checked>
-                            <span class="mac-slider"></span>
-                          </label>
-                        </div>
+                        <label class="mac-switch" title="Toggle Power">
+                          <input type="checkbox" id="power-toggle-2" checked>
+                          <span class="mac-slider"></span>
+                        </label>
                       </div>
 
                       <!-- Brightness -->
                       <div class="row-slider">
                         <div class="row-title">
-                          <span class="row-label">Brightness (DDC/CI)</span>
+                          <span class="row-label">Brightness</span>
                           <span class="row-val" id="brightness-val-2">90%</span>
                         </div>
-                        <div class="slider-track-wrap">
-                          <span class="icon-sun">☼</span>
-                          <input type="range" min="0" max="100" value="90" class="real-slider" id="brightness-slider-2">
-                        </div>
+                        <input type="range" min="0" max="100" value="90" class="real-slider" id="brightness-slider-2">
                       </div>
 
                       <!-- Volume -->
@@ -224,20 +176,16 @@
                           <span class="row-label">Volume</span>
                           <span class="row-val" id="volume-val-2">80%</span>
                         </div>
-                        <div class="slider-track-wrap">
-                          <span class="icon-sun">🔊</span>
-                          <input type="range" min="0" max="100" value="80" class="real-slider" id="volume-slider-2">
-                        </div>
+                        <input type="range" min="0" max="100" value="80" class="real-slider" id="volume-slider-2">
                       </div>
 
                       <!-- Resolution Dropdown -->
                       <div class="row-res">
                         <span class="res-label">Resolution</span>
                         <select class="native-select" id="res-select-2">
-                          <option value="1920x1080@144">1920 x 1080 @ 144Hz ▾</option>
-                          <option value="1920x1080@120">1920 x 1080 @ 120Hz ▾</option>
-                          <option value="2560x1440@144">2560 x 1440 @ 144Hz ▾</option>
-                          <option value="3840x2160@60">3840 x 2160 @ 60Hz ▾</option>
+                          <option value="1920x1080@144">1920 x 1080 @ 144Hz</option>
+                          <option value="1920x1080@120">1920 x 1080 @ 120Hz</option>
+                          <option value="2560x1440@144">2560 x 1440 @ 144Hz</option>
                         </select>
                       </div>
                     </div>
@@ -246,21 +194,15 @@
 
                   <!-- Popover Footer -->
                   <div class="popover-footer">
-                    <div class="footer-badge-pro">
-                      <span class="pro-check">✓</span>
-                      <span>Manage Your Display Pro (Free)</span>
-                    </div>
-                    <div class="footer-icons">
-                      <span class="icon-gear" title="Settings">⚙</span>
-                      <span class="icon-power" title="Sync Power">⏻</span>
-                    </div>
+                    <span class="footer-badge-pro">Manage Your Display Pro (Free)</span>
+                    <span class="footer-status-label">Active</span>
                   </div>
                 </div>
 
               </div>
             </div>
 
-            <!-- MacBook Base / Keyboard Deck & Hinge -->
+            <!-- MacBook Base & Notch Opening -->
             <div class="macbook-base">
               <div class="macbook-notch-indent"></div>
             </div>
@@ -270,49 +212,71 @@
       </div>
     </section>
 
-    <!-- Features Section -->
-    <section id="features" class="section">
+    <!-- Features Section: Netflix Top 10 Style Showcase -->
+    <section id="features" class="section showcase-section">
       <div class="section-intro">
+        <div class="section-tag">TOP CAPABILITIES</div>
         <h2 class="section-title">Essential capabilities. Zero clutter.</h2>
-        <p class="section-subtitle">Everything you need to orchestrate multi-monitor desks with low-level precision.</p>
+        <p class="section-subtitle">Engineered with low-level kernel & DDC/CI precision for complete multi-monitor mastery.</p>
       </div>
 
-      <div class="grid-3">
-        <div class="card">
-          <div class="card-number">01</div>
-          <h3 class="card-title">Hardware DDC/CI Engine</h3>
-          <p class="card-desc">Control external monitor brightness, contrast, volume, input selection, and DPMS sleep over HDMI, DisplayPort, and USB-C.</p>
+      <!-- Netflix Top 10 Numbered Showcase Grid -->
+      <div class="top10-grid">
+        
+        <!-- Card 1 -->
+        <div class="top10-card">
+          <div class="top10-rank">1</div>
+          <div class="top10-content">
+            <h3 class="top10-title">Hardware DDC/CI Control</h3>
+            <p class="top10-desc">Direct I2C hardware communication on Apple Silicon & Intel. Adjust brightness, contrast, and audio volume over HDMI, DisplayPort, and Type-C.</p>
+          </div>
         </div>
 
-        <div class="card">
-          <div class="card-number">02</div>
-          <h3 class="card-title">Discrete Screen Power</h3>
-          <p class="card-desc">Toggle any display ON or OFF independently without affecting others via SkyLight window-server and zero-gamma LUT blackout.</p>
+        <!-- Card 2 -->
+        <div class="top10-card">
+          <div class="top10-rank">2</div>
+          <div class="top10-content">
+            <h3 class="top10-title">Discrete Screen Power</h3>
+            <p class="top10-desc">Turn any display ON or OFF independently without disturbing window arrangements via SkyLight window-server and zero-gamma LUT blackout.</p>
+          </div>
         </div>
 
-        <div class="card">
-          <div class="card-number">03</div>
-          <h3 class="card-title">Native Resolution Dropdown</h3>
-          <p class="card-desc">Instantly switch between native, HiDPI Retina, and high-refresh rates (up to 144Hz+) using a clean, accessible dropdown selector.</p>
+        <!-- Card 3 -->
+        <div class="top10-card">
+          <div class="top10-rank">3</div>
+          <div class="top10-content">
+            <h3 class="top10-title">Native Resolution Dropdown</h3>
+            <p class="top10-desc">Switch resolutions and refresh rates (up to 144Hz+) instantly via a clean native dropdown menu instead of confusing sliders.</p>
+          </div>
         </div>
 
-        <div class="card">
-          <div class="card-number">04</div>
-          <h3 class="card-title">Underscan & Overscan Sizing</h3>
-          <p class="card-desc">Compensate for cropped TV or projector bezels with adjustable 0%–25% edge padding and hardware VCP geometry scaling.</p>
+        <!-- Card 4 -->
+        <div class="top10-card">
+          <div class="top10-rank">4</div>
+          <div class="top10-content">
+            <h3 class="top10-title">Underscan & Overscan Sizing</h3>
+            <p class="top10-desc">Compensate for cropped TV or monitor bezels with custom 0%–25% hardware letterboxing and VCP geometry scaling.</p>
+          </div>
         </div>
 
-        <div class="card">
-          <div class="card-number">05</div>
-          <h3 class="card-title">Smart Panel Intelligence</h3>
-          <p class="card-desc">Automated calculation of screen diagonal inches, pixel density (PPI), and aspect ratio with 1-click optimal color profile tuning.</p>
+        <!-- Card 5 -->
+        <div class="top10-card">
+          <div class="top10-rank">5</div>
+          <div class="top10-content">
+            <h3 class="top10-title">Automated Panel Intelligence</h3>
+            <p class="top10-desc">Mathematical calculation of screen diagonal inches, pixel density (PPI), and aspect ratio with 1-click Display P3 / sRGB color calibration.</p>
+          </div>
         </div>
 
-        <div class="card">
-          <div class="card-number">06</div>
-          <h3 class="card-title">Global Hotkeys & Bezel OSD</h3>
-          <p class="card-desc">Adjust brightness and volume or switch presets globally with keyboard shortcuts and translucent macOS bezel HUD feedback.</p>
+        <!-- Card 6 -->
+        <div class="top10-card">
+          <div class="top10-rank">6</div>
+          <div class="top10-content">
+            <h3 class="top10-title">Cross-Platform Open Source</h3>
+            <p class="top10-desc">Native Swift release for macOS, PyQt6 & ddcutil for Linux, and DXVA2 for Windows. 100% free under the MIT License.</p>
+          </div>
         </div>
+
       </div>
     </section>
 
@@ -344,52 +308,52 @@
             </tr>
             <tr>
               <td>Hardware DDC/CI (Apple Silicon)</td>
-              <td class="primary-col">✓</td>
-              <td>✓</td>
-              <td>✓</td>
-              <td>✓</td>
+              <td class="primary-col">Yes</td>
+              <td>Yes</td>
+              <td>Yes</td>
+              <td>Yes</td>
             </tr>
             <tr>
               <td>Discrete Display Power On/Off</td>
-              <td class="primary-col">✓</td>
-              <td>✓</td>
-              <td>—</td>
-              <td>✓</td>
+              <td class="primary-col">Yes</td>
+              <td>Yes</td>
+              <td>No</td>
+              <td>Yes</td>
             </tr>
             <tr>
               <td>Native Resolution Dropdown & HiDPI</td>
-              <td class="primary-col">✓</td>
-              <td>✓</td>
-              <td>—</td>
-              <td>—</td>
+              <td class="primary-col">Yes</td>
+              <td>Yes</td>
+              <td>No</td>
+              <td>No</td>
             </tr>
             <tr>
               <td>Underscan & Overscan Sizing</td>
-              <td class="primary-col">✓</td>
-              <td>✓</td>
-              <td>—</td>
-              <td>—</td>
+              <td class="primary-col">Yes</td>
+              <td>Yes</td>
+              <td>No</td>
+              <td>No</td>
             </tr>
             <tr>
               <td>Smart Panel Intelligence (PPI & Gamut)</td>
-              <td class="primary-col">✓</td>
-              <td>—</td>
-              <td>—</td>
-              <td>—</td>
+              <td class="primary-col">Yes</td>
+              <td>No</td>
+              <td>No</td>
+              <td>No</td>
             </tr>
             <tr>
-              <td>Multi-Platform (macOS, Linux, Windows)</td>
-              <td class="primary-col">✓</td>
-              <td>—</td>
-              <td>—</td>
-              <td>—</td>
+              <td>Cross-Platform (macOS, Linux, Windows)</td>
+              <td class="primary-col">Yes</td>
+              <td>No</td>
+              <td>No</td>
+              <td>No</td>
             </tr>
             <tr>
               <td>Multi-Monitor Presets & Group Sync</td>
-              <td class="primary-col">✓</td>
-              <td>✓</td>
-              <td>—</td>
-              <td>✓</td>
+              <td class="primary-col">Yes</td>
+              <td>Yes</td>
+              <td>No</td>
+              <td>Yes</td>
             </tr>
           </tbody>
         </table>
