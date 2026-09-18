@@ -7,7 +7,7 @@
   <meta name="description" content="The clean, open-source hardware display controller for macOS, Linux, and Windows. DDC/CI control, native resolution switching, and per-display power management.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700;800;900&family=Geist+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -16,17 +16,23 @@
   <header class="navbar">
     <div class="nav-container">
       <a href="#" class="nav-brand">
-        <span>Manage Your Display</span>
+        <!-- Rotato-Inspired Minimal Geometric Logo Badge -->
+        <svg class="brand-logo" viewBox="0 0 38 38" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="19" cy="19" r="19" fill="#F7F7F5"/>
+          <rect x="9.5" y="11" width="19" height="13" rx="2.5" fill="#09090B"/>
+          <rect x="11.5" y="13" width="15" height="9" rx="1.5" fill="#F7F7F5"/>
+          <path d="M15 27.5H23" stroke="#09090B" stroke-width="2" stroke-linecap="round"/>
+          <path d="M19 24V27.5" stroke="#09090B" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+        <span class="brand-name">manage your display</span>
       </a>
 
       <nav class="nav-links">
         <a href="#features">Features</a>
         <a href="#comparison">Compare</a>
         <a href="#platforms">Platforms</a>
-        <a href="#download" class="nav-btn-solid">Download</a>
-        <a href="https://github.com/bhavukarora/monik" target="_blank" class="nav-btn-outline">
-          <span>GitHub</span>
-        </a>
+        <a href="#download" class="nav-btn-solid">Download Free</a>
+        <a href="https://github.com/bhavukarora/monik" target="_blank" class="nav-btn-outline">GitHub</a>
       </nav>
     </div>
   </header>
@@ -39,7 +45,7 @@
       <div class="hero-content">
         <div class="hero-tag">
           <span class="tag-badge">Open Source</span>
-          <span>BetterDisplay Pro Alternative • MIT License</span>
+          <span>BetterDisplay Alternative • Free Forever</span>
         </div>
 
         <h1 class="hero-heading">
@@ -48,18 +54,18 @@
         </h1>
 
         <p class="hero-description">
-          Manage brightness, audio volume, custom resolutions, refresh rates, underscan, and per-display power across all your external monitors and built-in screens. 100% free forever.
+          Manage brightness, volume, custom resolutions, refresh rates, underscan, and per-display power across all your external monitors and built-in screens. 100% free under the MIT license.
         </p>
 
         <div class="hero-actions">
-          <a href="#download" class="btn btn-hero-primary">Download for macOS</a>
-          <a href="https://github.com/bhavukarora/monik" target="_blank" class="btn btn-hero-secondary">
-            <span>View on GitHub</span>
+          <a href="#download" class="btn btn-primary">Download for macOS</a>
+          <a href="https://github.com/bhavukarora/monik" target="_blank" class="btn btn-secondary">
+            <span>View Source Code</span>
             <span class="btn-arrow">→</span>
           </a>
         </div>
 
-        <!-- Ultra-Clean Floating MacBook Mockup -->
+        <!-- Clean, Realistic Floating MacBook Mockup -->
         <div id="demo" class="macbook-wrapper">
           <div class="macbook-mockup">
             <!-- Screen Lid -->
@@ -87,18 +93,18 @@
                 </div>
               </div>
 
-              <!-- Clean Desktop Screen (Pure minimal aesthetic) -->
+              <!-- Clean Desktop Screen (Pure Minimal Atmosphere) -->
               <div class="macbook-display-content">
                 
-                <!-- Live Display Info Watermark -->
+                <!-- Live Display Auto-Detection Indicator -->
                 <div class="desktop-intel-badge">
-                  <span class="intel-live-title">Auto-Detected Display</span>
-                  <span class="intel-live-details" id="live-detected-details">Calibrating...</span>
+                  <span class="intel-live-title">Live Hardware Auto-Detected</span>
+                  <span class="intel-live-details" id="live-detected-details">Calibrating screen...</span>
                 </div>
 
-                <!-- Compact, Razor-Sharp Native Popover -->
+                <!-- Razor-Sharp Native Popover Menu -->
                 <div class="native-popover">
-                  <!-- Presets Top Row (Text Only, No Emojis) -->
+                  <!-- Text-Only Preset Pills (No Emojis) -->
                   <div class="popover-presets">
                     <button class="pill-btn active" data-preset="work">Work & Day</button>
                     <button class="pill-btn" data-preset="night">Ultra-Dim</button>
@@ -108,12 +114,12 @@
                   <!-- Display Cards List -->
                   <div class="popover-cards-list">
                     
-                    <!-- Card 1: User's Live Display -->
+                    <!-- Card 1: Live Detected Display -->
                     <div class="native-card" id="pop-card-1">
                       <div class="card-head">
                         <div class="head-left">
                           <span class="card-name" id="card-name-1">MacBook Display</span>
-                          <span class="badge-m">Main</span>
+                          <span class="badge-tag">Main</span>
                         </div>
                         <label class="mac-switch" title="Toggle Power">
                           <input type="checkbox" id="power-toggle-1" checked>
@@ -153,7 +159,7 @@
                       <div class="card-head">
                         <div class="head-left">
                           <span class="card-name">Acer KG271</span>
-                          <span class="badge-ddc">DDC</span>
+                          <span class="badge-tag">DDC</span>
                         </div>
                         <label class="mac-switch" title="Toggle Power">
                           <input type="checkbox" id="power-toggle-2" checked>
@@ -212,79 +218,58 @@
       </div>
     </section>
 
-    <!-- Features Section: Netflix Top 10 Style Showcase -->
-    <section id="features" class="section showcase-section">
+    <!-- Clean Rotato-Style Bento Grid Features -->
+    <section id="features" class="section">
       <div class="section-intro">
-        <div class="section-tag">TOP CAPABILITIES</div>
-        <h2 class="section-title">Essential capabilities. Zero clutter.</h2>
-        <p class="section-subtitle">Engineered with low-level kernel & DDC/CI precision for complete multi-monitor mastery.</p>
+        <div class="section-tag">CAPABILITIES</div>
+        <h2 class="section-title">Built for power users. Simple for everyone.</h2>
+        <p class="section-subtitle">Low-level I2C bus control and window-server integration with zero unnecessary bloat.</p>
       </div>
 
-      <!-- Netflix Top 10 Numbered Showcase Grid -->
-      <div class="top10-grid">
-        
-        <!-- Card 1 -->
-        <div class="top10-card">
-          <div class="top10-rank">1</div>
-          <div class="top10-content">
-            <h3 class="top10-title">Hardware DDC/CI Control</h3>
-            <p class="top10-desc">Direct I2C hardware communication on Apple Silicon & Intel. Adjust brightness, contrast, and audio volume over HDMI, DisplayPort, and Type-C.</p>
-          </div>
+      <div class="bento-grid">
+        <!-- Bento 1 -->
+        <div class="bento-card bento-wide">
+          <div class="bento-badge">HARDWARE ENGINE</div>
+          <h3 class="bento-title">Native DDC/CI Protocol Communication</h3>
+          <p class="bento-desc">Direct I2C hardware bus control for Apple Silicon (M1/M2/M3/M4) and Intel Macs. Adjust hardware brightness, contrast, volume, input sources, and DPMS sleep over HDMI, DisplayPort, and USB-C.</p>
         </div>
 
-        <!-- Card 2 -->
-        <div class="top10-card">
-          <div class="top10-rank">2</div>
-          <div class="top10-content">
-            <h3 class="top10-title">Discrete Screen Power</h3>
-            <p class="top10-desc">Turn any display ON or OFF independently without disturbing window arrangements via SkyLight window-server and zero-gamma LUT blackout.</p>
-          </div>
+        <!-- Bento 2 -->
+        <div class="bento-card">
+          <div class="bento-badge">INDEPENDENT POWER</div>
+          <h3 class="bento-title">Discrete Screen Power</h3>
+          <p class="bento-desc">Toggle any display ON or OFF independently without waking sleeping monitors or scrambling open windows via SkyLight window-server management and zero-gamma LUT blackout.</p>
         </div>
 
-        <!-- Card 3 -->
-        <div class="top10-card">
-          <div class="top10-rank">3</div>
-          <div class="top10-content">
-            <h3 class="top10-title">Native Resolution Dropdown</h3>
-            <p class="top10-desc">Switch resolutions and refresh rates (up to 144Hz+) instantly via a clean native dropdown menu instead of confusing sliders.</p>
-          </div>
+        <!-- Bento 3 -->
+        <div class="bento-card">
+          <div class="bento-badge">RESOLUTION & REFRESH</div>
+          <h3 class="bento-title">Native Resolution Dropdown</h3>
+          <p class="bento-desc">Switch resolutions, HiDPI 2x Retina modes, and high refresh rates (up to 144Hz+) instantly via a clean native dropdown menu instead of clunky sliders.</p>
         </div>
 
-        <!-- Card 4 -->
-        <div class="top10-card">
-          <div class="top10-rank">4</div>
-          <div class="top10-content">
-            <h3 class="top10-title">Underscan & Overscan Sizing</h3>
-            <p class="top10-desc">Compensate for cropped TV or monitor bezels with custom 0%–25% hardware letterboxing and VCP geometry scaling.</p>
-          </div>
+        <!-- Bento 4 -->
+        <div class="bento-card">
+          <div class="bento-badge">BEZEL GEOMETRY</div>
+          <h3 class="bento-title">Underscan & Overscan Sizing</h3>
+          <p class="bento-desc">Compensate for cropped TV or projector bezels with custom 0%–25% hardware letterboxing and VCP geometry scaling.</p>
         </div>
 
-        <!-- Card 5 -->
-        <div class="top10-card">
-          <div class="top10-rank">5</div>
-          <div class="top10-content">
-            <h3 class="top10-title">Automated Panel Intelligence</h3>
-            <p class="top10-desc">Mathematical calculation of screen diagonal inches, pixel density (PPI), and aspect ratio with 1-click Display P3 / sRGB color calibration.</p>
-          </div>
+        <!-- Bento 5 -->
+        <div class="bento-card bento-wide">
+          <div class="bento-badge">COLOR & PPI CALIBRATION</div>
+          <h3 class="bento-title">Automated Panel Intelligence</h3>
+          <p class="bento-desc">Instant mathematical calculation of screen diagonal inches, pixel density (PPI), and aspect ratio with 1-click Display P3 vs sRGB color calibration presets.</p>
         </div>
-
-        <!-- Card 6 -->
-        <div class="top10-card">
-          <div class="top10-rank">6</div>
-          <div class="top10-content">
-            <h3 class="top10-title">Cross-Platform Open Source</h3>
-            <p class="top10-desc">Native Swift release for macOS, PyQt6 & ddcutil for Linux, and DXVA2 for Windows. 100% free under the MIT License.</p>
-          </div>
-        </div>
-
       </div>
     </section>
 
     <!-- Comparison Section -->
     <section id="comparison" class="section">
       <div class="section-intro">
-        <h2 class="section-title">Transparent comparison.</h2>
-        <p class="section-subtitle">A direct side-by-side view against the leading alternatives.</p>
+        <div class="section-tag">TRANSPARENCY</div>
+        <h2 class="section-title">Direct side-by-side comparison.</h2>
+        <p class="section-subtitle">See how Manage Your Display compares against leading commercial tools.</p>
       </div>
 
       <div class="table-wrapper">
@@ -363,6 +348,7 @@
     <!-- Platforms Section -->
     <section id="platforms" class="section">
       <div class="section-intro">
+        <div class="section-tag">OPEN SOURCE</div>
         <h2 class="section-title">Cross-platform installation.</h2>
         <p class="section-subtitle">Runs natively across macOS, Linux, and Windows.</p>
       </div>
@@ -377,8 +363,7 @@
         <div class="terminal-bar">
           <span>macOS • Native Swift Release</span>
         </div>
-        <pre><code># Clone and build native .app bundle
-git clone https://github.com/bhavukarora/monik.git
+        <pre><code>git clone https://github.com/bhavukarora/monik.git
 cd monik
 ./scripts/build_app.sh
 open "build/Manage Your Display.app"</code></pre>
@@ -388,8 +373,7 @@ open "build/Manage Your Display.app"</code></pre>
         <div class="terminal-bar">
           <span>Linux • PyQt6 & ddcutil</span>
         </div>
-        <pre><code># Install I2C modules and run system tray GUI
-chmod +x linux/install.sh
+        <pre><code>chmod +x linux/install.sh
 ./linux/install.sh
 python3 linux/manage_your_display_gui.py</code></pre>
       </div>
@@ -398,8 +382,7 @@ python3 linux/manage_your_display_gui.py</code></pre>
         <div class="terminal-bar">
           <span>Windows • DXVA2 & Flutter</span>
         </div>
-        <pre><code># Run Windows system tray application
-flutter run -d windows</code></pre>
+        <pre><code>flutter run -d windows</code></pre>
       </div>
     </section>
 
@@ -407,10 +390,10 @@ flutter run -d windows</code></pre>
     <section id="download" class="section download-section">
       <div class="download-box">
         <h2 class="download-title">Ready to take control?</h2>
-        <p class="download-desc">Free and open source. No telemetry. No registration.</p>
+        <p class="download-desc">Free and open source. No telemetry. No paywalls. No registration.</p>
         <div class="download-actions">
-          <a href="https://github.com/bhavukarora/monik/releases" target="_blank" class="btn btn-hero-primary">Download Latest Release</a>
-          <a href="https://github.com/bhavukarora/monik" target="_blank" class="btn btn-hero-secondary">Browse Source Code</a>
+          <a href="https://github.com/bhavukarora/monik/releases" target="_blank" class="btn btn-primary">Download Latest Release</a>
+          <a href="https://github.com/bhavukarora/monik" target="_blank" class="btn btn-secondary">Browse Source Code</a>
         </div>
       </div>
     </section>
@@ -420,7 +403,7 @@ flutter run -d windows</code></pre>
   <footer class="footer">
     <div class="footer-container">
       <div class="footer-left">
-        <span>Manage Your Display • Released under the MIT License</span>
+        <span>manage your display • Released under the MIT License</span>
       </div>
       <div class="footer-links">
         <a href="https://github.com/bhavukarora/monik">GitHub</a>
