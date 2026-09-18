@@ -100,39 +100,49 @@
       </div>
 
       <div class="bento-grid">
-        <!-- Bento 1 -->
-        <div class="bento-card bento-wide">
+        <!-- Row 1: Span 2 + Span 1 = 3 Cols -->
+        <div class="bento-card bento-span-2">
           <div class="bento-badge">HARDWARE ENGINE</div>
           <h3 class="bento-title">Native DDC/CI Protocol Communication</h3>
           <p class="bento-desc">Direct I2C hardware bus control for Apple Silicon (M1/M2/M3/M4) and Intel Macs. Adjust hardware brightness, contrast, volume, input sources, and DPMS sleep over HDMI, DisplayPort, and USB-C.</p>
         </div>
 
-        <!-- Bento 2 -->
         <div class="bento-card">
           <div class="bento-badge">INDEPENDENT POWER</div>
           <h3 class="bento-title">Discrete Screen Power</h3>
           <p class="bento-desc">Toggle any display ON or OFF independently without waking sleeping monitors or scrambling open windows via SkyLight window-server management and zero-gamma LUT blackout.</p>
         </div>
 
-        <!-- Bento 3 -->
-        <div class="bento-card">
-          <div class="bento-badge">RESOLUTION & REFRESH</div>
-          <h3 class="bento-title">Native Resolution Dropdown</h3>
-          <p class="bento-desc">Switch resolutions, HiDPI 2x Retina modes, and high refresh rates (up to 144Hz+) instantly via a clean native dropdown menu instead of clunky sliders.</p>
-        </div>
-
-        <!-- Bento 4 -->
+        <!-- Row 2: Span 1 + Span 2 = 3 Cols -->
         <div class="bento-card">
           <div class="bento-badge">BEZEL GEOMETRY</div>
           <h3 class="bento-title">Underscan & Overscan Sizing</h3>
           <p class="bento-desc">Compensate for cropped TV or projector bezels with custom 0%–25% hardware letterboxing and VCP geometry scaling.</p>
         </div>
 
-        <!-- Bento 5 -->
-        <div class="bento-card bento-wide">
+        <div class="bento-card bento-span-2">
+          <div class="bento-badge">RESOLUTION & REFRESH</div>
+          <h3 class="bento-title">Native Resolution & ProMotion Control</h3>
+          <p class="bento-desc">Switch resolutions, HiDPI 2x Retina modes, and high refresh rates (up to 240Hz+) instantly via a clean native dropdown menu instead of clunky sliders.</p>
+        </div>
+
+        <!-- Row 3: Span 1 + Span 1 + Span 1 = 3 Cols -->
+        <div class="bento-card">
           <div class="bento-badge">COLOR & PPI CALIBRATION</div>
           <h3 class="bento-title">Automated Panel Intelligence</h3>
           <p class="bento-desc">Instant mathematical calculation of screen diagonal inches, pixel density (PPI), and aspect ratio with 1-click Display P3 vs sRGB color calibration presets.</p>
+        </div>
+
+        <div class="bento-card">
+          <div class="bento-badge">PRIVACY & PERFORMANCE</div>
+          <h3 class="bento-title">Zero Telemetry & 100% Free</h3>
+          <p class="bento-desc">No accounts, no background analytics, and no subscription paywalls. MIT licensed, private forever, with a tiny footprint under 20MB of RAM.</p>
+        </div>
+
+        <div class="bento-card">
+          <div class="bento-badge">MULTI-PLATFORM</div>
+          <h3 class="bento-title">Native Cross-Platform Core</h3>
+          <p class="bento-desc">Engineered in Swift & AppKit for macOS, with dedicated native backends for Windows 11 (DXVA2) and Linux (ddcutil/X11/Wayland).</p>
         </div>
       </div>
     </section>
