@@ -34,10 +34,9 @@ public class MenuBarController: NSObject, NSPopoverDelegate {
         
         // Setup popover
         popover = NSPopover()
-        popover.contentSize = NSSize(width: 350, height: 620)
+        popover.contentSize = NSSize(width: 360, height: 580)
         popover.behavior = .transient
         popover.delegate = self
-        popover.appearance = NSAppearance(named: .vibrantDark)
         popover.contentViewController = NSHostingController(rootView: MonikPopoverView())
     }
     
@@ -56,7 +55,7 @@ public class MenuBarController: NSObject, NSPopoverDelegate {
         
         let menu = NSMenu()
         
-        let headerItem = NSMenuItem(title: "Manage Your Display Pro", action: nil, keyEquivalent: "")
+        let headerItem = NSMenuItem(title: "Manage Your Display", action: nil, keyEquivalent: "")
         headerItem.isEnabled = false
         menu.addItem(headerItem)
         

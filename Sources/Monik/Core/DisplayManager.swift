@@ -41,45 +41,30 @@ public class DisplayManager: ObservableObject {
     }
     
     public func refreshDisplays() {
-        // 1. Gather all online displays
+        // 1. Gather ONLY real online, physically connected displays
         var onlineDisplays = [CGDirectDisplayID](repeating: 0, count: 16)
         var count: UInt32 = 0
         _ = CGGetOnlineDisplayList(16, &onlineDisplays, &count)
-        var discoveredIDs = Set(Array(onlineDisplays.prefix(Int(count))))
-        
-        // 2. Also scan potential CoreDisplay IDs (e.g. built-in display in clamshell mode)
-        for candidateID in 1...20 {
-            let id = CGDirectDisplayID(candidateID)
-            if let unmanagedDict = CoreDisplay_DisplayCreateInfoDictionary(id) {
-                let dict = unmanagedDict.takeRetainedValue() as NSDictionary
-                if dict["DisplayProductName"] != nil || CGDisplayIsBuiltin(id) != 0 {
-                    discoveredIDs.insert(id)
-                }
-            }
+        var discoveredIDs = Array(onlineDisplays.prefix(Int(count)))
+        if discoveredIDs.isEmpty {
+            discoveredIDs = [CGMainDisplayID()]
         }
         
         var updatedList: [DisplayInfo] = []
         
-        // Stable, persistent ordering: preserve the exact current UI display order so cards never jump around
-        var existingOrder: [CGDirectDisplayID] = self.displays.map { $0.id }
-        for id in Array(discoveredIDs).sorted(by: { $0 < $1 }) {
-            if !existingOrder.contains(id) {
-                existingOrder.append(id)
-            }
-        }
-        let stableOrderedIDs = existingOrder.filter { discoveredIDs.contains($0) }
-        
-        for (index, displayID) in stableOrderedIDs.enumerated() {
+        for (index, displayID) in discoveredIDs.enumerated() {
             let isBuiltIn = CGDisplayIsBuiltin(displayID) != 0
             let isMain = CGDisplayIsMain(displayID) != 0
             let isMirrored = CGDisplayIsInMirrorSet(displayID) != 0
             let isOnline = CGDisplayIsOnline(displayID) != 0
             let isActive = CGDisplayIsActive(displayID) != 0
+            let isAsleep = CGDisplayIsAsleep(displayID) != 0
+            let isBlackout = SoftwareDimmer.shared.isDisplayBlackedOut(displayID: displayID)
             let name = resolveDisplayName(displayID: displayID, isBuiltIn: isBuiltIn, index: index)
             
             var badge = ""
             if isMain {
-                badge = "M"
+                badge = "Main"
             } else if isBuiltIn {
                 badge = "Built-in"
             }
@@ -93,8 +78,8 @@ public class DisplayManager: ObservableObject {
                 badge: badge
             )
             
-            // True power state based on OS active/online state and software blackout
-            display.isPoweredOn = isOnline && isActive && !SoftwareDimmer.shared.isDisplayBlackedOut(displayID: displayID)
+            // True power state based on hardware and OS state
+            display.isPoweredOn = isOnline && isActive && !isAsleep && !isBlackout
             
             // Populate modes
             let modes = DisplayModesService.shared.getAvailableModes(for: displayID)
@@ -104,9 +89,16 @@ public class DisplayManager: ObservableObject {
                 display.currentRefreshRate = active.refreshRate
                 display.isHiDPI = active.isHiDPI
             } else if isOnline {
-                display.currentResolution = "\(CGDisplayPixelsWide(displayID))x\(CGDisplayPixelsHigh(displayID))"
+                display.currentResolution = "\(CGDisplayPixelsWide(displayID)) x \(CGDisplayPixelsHigh(displayID))"
             } else if isBuiltIn {
-                display.currentResolution = "3024 x 1964 (Built-in Retina)"
+                display.currentResolution = "3024 x 1964"
+            }
+            
+            // Populate unique refresh rates
+            let rates = modes.map { $0.refreshRate }.filter { $0 > 0 }
+            let uniqueRates = Array(Set(rates)).sorted()
+            if !uniqueRates.isEmpty {
+                display.availableRefreshRates = uniqueRates
             }
             
             display.rotation = Int(CGDisplayRotation(displayID))
@@ -122,7 +114,7 @@ public class DisplayManager: ObservableObject {
             updatedList.append(display)
         }
         
-        // Preserve open UI card state across refreshes (without overwriting real power state)
+        // Preserve user adjusted settings across refreshes
         for newDisplay in updatedList {
             if let existing = self.displays.first(where: { $0.id == newDisplay.id }) {
                 newDisplay.isExpanded = existing.isExpanded
@@ -131,6 +123,7 @@ public class DisplayManager: ObservableObject {
                     newDisplay.combinedBrightness = existing.combinedBrightness
                 }
                 newDisplay.volume = existing.volume
+                newDisplay.contrast = existing.contrast
             }
         }
         
@@ -162,19 +155,36 @@ public class DisplayManager: ObservableObject {
     
     // Core Actions
     public func setCombinedBrightness(for display: DisplayInfo, value: Double) {
-        display.combinedBrightness = value
+        let clamped = max(0.0, min(1.0, value))
+        display.combinedBrightness = clamped
         
         if display.isBuiltIn {
-            CoreDisplay_Display_SetUserBrightness(display.id, value)
+            CoreDisplay_Display_SetUserBrightness(display.id, clamped)
+            _ = CGSetDisplayTransferByFormula(display.id, 0.0, 1.0, 1.0, 0.0, 1.0, 1.0, 0.0, 1.0, 1.0)
             SoftwareDimmer.shared.setDimming(displayID: display.id, brightness: 1.0)
         } else {
-            let hardwareVal = Int(round(value * 100))
+            let hardwareVal = Int(round(clamped * 100))
             let ddcOk = DDCService.shared.setBrightness(displayID: display.id, value: hardwareVal)
             if ddcOk {
+                _ = CGSetDisplayTransferByFormula(display.id, 0.0, 1.0, 1.0, 0.0, 1.0, 1.0, 0.0, 1.0, 1.0)
                 SoftwareDimmer.shared.setDimming(displayID: display.id, brightness: 1.0)
             } else {
-                SoftwareDimmer.shared.setDimming(displayID: display.id, brightness: value)
+                // Seamless GPU Hardware Gamma LUT fallback (works across HDMI/dongles/docks)
+                let floatVal = Float(clamped)
+                _ = CGSetDisplayTransferByFormula(display.id, 0.0, floatVal, 1.0, 0.0, floatVal, 1.0, 0.0, floatVal, 1.0)
+                SoftwareDimmer.shared.setDimming(displayID: display.id, brightness: clamped)
             }
+        }
+    }
+    
+    public func setContrast(for display: DisplayInfo, value: Double) {
+        let clamped = max(0.0, min(1.0, value))
+        display.contrast = clamped
+        let val = Int(round(clamped * 100))
+        let ddcOk = DDCService.shared.setContrast(displayID: display.id, value: val)
+        if !ddcOk && !display.isBuiltIn {
+            let gamma = Float(0.5 + clamped)
+            _ = CGSetDisplayTransferByFormula(display.id, 0.0, Float(display.combinedBrightness), gamma, 0.0, Float(display.combinedBrightness), gamma, 0.0, Float(display.combinedBrightness), gamma)
         }
     }
     
@@ -194,7 +204,7 @@ public class DisplayManager: ObservableObject {
         OSDHUDController.shared.show(
             icon: "textformat.size",
             title: "Font Smoothing Enabled",
-            valueText: "Crisp External Display Text"
+            valueText: "Subpixel Text Antialiasing"
         )
     }
     
@@ -211,20 +221,24 @@ public class DisplayManager: ObservableObject {
                 ?? display.availableModes.max(by: { $0.refreshRate < $1.refreshRate }) {
                 setDisplayMode(for: display, mode: bestMode)
             }
+            
+            setCombinedBrightness(for: display, value: 0.9)
+            setContrast(for: display, value: 0.5)
         }
         
         refreshDisplays()
         
         OSDHUDController.shared.show(
             icon: "display",
-            title: "All Displays Restored",
-            valueText: "Crisp HiDPI & Standard Gamma"
+            title: "Displays Restored",
+            valueText: "Optimal Modes & Standard Gamma"
         )
     }
     
     public func setVolume(for display: DisplayInfo, value: Double) {
-        display.volume = value
-        let val = Int(round(value * 100))
+        let clamped = max(0.0, min(1.0, value))
+        display.volume = clamped
+        let val = Int(round(clamped * 100))
         _ = DDCService.shared.setVolume(displayID: display.id, value: val)
     }
     
@@ -233,6 +247,19 @@ public class DisplayManager: ObservableObject {
             display.currentResolution = mode.resolutionString
             display.currentRefreshRate = mode.refreshRate
             display.isHiDPI = mode.isHiDPI
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                self.refreshDisplays()
+            }
+        }
+    }
+    
+    public func setRefreshRate(for display: DisplayInfo, targetRate: Double) {
+        let curW = CGDisplayPixelsWide(display.id)
+        let curH = CGDisplayPixelsHigh(display.id)
+        if let mode = display.availableModes.first(where: {
+            $0.width == curW && $0.height == curH && abs($0.refreshRate - targetRate) < 1.0
+        }) ?? display.availableModes.first(where: { abs($0.refreshRate - targetRate) < 1.0 }) {
+            setDisplayMode(for: display, mode: mode)
         }
     }
     
@@ -253,10 +280,7 @@ public class DisplayManager: ObservableObject {
         display.isPoweredOn = powerOn
         
         if powerOn {
-            // 1. Re-enable in SkyLight / CoreGraphics / displayplacer
-            _ = DisplayModesService.shared.setDisplayEnabled(displayID: display.id, enabled: true)
-            
-            // 2. Hardware DDC power on & brightness restore
+            // 1. Hardware DDC wake
             if !display.isBuiltIn {
                 _ = DDCService.shared.setPower(displayID: display.id, powerOn: true)
                 let targetB = display.combinedBrightness > 0.05 ? display.combinedBrightness : 0.8
@@ -266,22 +290,22 @@ public class DisplayManager: ObservableObject {
                 CoreDisplay_Display_SetUserBrightness(display.id, targetB)
             }
             
-            // 3. Remove software blackout & restore gamma LUT
+            // 2. Remove software blackout & restore gamma LUT
             SoftwareDimmer.shared.setBlackout(displayID: display.id, isBlackout: false)
+            
+            // 3. Re-apply current brightness and contrast
+            setCombinedBrightness(for: display, value: display.combinedBrightness)
+            setContrast(for: display, value: display.contrast)
         } else {
-            // 1. Hardware DDC power off & brightness 0
+            // 1. Hardware DDC sleep
             if !display.isBuiltIn {
                 _ = DDCService.shared.setPower(displayID: display.id, powerOn: false)
-                _ = DDCService.shared.setBrightness(displayID: display.id, value: 0)
             } else {
                 CoreDisplay_Display_SetUserBrightness(display.id, 0.0)
             }
             
-            // 2. Software blackout & zero gamma LUT
+            // 2. Full blackout (gamma LUT zeroing + black window)
             SoftwareDimmer.shared.setBlackout(displayID: display.id, isBlackout: true)
-            
-            // 3. Disable in SkyLight / CoreGraphics / displayplacer
-            _ = DisplayModesService.shared.setDisplayEnabled(displayID: display.id, enabled: false)
         }
         
         // Refresh display list after power state change

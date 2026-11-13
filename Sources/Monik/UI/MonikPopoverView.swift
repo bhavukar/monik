@@ -8,188 +8,173 @@ import AppKit
 
 public struct MonikPopoverView: View {
     @ObservedObject var displayManager = DisplayManager.shared
-    @ObservedObject var presetManager = PresetManager.shared
     
     public init() {}
     
     public var body: some View {
-        ZStack {
-            VisualEffectBackground(material: .popover, blendingMode: .behindWindow)
-                .ignoresSafeArea()
-            
-            VStack(spacing: 0) {
-                ScrollView(.vertical, showsIndicators: false) {
-                    VStack(spacing: 12) {
-                        // Quick Optimization Action Bar for External Monitors
-                        HStack(spacing: 6) {
-                            Image(systemName: "sparkles")
-                                .font(.system(size: 11))
-                                .foregroundColor(.yellow)
-                            VStack(alignment: .leading, spacing: 1) {
-                                Text("Crisp Text & Native HiDPI")
-                                    .font(.system(size: 10, weight: .semibold))
-                                    .foregroundColor(.white)
-                                Text("Font smoothing & high refresh")
-                                    .font(.system(size: 8))
-                                    .foregroundColor(.white.opacity(0.6))
-                            }
-                            Spacer()
-                            Button(action: {
-                                displayManager.restoreAllDisplays()
-                            }) {
-                                HStack(spacing: 3) {
-                                    Image(systemName: "wand.and.stars")
-                                        .font(.system(size: 9))
-                                    Text("Fix Displays")
-                                        .font(.system(size: 10, weight: .bold))
-                                }
-                                .padding(.horizontal, 7)
-                                .padding(.vertical, 3)
-                                .background(Color.blue)
-                                .cornerRadius(5)
-                                .foregroundColor(.white)
-                            }
-                            .buttonStyle(.plain)
-                            .help("Restore crisp text antialiasing and optimal HiDPI modes on all external monitors")
-                        }
-                        .padding(.horizontal, 8)
-                        .padding(.vertical, 5)
-                        .background(Color.blue.opacity(0.2))
-                        .cornerRadius(7)
-                        .padding(.horizontal, 10)
-                        
-                        // Presets Quick Bar
-                        ScrollView(.horizontal, showsIndicators: false) {
-                            HStack(spacing: 6) {
-                                ForEach(presetManager.presets) { p in
-                                    Button(action: {
-                                        presetManager.applyPreset(p)
-                                    }) {
-                                        HStack(spacing: 4) {
-                                            Image(systemName: p.icon)
-                                                .font(.system(size: 10))
-                                            Text(p.name)
-                                                .font(.system(size: 10, weight: .medium))
-                                        }
-                                        .padding(.horizontal, 8)
-                                        .padding(.vertical, 4)
-                                        .background(Color.white.opacity(0.1))
-                                        .cornerRadius(6)
-                                        .foregroundColor(.white.opacity(0.9))
-                                    }
-                                    .buttonStyle(.plain)
-                                }
-                            }
-                            .padding(.horizontal, 10)
-                        }
-                        .padding(.top, 4)
-                        
-                        // Display Cards
-                        ForEach(displayManager.displays) { display in
-                            DisplayCardView(display: display)
-                        }
-                        
-                        // Tools Section
-                        ToolsSectionView()
-                    }
-                    .padding(.vertical, 10)
+        VStack(spacing: 0) {
+            // Header Bar
+            HStack(spacing: 8) {
+                Image(systemName: "display.2")
+                    .font(.system(size: 15, weight: .semibold))
+                    .foregroundColor(.blue)
+                
+                VStack(alignment: .leading, spacing: 1) {
+                    Text("Manage Your Display")
+                        .font(.system(size: 13, weight: .bold))
+                        .foregroundColor(.primary)
+                    Text("\(displayManager.displays.count) Displays Connected")
+                        .font(.system(size: 10, design: .monospaced))
+                        .foregroundColor(.secondary)
                 }
-                .frame(maxHeight: 650)
                 
-                // Bottom Bar
-                Divider()
-                    .background(Color.white.opacity(0.15))
+                Spacer()
                 
-                HStack(spacing: 8) {
-                    // Pro Status Badge
-                    HStack(spacing: 5) {
-                        Image(systemName: "checkmark.seal.fill")
+                // Action icons
+                HStack(spacing: 4) {
+                    Button(action: {
+                        displayManager.refreshDisplays()
+                    }) {
+                        Image(systemName: "arrow.clockwise")
                             .font(.system(size: 11))
-                            .foregroundColor(.white)
-                        Text("Manage Your Display Pro")
-                            .font(.system(size: 10, weight: .bold))
-                            .foregroundColor(.white)
+                            .frame(width: 26, height: 26)
+                            .background(Color(NSColor.controlBackgroundColor))
+                            .cornerRadius(6)
                     }
-                    .padding(.horizontal, 7)
-                    .padding(.vertical, 4)
-                    .background(
-                        LinearGradient(
-                            colors: [Color.blue.opacity(0.8), Color.purple.opacity(0.8)],
-                            startPoint: .leading,
-                            endPoint: .trailing
-                        )
-                    )
-                    .clipShape(Capsule())
+                    .buttonStyle(.plain)
+                    .help("Rescan Displays")
                     
-                    Spacer()
-                    
-                    // Fix Font Smoothing
                     Button(action: {
                         displayManager.enableMacFontSmoothing()
                     }) {
                         Image(systemName: "textformat.size")
-                            .font(.system(size: 12))
-                            .foregroundColor(.white.opacity(0.85))
+                            .font(.system(size: 11))
+                            .frame(width: 26, height: 26)
+                            .background(Color(NSColor.controlBackgroundColor))
+                            .cornerRadius(6)
                     }
                     .buttonStyle(.plain)
-                    .help("Fix Blurry Text (Font Smoothing)")
+                    .help("Fix Blurry Text (Enable macOS Subpixel Font Smoothing)")
                     
-                    // Settings Gear Button
                     Button(action: {
                         PreferencesWindowController.shared.show()
                     }) {
                         Image(systemName: "gearshape")
-                            .font(.system(size: 12))
-                            .foregroundColor(.white.opacity(0.85))
+                            .font(.system(size: 11))
+                            .frame(width: 26, height: 26)
+                            .background(Color(NSColor.controlBackgroundColor))
+                            .cornerRadius(6)
                     }
                     .buttonStyle(.plain)
                     .help("Settings")
                     
-                    // Prominent Quit Button
                     Button(action: {
                         NSApplication.shared.terminate(nil)
                     }) {
-                        HStack(spacing: 3) {
-                            Image(systemName: "power")
-                                .font(.system(size: 10, weight: .bold))
-                            Text("Quit")
-                                .font(.system(size: 10, weight: .bold))
-                        }
-                        .foregroundColor(.white)
-                        .padding(.horizontal, 7)
-                        .padding(.vertical, 4)
-                        .background(Color.red.opacity(0.85))
-                        .cornerRadius(5)
+                        Image(systemName: "power")
+                            .font(.system(size: 11))
+                            .foregroundColor(.red)
+                            .frame(width: 26, height: 26)
+                            .background(Color(NSColor.controlBackgroundColor))
+                            .cornerRadius(6)
                     }
                     .buttonStyle(.plain)
-                    .help("Quit Manage Your Display (Cmd+Q)")
+                    .help("Quit Manage Your Display (⌘Q)")
                 }
-                .padding(.horizontal, 10)
-                .padding(.vertical, 8)
-                .background(Color.black.opacity(0.3))
             }
+            .padding(.horizontal, 14)
+            .padding(.vertical, 12)
+            .background(Color(NSColor.windowBackgroundColor))
+            
+            Divider()
+            
+            // Scrollable List of Display Cards
+            ScrollView(.vertical, showsIndicators: true) {
+                VStack(spacing: 12) {
+                    if displayManager.displays.isEmpty {
+                        VStack(spacing: 10) {
+                            Image(systemName: "display.trianglebadge.exclamationmark")
+                                .font(.system(size: 32))
+                                .foregroundColor(.secondary)
+                            Text("No Displays Detected")
+                                .font(.system(size: 13, weight: .semibold))
+                            Text("Check your monitor cables and connections.")
+                                .font(.system(size: 11))
+                                .foregroundColor(.secondary)
+                            Button("Scan Again") {
+                                displayManager.refreshDisplays()
+                            }
+                            .buttonStyle(.borderedProminent)
+                        }
+                        .padding(.vertical, 40)
+                    } else {
+                        ForEach(displayManager.displays) { display in
+                            DisplayCardView(display: display)
+                        }
+                    }
+                }
+                .padding(12)
+            }
+            .frame(maxHeight: 560)
+            
+            Divider()
+            
+            // Bottom Bar
+            HStack(spacing: 8) {
+                Button(action: {
+                    if let url = URL(string: "x-apple.systempreferences:com.apple.Displays-Settings.extension") {
+                        NSWorkspace.shared.open(url)
+                    } else {
+                        NSWorkspace.shared.open(URL(fileURLWithPath: "/System/Applications/System Settings.app"))
+                    }
+                }) {
+                    HStack(spacing: 4) {
+                        Image(systemName: "display")
+                            .font(.system(size: 10))
+                        Text("macOS Displays...")
+                            .font(.system(size: 11))
+                    }
+                    .foregroundColor(.secondary)
+                }
+                .buttonStyle(.plain)
+                
+                Spacer()
+                
+                Button(action: {
+                    displayManager.restoreAllDisplays()
+                }) {
+                    HStack(spacing: 4) {
+                        Image(systemName: "arrow.counterclockwise")
+                            .font(.system(size: 10))
+                        Text("Reset All")
+                            .font(.system(size: 11))
+                    }
+                    .foregroundColor(.secondary)
+                }
+                .buttonStyle(.plain)
+                .help("Reset brightness, gamma, and restore crisp modes")
+                
+                Divider()
+                    .frame(height: 12)
+                
+                Button(action: {
+                    NSApplication.shared.terminate(nil)
+                }) {
+                    HStack(spacing: 3) {
+                        Text("Quit")
+                            .font(.system(size: 11, weight: .medium))
+                        Text("⌘Q")
+                            .font(.system(size: 10, design: .monospaced))
+                            .foregroundColor(.secondary)
+                    }
+                    .foregroundColor(.red.opacity(0.85))
+                }
+                .buttonStyle(.plain)
+            }
+            .padding(.horizontal, 14)
+            .padding(.vertical, 8)
+            .background(Color(NSColor.windowBackgroundColor))
         }
-        .frame(width: 350)
-        .preferredColorScheme(.dark)
-    }
-}
-
-// NSVisualEffectView Wrapper for SwiftUI
-struct VisualEffectBackground: NSViewRepresentable {
-    let material: NSVisualEffectView.Material
-    let blendingMode: NSVisualEffectView.BlendingMode
-    
-    func makeNSView(context: Context) -> NSVisualEffectView {
-        let view = NSVisualEffectView()
-        view.material = material
-        view.blendingMode = blendingMode
-        view.state = .active
-        view.appearance = NSAppearance(named: .vibrantDark)
-        return view
-    }
-    
-    func updateNSView(_ nsView: NSVisualEffectView, context: Context) {
-        nsView.material = material
-        nsView.blendingMode = blendingMode
+        .frame(width: 360)
     }
 }

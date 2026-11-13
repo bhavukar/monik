@@ -106,6 +106,25 @@ public class DisplayModesService {
     }
     
     public func setDisplayMode(displayID: CGDirectDisplayID, modeNumber: Int32) -> Bool {
+        // 1. Try official CoreGraphics display mode configuration first
+        let opt = [kCGDisplayShowDuplicateLowResolutionModes: kCFBooleanTrue] as CFDictionary
+        if let cgModes = CGDisplayCopyAllDisplayModes(displayID, opt) as? [CGDisplayMode] {
+            if let targetMode = cgModes.first(where: { $0.ioDisplayModeID == modeNumber }) {
+                var config: CGDisplayConfigRef?
+                if CGBeginDisplayConfiguration(&config) == .success, let cfg = config {
+                    let err = CGConfigureDisplayWithDisplayMode(cfg, displayID, targetMode, nil)
+                    if err == .success {
+                        let comp = CGCompleteDisplayConfiguration(cfg, .permanently)
+                        if comp == .success {
+                            return true
+                        }
+                    }
+                    CGCancelDisplayConfiguration(cfg)
+                }
+            }
+        }
+        
+        // 2. Try SkyLight CGSConfigureDisplayMode
         var config: CGDisplayConfigRef?
         if CGBeginDisplayConfiguration(&config) == .success, let cfg = config {
             CGSConfigureDisplayMode(cfg, displayID, modeNumber)
@@ -116,7 +135,7 @@ public class DisplayModesService {
             CGCancelDisplayConfiguration(cfg)
         }
         
-        // Fallback to displayplacer CLI if installed
+        // 3. Fallback to displayplacer CLI if installed
         if let uuid = getDisplayUUID(for: displayID) {
             let displayplacerPaths = ["/opt/homebrew/bin/displayplacer", "/usr/local/bin/displayplacer"]
             for path in displayplacerPaths {

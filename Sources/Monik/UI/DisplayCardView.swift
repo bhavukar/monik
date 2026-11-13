@@ -1,923 +1,313 @@
 //
 //  DisplayCardView.swift
-//  Monik
+//  Manage Your Display
 //
 
 import SwiftUI
 import CoreGraphics
+import AppKit
 
 struct DisplayCardView: View {
     @ObservedObject var display: DisplayInfo
     @ObservedObject var displayManager = DisplayManager.shared
     
     var body: some View {
-        VStack(spacing: 8) {
-            // Card Header
+        VStack(spacing: 12) {
+            // Header Row: Icon, Name, Badges, and Power Toggle
             HStack(spacing: 8) {
                 Image(systemName: display.isBuiltIn ? "laptopcomputer" : "display")
-                    .font(.system(size: 14))
-                    .foregroundColor(display.isPoweredOn ? .white : .white.opacity(0.4))
+                    .font(.system(size: 16, weight: .medium))
+                    .foregroundColor(display.isPoweredOn ? .primary : .secondary)
                 
-                Text(display.name)
-                    .font(.system(size: 13, weight: .semibold))
-                    .foregroundColor(display.isPoweredOn ? .white : .white.opacity(0.6))
-                    .lineLimit(1)
-                
-                if !display.badge.isEmpty {
-                    Text(display.badge)
-                        .font(.system(size: 9, weight: .bold))
-                        .padding(.horizontal, 5)
-                        .padding(.vertical, 2)
-                        .background(Color.white.opacity(0.2))
-                        .clipShape(Capsule())
-                        .foregroundColor(.white.opacity(0.9))
-                }
-                
-                if !display.isPoweredOn {
-                    Text("Off")
-                        .font(.system(size: 9, weight: .bold))
-                        .padding(.horizontal, 5)
-                        .padding(.vertical, 2)
-                        .background(Color.red.opacity(0.3))
-                        .clipShape(Capsule())
-                        .foregroundColor(.red.opacity(0.9))
+                VStack(alignment: .leading, spacing: 2) {
+                    HStack(spacing: 6) {
+                        Text(display.name)
+                            .font(.system(size: 13, weight: .bold))
+                            .foregroundColor(display.isPoweredOn ? .primary : .secondary)
+                            .lineLimit(1)
+                        
+                        if display.isMain {
+                            Text("Main")
+                                .font(.system(size: 9, weight: .semibold))
+                                .padding(.horizontal, 5)
+                                .padding(.vertical, 1.5)
+                                .background(Color.blue.opacity(0.15))
+                                .foregroundColor(.blue)
+                                .cornerRadius(4)
+                        }
+                    }
+                    
+                    HStack(spacing: 4) {
+                        Circle()
+                            .fill(display.isPoweredOn ? Color.green : Color.secondary)
+                            .frame(width: 6, height: 6)
+                        Text(display.isPoweredOn ? "Active" : "Off")
+                            .font(.system(size: 10, weight: .medium))
+                            .foregroundColor(display.isPoweredOn ? .primary : .secondary)
+                        
+                        if !display.currentResolution.isEmpty {
+                            Text("• \(display.currentResolution) @ \(Int(round(display.currentRefreshRate)))Hz")
+                                .font(.system(size: 10, design: .monospaced))
+                                .foregroundColor(.secondary)
+                        }
+                    }
                 }
                 
                 Spacer()
                 
-                // Header action icons
-                HStack(spacing: 6) {
-                    Button(action: {
-                        displayManager.setAsMainDisplay(for: display)
-                    }) {
-                        Image(systemName: "square.dashed")
-                            .font(.system(size: 12))
-                            .foregroundColor(.white.opacity(0.7))
-                    }
-                    .buttonStyle(.plain)
-                    .help("Set as Main Display")
-                    
-                    Button(action: {
-                        PictureInPictureService.shared.togglePiP(for: display.id)
-                    }) {
-                        Image(systemName: "pip")
-                            .font(.system(size: 12))
-                            .foregroundColor(.white.opacity(0.7))
-                    }
-                    .buttonStyle(.plain)
-                    .help("Picture in Picture")
-                }
-                
+                // Hardware / Software Power Toggle
                 Toggle("", isOn: Binding(
                     get: { display.isPoweredOn },
                     set: { displayManager.setPower(for: display, powerOn: $0) }
                 ))
                 .labelsHidden()
-                .toggleStyle(SwitchToggleStyle(tint: .blue))
-                .scaleEffect(0.75)
+                .toggleStyle(SwitchToggleStyle())
+                .scaleEffect(0.8)
+                .help(display.isPoweredOn ? "Turn off display" : "Turn on display")
             }
-            .padding(.horizontal, 10)
-            .padding(.top, 10)
+            .padding(.bottom, 2)
             
-            // Brightness (Combined)
-            VStack(alignment: .leading, spacing: 3) {
-                HStack {
-                    Text("Brightness (Combined)")
-                        .font(.system(size: 11))
-                        .foregroundColor(.white.opacity(0.8))
-                    Spacer()
-                    Text("\(Int(round(display.combinedBrightness * 100)))%")
-                        .font(.system(size: 11, design: .monospaced))
-                        .foregroundColor(.white.opacity(0.9))
-                }
-                HStack(spacing: 8) {
-                    Image(systemName: "sun.max.fill")
-                        .font(.system(size: 12))
-                        .foregroundColor(.white.opacity(0.8))
-                    
-                    Slider(
-                        value: Binding(
-                            get: { display.combinedBrightness },
-                            set: { displayManager.setCombinedBrightness(for: display, value: $0) }
-                        ),
-                        in: 0.0...1.0
-                    )
-                    .tint(.white)
-                    .disabled(!display.isPoweredOn)
-                }
-            }
-            .padding(.horizontal, 10)
-            .opacity(display.isPoweredOn ? 1.0 : 0.4)
-            
-            // Volume
-            VStack(alignment: .leading, spacing: 3) {
-                HStack {
-                    Text("Volume")
-                        .font(.system(size: 11))
-                        .foregroundColor(.white.opacity(0.8))
-                    Spacer()
-                    Text("\(Int(round(display.volume * 100)))%")
-                        .font(.system(size: 11, design: .monospaced))
-                        .foregroundColor(.white.opacity(0.9))
-                }
-                HStack(spacing: 8) {
-                    Image(systemName: "speaker.wave.2.fill")
-                        .font(.system(size: 12))
-                        .foregroundColor(.white.opacity(0.8))
-                    
-                    Slider(
-                        value: Binding(
-                            get: { display.volume },
-                            set: { displayManager.setVolume(for: display, value: $0) }
-                        ),
-                        in: 0.0...1.0
-                    )
-                    .tint(.white)
-                    .disabled(!display.isPoweredOn)
-                }
-            }
-            .padding(.horizontal, 10)
-            .opacity(display.isPoweredOn ? 1.0 : 0.4)
-            
-            // Resolution Picker
-            HStack(spacing: 8) {
-                Image(systemName: "aspectratio")
-                    .font(.system(size: 12))
-                    .foregroundColor(.white.opacity(0.8))
-                    .frame(width: 16)
-                
-                Text("Resolution")
-                    .font(.system(size: 11))
-                    .foregroundColor(.white.opacity(0.8))
-                
-                Spacer()
-                
-                Menu {
-                    if display.availableModes.isEmpty {
-                        Text("No resolutions available")
-                    } else {
-                        ForEach(display.availableModes) { mode in
-                            Button(action: {
-                                displayManager.setDisplayMode(for: display, mode: mode)
-                            }) {
-                                HStack {
-                                    if mode.isActive {
-                                        Image(systemName: "checkmark")
-                                    }
-                                    Text(mode.descriptionString)
-                                }
-                            }
-                        }
-                    }
-                } label: {
-                    HStack(spacing: 4) {
-                        Text(display.currentResolution)
-                            .font(.system(size: 11, weight: .semibold, design: .monospaced))
-                            .foregroundColor(.white)
-                            .lineLimit(1)
-                        
-                        if display.currentRefreshRate > 0 {
-                            Text("@ \(Int(round(display.currentRefreshRate)))Hz")
-                                .font(.system(size: 10, design: .monospaced))
-                                .foregroundColor(.white.opacity(0.7))
-                        }
-                        
-                        if display.isHiDPI {
-                            Text("HiDPI")
-                                .font(.system(size: 8, weight: .bold))
-                                .padding(.horizontal, 4)
-                                .padding(.vertical, 1)
-                                .background(Color.blue.opacity(0.4))
-                                .cornerRadius(3)
-                                .foregroundColor(.white)
-                        }
-                        
-                        Image(systemName: "chevron.up.chevron.down")
-                            .font(.system(size: 9))
-                            .foregroundColor(.white.opacity(0.6))
-                    }
-                    .padding(.horizontal, 8)
-                    .padding(.vertical, 4)
-                    .background(Color.white.opacity(0.12))
-                    .cornerRadius(6)
-                }
-                .menuStyle(BorderlessButtonMenuStyle())
-                .disabled(!display.isPoweredOn)
-            }
-            .padding(.horizontal, 10)
-            .opacity(display.isPoweredOn ? 1.0 : 0.4)
-            
-            // Expandable Chevron
-            Button(action: {
-                withAnimation(.easeInOut(duration: 0.2)) {
-                    display.isExpanded.toggle()
-                }
-            }) {
-                Image(systemName: display.isExpanded ? "chevron.up" : "chevron.down")
-                    .font(.system(size: 11, weight: .semibold))
-                    .foregroundColor(.white.opacity(0.6))
-                    .frame(maxWidth: .infinity)
-                    .padding(.vertical, 3)
-            }
-            .buttonStyle(.plain)
-            
-            // Expanded Settings Menu
-            if display.isExpanded {
-                VStack(spacing: 1) {
-                    // Smart Display Tuning & Profile Recommendation Card
-                    let rec = DisplayIntelligenceService.shared.analyzeDisplay(display: display)
-                    VStack(alignment: .leading, spacing: 6) {
+            if display.isPoweredOn {
+                VStack(spacing: 10) {
+                    // Brightness Slider (0–100%)
+                    VStack(alignment: .leading, spacing: 2) {
                         HStack {
-                            Image(systemName: "sparkles")
-                                .font(.system(size: 11, weight: .bold))
-                                .foregroundColor(.yellow)
-                            Text("Smart Panel Intelligence")
-                                .font(.system(size: 11, weight: .semibold))
-                                .foregroundColor(.white.opacity(0.9))
+                            Image(systemName: "sun.max.fill")
+                                .font(.system(size: 11))
+                                .foregroundColor(.secondary)
+                            Text("Brightness")
+                                .font(.system(size: 11, weight: .medium))
+                                .foregroundColor(.primary)
                             Spacer()
-                            Text(rec.panelCategory)
-                                .font(.system(size: 9, weight: .medium))
-                                .padding(.horizontal, 5)
-                                .padding(.vertical, 2)
-                                .background(Color.blue.opacity(0.3))
-                                .cornerRadius(4)
-                                .foregroundColor(.white.opacity(0.9))
+                            Text("\(Int(round(display.combinedBrightness * 100)))%")
+                                .font(.system(size: 11, design: .monospaced))
+                                .foregroundColor(.secondary)
                         }
                         
-                        Text("Detected: \(String(format: "%.1f", rec.diagonalInches))\" • \(Int(round(rec.ppi))) PPI • \(rec.aspectRatioString)")
-                            .font(.system(size: 10, design: .monospaced))
-                            .foregroundColor(.white.opacity(0.6))
+                        Slider(
+                            value: Binding(
+                                get: { display.combinedBrightness },
+                                set: { displayManager.setCombinedBrightness(for: display, value: $0) }
+                            ),
+                            in: 0.0...1.0
+                        )
+                        .tint(.blue)
+                    }
+                    
+                    // Contrast Slider (0–100%)
+                    VStack(alignment: .leading, spacing: 2) {
+                        HStack {
+                            Image(systemName: "circle.lefthalf.filled")
+                                .font(.system(size: 11))
+                                .foregroundColor(.secondary)
+                            Text("Contrast")
+                                .font(.system(size: 11, weight: .medium))
+                                .foregroundColor(.primary)
+                            Spacer()
+                            Text("\(Int(round(display.contrast * 100)))%")
+                                .font(.system(size: 11, design: .monospaced))
+                                .foregroundColor(.secondary)
+                        }
                         
-                        HStack(spacing: 6) {
-                            VStack(alignment: .leading, spacing: 1) {
-                                Text("Suggested Profile:")
-                                    .font(.system(size: 9))
-                                    .foregroundColor(.white.opacity(0.5))
-                                Text(rec.optimalColorProfile)
-                                    .font(.system(size: 10, weight: .bold))
-                                    .foregroundColor(.white.opacity(0.95))
+                        Slider(
+                            value: Binding(
+                                get: { display.contrast },
+                                set: { displayManager.setContrast(for: display, value: $0) }
+                            ),
+                            in: 0.0...1.0
+                        )
+                        .tint(.blue)
+                    }
+                    
+                    // Volume Slider (only if external or supported)
+                    if !display.isBuiltIn {
+                        VStack(alignment: .leading, spacing: 2) {
+                            HStack {
+                                Image(systemName: display.volume > 0 ? "speaker.wave.2.fill" : "speaker.slash.fill")
+                                    .font(.system(size: 11))
+                                    .foregroundColor(.secondary)
+                                Text("Volume")
+                                    .font(.system(size: 11, weight: .medium))
+                                    .foregroundColor(.primary)
+                                Spacer()
+                                Text("\(Int(round(display.volume * 100)))%")
+                                    .font(.system(size: 11, design: .monospaced))
+                                    .foregroundColor(.secondary)
                             }
                             
-                            Spacer()
+                            Slider(
+                                value: Binding(
+                                    get: { display.volume },
+                                    set: { displayManager.setVolume(for: display, value: $0) }
+                                ),
+                                in: 0.0...1.0
+                            )
+                            .tint(.blue)
+                        }
+                    }
+                    
+                    Divider()
+                        .padding(.vertical, 2)
+                    
+                    // Resolution & Refresh Rate Pickers
+                    HStack(spacing: 8) {
+                        // Resolution Menu
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text("Resolution")
+                                .font(.system(size: 10, weight: .medium))
+                                .foregroundColor(.secondary)
                             
-                            Button(action: {
-                                DisplayIntelligenceService.shared.applyRecommendation(display: display, recommendation: rec)
-                            }) {
+                            Menu {
+                                if display.availableModes.isEmpty {
+                                    Text("No modes available")
+                                } else {
+                                    let uniqueModes = uniqueResolutionModes(for: display.availableModes)
+                                    ForEach(uniqueModes) { mode in
+                                        Button(action: {
+                                            displayManager.setDisplayMode(for: display, mode: mode)
+                                        }) {
+                                            HStack {
+                                                if mode.isActive {
+                                                    Image(systemName: "checkmark")
+                                                }
+                                                Text(mode.descriptionString)
+                                            }
+                                        }
+                                    }
+                                }
+                            } label: {
                                 HStack(spacing: 4) {
-                                    Image(systemName: "wand.and.stars")
+                                    Text(display.currentResolution)
+                                        .font(.system(size: 11, weight: .semibold, design: .monospaced))
+                                        .lineLimit(1)
+                                    if display.isHiDPI {
+                                        Text("HiDPI")
+                                            .font(.system(size: 8, weight: .bold))
+                                            .padding(.horizontal, 3)
+                                            .padding(.vertical, 1)
+                                            .background(Color.blue.opacity(0.2))
+                                            .foregroundColor(.blue)
+                                            .cornerRadius(3)
+                                    }
+                                    Spacer()
+                                    Image(systemName: "chevron.up.chevron.down")
                                         .font(.system(size: 9))
-                                    Text("Apply Optimal")
-                                        .font(.system(size: 10, weight: .semibold))
+                                        .foregroundColor(.secondary)
                                 }
                                 .padding(.horizontal, 8)
-                                .padding(.vertical, 4)
-                                .background(Color.blue)
-                                .cornerRadius(5)
-                                .foregroundColor(.white)
+                                .padding(.vertical, 5)
+                                .background(Color(NSColor.controlBackgroundColor))
+                                .cornerRadius(6)
+                            }
+                            .menuStyle(BorderlessButtonMenuStyle())
+                        }
+                        
+                        // Refresh Rate Menu
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text("Refresh Rate")
+                                .font(.system(size: 10, weight: .medium))
+                                .foregroundColor(.secondary)
+                            
+                            Menu {
+                                ForEach(display.availableRefreshRates, id: \.self) { rate in
+                                    Button(action: {
+                                        displayManager.setRefreshRate(for: display, targetRate: rate)
+                                    }) {
+                                        HStack {
+                                            if abs(display.currentRefreshRate - rate) < 1.0 {
+                                                Image(systemName: "checkmark")
+                                            }
+                                            Text("\(Int(round(rate))) Hz")
+                                        }
+                                    }
+                                }
+                            } label: {
+                                HStack(spacing: 4) {
+                                    Text("\(Int(round(display.currentRefreshRate))) Hz")
+                                        .font(.system(size: 11, weight: .semibold, design: .monospaced))
+                                    Spacer()
+                                    Image(systemName: "chevron.up.chevron.down")
+                                        .font(.system(size: 9))
+                                        .foregroundColor(.secondary)
+                                }
+                                .padding(.horizontal, 8)
+                                .padding(.vertical, 5)
+                                .background(Color(NSColor.controlBackgroundColor))
+                                .cornerRadius(6)
+                            }
+                            .menuStyle(BorderlessButtonMenuStyle())
+                            .frame(width: 95)
+                        }
+                    }
+                    
+                    // Rotation Selector
+                    HStack(spacing: 6) {
+                        Text("Rotation")
+                            .font(.system(size: 10, weight: .medium))
+                            .foregroundColor(.secondary)
+                        Spacer()
+                        
+                        ForEach([0, 90, 180, 270], id: \.self) { deg in
+                            Button(action: {
+                                displayManager.setRotation(for: display, degrees: deg)
+                            }) {
+                                Text("\(deg)°")
+                                    .font(.system(size: 10, weight: display.rotation == deg ? .bold : .regular))
+                                    .padding(.horizontal, 8)
+                                    .padding(.vertical, 3)
+                                    .background(display.rotation == deg ? Color.blue : Color(NSColor.controlBackgroundColor))
+                                    .foregroundColor(display.rotation == deg ? .white : .primary)
+                                    .cornerRadius(4)
                             }
                             .buttonStyle(.plain)
                         }
                     }
-                    .padding(8)
-                    .background(Color.white.opacity(0.06))
-                    .cornerRadius(8)
-                    .padding(.horizontal, 6)
-                    .padding(.bottom, 4)
                     
-                    submenuRow(
-                        icon: "rectangle.3.group",
-                        title: "Display Mode",
-                        submenuKey: "displayMode"
-                    ) {
-                        displayModesSubmenu
-                    }
-                    
-                    submenuRow(
-                        icon: "speedometer",
-                        title: "Refresh Rate",
-                        submenuKey: "refreshRate"
-                    ) {
-                        refreshRateSubmenu
-                    }
-                    
-                    submenuRow(
-                        icon: "circle.lefthalf.filled",
-                        title: "Colour Mode",
-                        submenuKey: "colorMode"
-                    ) {
-                        colorModeSubmenu
-                    }
-                    
-                    submenuRow(
-                        icon: "rectangle.on.rectangle",
-                        title: "Mirror Display",
-                        submenuKey: "mirror"
-                    ) {
-                        mirrorSubmenu
-                    }
-                    
-                    actionRow(icon: "video", title: "Stream Display") {
-                        PictureInPictureService.shared.openPiP(for: display.id)
-                    }
-                    
-                    actionRow(icon: "pip", title: "Picture in Picture") {
-                        PictureInPictureService.shared.openPiP(for: display.id)
-                    }
-                    
-                    submenuRow(
-                        icon: "arrow.up.and.down.and.arrow.left.and.right",
-                        title: "Move Display",
-                        submenuKey: "moveDisplay"
-                    ) {
-                        moveDisplaySubmenu
-                    }
-                    
-                    submenuRow(
-                        icon: "rotate.right",
-                        title: "Screen Rotation",
-                        submenuKey: "rotation"
-                    ) {
-                        rotationSubmenu
-                    }
-                    
-                    submenuRow(
-                        icon: "slider.horizontal.3",
-                        title: "Image Adjustments",
-                        submenuKey: "imageAdjustments"
-                    ) {
-                        imageAdjustmentsSubmenu
-                    }
-                    
-                    submenuRow(
-                        icon: "arrow.up.left.and.arrow.down.right.rectangle",
-                        title: "Underscan & Overscan",
-                        submenuKey: "underscan"
-                    ) {
-                        underscanSubmenu
-                    }
-                    
-                    submenuRow(
-                        icon: "power",
-                        title: "Device Control",
-                        submenuKey: "deviceControl"
-                    ) {
-                        deviceControlSubmenu
-                    }
-                    
-                    submenuRow(
-                        icon: "cable.connector",
-                        title: "Input Source",
-                        submenuKey: "inputSource"
-                    ) {
-                        inputSourceSubmenu
-                    }
-                    
-                    submenuRow(
-                        icon: "paintpalette",
-                        title: "Colour Profile",
-                        submenuKey: "colorProfile"
-                    ) {
-                        colorProfileSubmenu
-                    }
-                    
-                    actionRow(icon: "lock.shield", title: "Configuration Protection") {
-                        // Protect configuration
-                    }
-                    
-                    actionRow(icon: "gearshape.2", title: "Manage Display") {
-                        PreferencesWindowController.shared.show()
-                    }
-                    
-                    // High Resolution (HiDPI) Toggle
-                    HStack {
-                        Image(systemName: "sparkles")
-                            .font(.system(size: 11))
-                            .frame(width: 18)
-                            .foregroundColor(.white.opacity(0.8))
-                        Text("High Resolution (HiDPI)")
-                            .font(.system(size: 11))
-                            .foregroundColor(.white.opacity(0.9))
-                        Spacer()
-                        if display.isHiDPI {
-                            Image(systemName: "checkmark")
-                                .font(.system(size: 10, weight: .bold))
-                                .foregroundColor(.blue)
+                    // Quick Action Buttons
+                    if !display.isMain {
+                        HStack {
+                            Button(action: {
+                                displayManager.setAsMainDisplay(for: display)
+                            }) {
+                                HStack(spacing: 4) {
+                                    Image(systemName: "star")
+                                        .font(.system(size: 10))
+                                    Text("Set as Main Display")
+                                        .font(.system(size: 10, weight: .medium))
+                                }
+                                .padding(.horizontal, 8)
+                                .padding(.vertical, 4)
+                                .background(Color(NSColor.controlBackgroundColor))
+                                .cornerRadius(5)
+                            }
+                            .buttonStyle(.plain)
+                            
+                            Spacer()
                         }
-                    }
-                    .padding(.horizontal, 10)
-                    .padding(.vertical, 5)
-                    .contentShape(Rectangle())
-                    .onTapGesture {
-                        if let hidpiMode = display.availableModes.first(where: { $0.isHiDPI && !$0.isActive }) {
-                            displayManager.setDisplayMode(for: display, mode: hidpiMode)
-                        }
-                    }
-                    
-                    // Set as Main Display Button
-                    HStack {
-                        Image(systemName: "m.circle")
-                            .font(.system(size: 12))
-                            .frame(width: 18)
-                            .foregroundColor(.white.opacity(0.8))
-                        Text("Set as Main Display")
-                            .font(.system(size: 11))
-                            .foregroundColor(.white.opacity(0.9))
-                        Spacer()
-                        if display.isMain {
-                            Text("Current")
-                                .font(.system(size: 10))
-                                .foregroundColor(.white.opacity(0.6))
-                        }
-                    }
-                    .padding(.horizontal, 10)
-                    .padding(.vertical, 5)
-                    .contentShape(Rectangle())
-                    .onTapGesture {
-                        displayManager.setAsMainDisplay(for: display)
+                        .padding(.top, 2)
                     }
                 }
-                .padding(.bottom, 6)
             }
         }
-        .background(
-            RoundedRectangle(cornerRadius: 12)
-                .fill(Color.white.opacity(0.08))
-                .overlay(
-                    RoundedRectangle(cornerRadius: 12)
-                        .stroke(Color.white.opacity(0.12), lineWidth: 1)
-                )
+        .padding(12)
+        .background(Color(NSColor.controlBackgroundColor).opacity(0.6))
+        .cornerRadius(10)
+        .overlay(
+            RoundedRectangle(cornerRadius: 10)
+                .stroke(Color(NSColor.separatorColor), lineWidth: 0.5)
         )
-        .padding(.horizontal, 10)
     }
     
-    // Submenu Row Component
-    private func submenuRow<Content: View>(
-        icon: String,
-        title: String,
-        submenuKey: String,
-        @ViewBuilder content: @escaping () -> Content
-    ) -> some View {
-        VStack(spacing: 0) {
-            Button(action: {
-                withAnimation(.easeInOut(duration: 0.15)) {
-                    if display.expandedSubmenu == submenuKey {
-                        display.expandedSubmenu = nil
-                    } else {
-                        display.expandedSubmenu = submenuKey
-                    }
-                }
-            }) {
-                HStack {
-                    Image(systemName: icon)
-                        .font(.system(size: 11))
-                        .frame(width: 18)
-                        .foregroundColor(.white.opacity(0.8))
-                    Text(title)
-                        .font(.system(size: 11))
-                        .foregroundColor(.white.opacity(0.9))
-                    Spacer()
-                    Image(systemName: display.expandedSubmenu == submenuKey ? "chevron.down" : "chevron.right")
-                        .font(.system(size: 9))
-                        .foregroundColor(.white.opacity(0.5))
-                }
-                .padding(.horizontal, 10)
-                .padding(.vertical, 5)
-                .background(display.expandedSubmenu == submenuKey ? Color.white.opacity(0.06) : Color.clear)
-            }
-            .buttonStyle(.plain)
-            
-            if display.expandedSubmenu == submenuKey {
-                VStack(spacing: 2) {
-                    content()
-                }
-                .padding(.leading, 28)
-                .padding(.trailing, 10)
-                .padding(.vertical, 4)
-                .background(Color.black.opacity(0.2))
+    private func uniqueResolutionModes(for modes: [DisplayModeItem]) -> [DisplayModeItem] {
+        var seen = Set<String>()
+        var result: [DisplayModeItem] = []
+        for m in modes {
+            let key = "\(m.width)x\(m.height)-\(m.isHiDPI)"
+            if !seen.contains(key) {
+                seen.insert(key)
+                result.append(m)
             }
         }
-    }
-    
-    // Action Row Component
-    private func actionRow(icon: String, title: String, action: @escaping () -> Void) -> some View {
-        Button(action: action) {
-            HStack {
-                Image(systemName: icon)
-                    .font(.system(size: 11))
-                    .frame(width: 18)
-                    .foregroundColor(.white.opacity(0.8))
-                Text(title)
-                    .font(.system(size: 11))
-                    .foregroundColor(.white.opacity(0.9))
-                Spacer()
-                Image(systemName: "chevron.right")
-                    .font(.system(size: 9))
-                    .foregroundColor(.white.opacity(0.5))
-            }
-            .padding(.horizontal, 10)
-            .padding(.vertical, 5)
-        }
-        .buttonStyle(.plain)
-    }
-    
-    // Display Modes Submenu
-    private var displayModesSubmenu: some View {
-        ScrollView(.vertical, showsIndicators: true) {
-            VStack(spacing: 2) {
-                ForEach(display.availableModes, id: \.id) { mode in
-                    HStack {
-                        Text(mode.descriptionString)
-                            .font(.system(size: 10, design: .monospaced))
-                            .foregroundColor(.white.opacity(0.85))
-                        Spacer()
-                        if mode.isActive {
-                            Image(systemName: "checkmark")
-                                .font(.system(size: 9, weight: .bold))
-                                .foregroundColor(.blue)
-                        }
-                    }
-                    .padding(.vertical, 4)
-                    .padding(.horizontal, 4)
-                    .contentShape(Rectangle())
-                    .onTapGesture {
-                        displayManager.setDisplayMode(for: display, mode: mode)
-                    }
-                }
-            }
-        }
-        .frame(maxHeight: 220)
-    }
-    
-    // Refresh Rate Submenu
-    private var refreshRateSubmenu: some View {
-        let rates: [Double] = Array(Set(display.availableModes.map { $0.refreshRate }.filter { $0 > 0 })).sorted(by: >)
-        let displayRates = rates.isEmpty ? [60.0, 75.0, 120.0, 144.0] : rates
-        
-        return ForEach(displayRates, id: \.self) { rate in
-            HStack {
-                Text("\(Int(round(rate))) Hz")
-                    .font(.system(size: 10, design: .monospaced))
-                    .foregroundColor(.white.opacity(0.85))
-                Spacer()
-                if Int(round(display.currentRefreshRate)) == Int(round(rate)) {
-                    Image(systemName: "checkmark")
-                        .font(.system(size: 9, weight: .bold))
-                        .foregroundColor(.blue)
-                }
-            }
-            .padding(.vertical, 3)
-            .contentShape(Rectangle())
-            .onTapGesture {
-                if let active = display.availableModes.first(where: { $0.isActive }),
-                   let matchingMode = display.availableModes.first(where: {
-                       $0.width == active.width &&
-                       $0.height == active.height &&
-                       Int(round($0.refreshRate)) == Int(round(rate))
-                   }) {
-                    displayManager.setDisplayMode(for: display, mode: matchingMode)
-                }
-            }
-        }
-    }
-    
-    // Color Mode Submenu
-    private var colorModeSubmenu: some View {
-        VStack(alignment: .leading, spacing: 4) {
-            ForEach(["RGB (Standard)", "YPbPr (Component)", "HDR Mode"], id: \.self) { cm in
-                HStack {
-                    Text(cm)
-                        .font(.system(size: 11))
-                        .foregroundColor(.white.opacity(0.85))
-                    Spacer()
-                    if cm.starts(with: "RGB") {
-                        Image(systemName: "checkmark")
-                            .font(.system(size: 9, weight: .bold))
-                            .foregroundColor(.blue)
-                    }
-                }
-                .padding(.vertical, 3)
-            }
-        }
-    }
-    
-    // Mirror Submenu
-    private var mirrorSubmenu: some View {
-        VStack(alignment: .leading, spacing: 4) {
-            HStack {
-                Text("Mirror Off")
-                    .font(.system(size: 11))
-                    .foregroundColor(.white.opacity(0.85))
-                Spacer()
-                if !display.isMirrored {
-                    Image(systemName: "checkmark")
-                        .font(.system(size: 9, weight: .bold))
-                        .foregroundColor(.blue)
-                }
-            }
-            .padding(.vertical, 3)
-            .contentShape(Rectangle())
-            .onTapGesture {
-                _ = DisplayModesService.shared.setMirroring(displayID: display.id, mirrorTarget: nil)
-            }
-            
-            ForEach(displayManager.displays.filter { $0.id != display.id }) { otherDisplay in
-                HStack {
-                    Text("Mirror with \(otherDisplay.name)")
-                        .font(.system(size: 11))
-                        .foregroundColor(.white.opacity(0.85))
-                    Spacer()
-                    if display.isMirrored {
-                        Image(systemName: "checkmark")
-                            .font(.system(size: 9, weight: .bold))
-                            .foregroundColor(.blue)
-                    }
-                }
-                .padding(.vertical, 3)
-                .contentShape(Rectangle())
-                .onTapGesture {
-                    _ = DisplayModesService.shared.setMirroring(displayID: display.id, mirrorTarget: otherDisplay.id)
-                }
-            }
-        }
-    }
-    
-    // Rotation Submenu
-    private var rotationSubmenu: some View {
-        ForEach([0, 90, 180, 270], id: \.self) { deg in
-            HStack {
-                Text(deg == 0 ? "Standard (0°)" : "\(deg)°")
-                    .font(.system(size: 11))
-                    .foregroundColor(.white.opacity(0.85))
-                Spacer()
-                if display.rotation == deg {
-                    Image(systemName: "checkmark")
-                        .font(.system(size: 9, weight: .bold))
-                        .foregroundColor(.blue)
-                }
-            }
-            .padding(.vertical, 3)
-            .contentShape(Rectangle())
-            .onTapGesture {
-                displayManager.setRotation(for: display, degrees: deg)
-            }
-        }
-    }
-    
-    // Move Display Submenu
-    private var moveDisplaySubmenu: some View {
-        VStack(alignment: .leading, spacing: 4) {
-            ForEach(["Move Left", "Move Right", "Move Above", "Move Below"], id: \.self) { dir in
-                HStack {
-                    Text(dir)
-                        .font(.system(size: 11))
-                        .foregroundColor(.white.opacity(0.85))
-                    Spacer()
-                }
-                .padding(.vertical, 3)
-                .contentShape(Rectangle())
-                .onTapGesture {
-                    // Quick arrangement adjustment
-                }
-            }
-        }
-    }
-    
-    // Image Adjustments Submenu
-    private var imageAdjustmentsSubmenu: some View {
-        VStack(alignment: .leading, spacing: 6) {
-            HStack {
-                Text("Contrast")
-                    .font(.system(size: 10))
-                    .foregroundColor(.white.opacity(0.7))
-                Spacer()
-                Text("\(Int(round(display.contrast * 100)))%")
-                    .font(.system(size: 10, design: .monospaced))
-                    .foregroundColor(.white.opacity(0.8))
-            }
-            Slider(
-                value: Binding(
-                    get: { display.contrast },
-                    set: {
-                        display.contrast = $0
-                        _ = DDCService.shared.setContrast(displayID: display.id, value: Int(round($0 * 100)))
-                    }
-                ),
-                in: 0.0...1.0
-            )
-            .tint(.white)
-            
-            HStack {
-                Text("Software Dimming Override")
-                    .font(.system(size: 10))
-                    .foregroundColor(.white.opacity(0.7))
-                Spacer()
-            }
-            Slider(value: $display.combinedBrightness, in: 0.0...1.0)
-                .tint(.white)
-        }
-    }
-    
-    // Device Control Submenu
-    private var deviceControlSubmenu: some View {
-        VStack(alignment: .leading, spacing: 4) {
-            Button(action: {
-                displayManager.setPower(for: display, powerOn: false)
-            }) {
-                HStack {
-                    Text("Power Off Monitor (DDC)")
-                        .font(.system(size: 11))
-                        .foregroundColor(.red.opacity(0.9))
-                    Spacer()
-                }
-                .padding(.vertical, 3)
-            }
-            .buttonStyle(.plain)
-            
-            Button(action: {
-                _ = DDCService.shared.setMute(displayID: display.id, isMuted: true)
-            }) {
-                HStack {
-                    Text("Mute Audio (DDC)")
-                        .font(.system(size: 11))
-                        .foregroundColor(.white.opacity(0.85))
-                    Spacer()
-                }
-                .padding(.vertical, 3)
-            }
-            .buttonStyle(.plain)
-        }
-    }
-    
-    // Input Source Submenu
-    private var inputSourceSubmenu: some View {
-        let inputs: [(name: String, code: UInt16)] = [
-            ("HDMI 1", 0x11),
-            ("HDMI 2", 0x12),
-            ("DisplayPort 1", 0x0F),
-            ("DisplayPort 2", 0x10),
-            ("USB-C", 0x1B)
-        ]
-        return VStack(alignment: .leading, spacing: 4) {
-            ForEach(inputs, id: \.name) { item in
-                HStack {
-                    Text(item.name)
-                        .font(.system(size: 11))
-                        .foregroundColor(.white.opacity(0.85))
-                    Spacer()
-                    if display.currentInputSource == item.name {
-                        Image(systemName: "checkmark")
-                            .font(.system(size: 9, weight: .bold))
-                            .foregroundColor(.blue)
-                    }
-                }
-                .padding(.vertical, 3)
-                .contentShape(Rectangle())
-                .onTapGesture {
-                    displayManager.setInputSource(for: display, code: item.code, name: item.name)
-                }
-            }
-        }
-    }
-    
-    // Color Profile Submenu
-    private var colorProfileSubmenu: some View {
-        let profiles = ["Display P3", "sRGB IEC61966-2.1", "Adobe RGB (1998)", "Color LCD", "Generic RGB"]
-        return VStack(alignment: .leading, spacing: 4) {
-            ForEach(profiles, id: \.self) { profile in
-                HStack {
-                    Text(profile)
-                        .font(.system(size: 11))
-                        .foregroundColor(.white.opacity(0.85))
-                    Spacer()
-                    if profile == "sRGB IEC61966-2.1" {
-                        Image(systemName: "checkmark")
-                            .font(.system(size: 9, weight: .bold))
-                            .foregroundColor(.blue)
-                    }
-                }
-                .padding(.vertical, 3)
-                .contentShape(Rectangle())
-                .onTapGesture {
-                    display.currentColorProfile = profile
-                }
-            }
-        }
-    }
-    
-    // Underscan & Overscan Submenu
-    private var underscanSubmenu: some View {
-        VStack(alignment: .leading, spacing: 10) {
-            // Underscan Slider
-            VStack(alignment: .leading, spacing: 3) {
-                HStack {
-                    Text("Underscan Padding")
-                        .font(.system(size: 11))
-                        .foregroundColor(.white.opacity(0.8))
-                    Spacer()
-                    Text("\(Int(round(display.underscan * 100)))%")
-                        .font(.system(size: 11, design: .monospaced))
-                        .foregroundColor(.white.opacity(0.9))
-                }
-                
-                HStack(spacing: 8) {
-                    Image(systemName: "arrow.down.right.and.arrow.up.left")
-                        .font(.system(size: 11))
-                        .foregroundColor(.white.opacity(0.7))
-                    
-                    Slider(
-                        value: Binding(
-                            get: { display.underscan },
-                            set: { displayManager.setUnderscan(for: display, value: $0) }
-                        ),
-                        in: 0.0...0.25,
-                        step: 0.01
-                    )
-                    .tint(.blue)
-                }
-                
-                // Quick Underscan preset chips
-                HStack(spacing: 6) {
-                    ForEach([0.0, 0.05, 0.10, 0.15, 0.20], id: \.self) { pct in
-                        Button(action: {
-                            displayManager.setUnderscan(for: display, value: pct)
-                        }) {
-                            Text(pct == 0.0 ? "0% (Off)" : "\(Int(pct * 100))%")
-                                .font(.system(size: 9, weight: display.underscan == pct ? .bold : .regular))
-                                .padding(.horizontal, 6)
-                                .padding(.vertical, 2)
-                                .background(display.underscan == pct ? Color.blue.opacity(0.4) : Color.white.opacity(0.1))
-                                .cornerRadius(4)
-                                .foregroundColor(.white)
-                        }
-                        .buttonStyle(.plain)
-                    }
-                }
-                .padding(.top, 2)
-            }
-            
-            Divider().background(Color.white.opacity(0.1))
-            
-            // Overscan Toggle
-            HStack {
-                VStack(alignment: .leading, spacing: 1) {
-                    Text("Overscan Compensation")
-                        .font(.system(size: 11))
-                        .foregroundColor(.white.opacity(0.9))
-                    Text("Crop or expand TV & projector signal edges")
-                        .font(.system(size: 9))
-                        .foregroundColor(.white.opacity(0.5))
-                }
-                Spacer()
-                Toggle("", isOn: Binding(
-                    get: { display.overscanEnabled },
-                    set: { displayManager.setOverscan(for: display, enabled: $0) }
-                ))
-                .labelsHidden()
-                .toggleStyle(SwitchToggleStyle(tint: .blue))
-                .scaleEffect(0.7)
-            }
-            
-            Divider().background(Color.white.opacity(0.1))
-            
-            // Display Scaling Mode
-            VStack(alignment: .leading, spacing: 4) {
-                Text("Scaling & Aspect Ratio")
-                    .font(.system(size: 11))
-                    .foregroundColor(.white.opacity(0.8))
-                
-                HStack(spacing: 4) {
-                    ForEach(["Full Screen", "Aspect Ratio", "1:1 Pixel", "Overscan"], id: \.self) { mode in
-                        Button(action: {
-                            displayManager.setDisplayScalingMode(for: display, mode: mode)
-                        }) {
-                            Text(mode)
-                                .font(.system(size: 9, weight: display.displayScalingMode == mode ? .bold : .regular))
-                                .padding(.horizontal, 5)
-                                .padding(.vertical, 3)
-                                .background(display.displayScalingMode == mode ? Color.blue.opacity(0.4) : Color.white.opacity(0.08))
-                                .cornerRadius(4)
-                                .foregroundColor(.white)
-                        }
-                        .buttonStyle(.plain)
-                    }
-                }
-            }
-            
-            // Geometry Reset Button
-            Button(action: {
-                displayManager.resetGeometry(for: display)
-            }) {
-                HStack {
-                    Image(systemName: "arrow.counterclockwise")
-                        .font(.system(size: 10))
-                    Text("Reset Underscan & Geometry")
-                        .font(.system(size: 10))
-                }
-                .foregroundColor(.white.opacity(0.6))
-                .padding(.top, 2)
-            }
-            .buttonStyle(.plain)
-        }
-        .padding(.vertical, 4)
+        return result
     }
 }
