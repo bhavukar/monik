@@ -54,6 +54,44 @@ struct ToolsSectionView: View {
                 systemColoursSubmenu
             }
             
+            // Fix Blurry Text
+            Button(action: {
+                DisplayManager.shared.enableMacFontSmoothing()
+            }) {
+                HStack {
+                    Image(systemName: "textformat.size")
+                        .font(.system(size: 11))
+                        .frame(width: 18)
+                        .foregroundColor(.blue.opacity(0.9))
+                    Text("Fix Blurry Text (Font Smoothing)")
+                        .font(.system(size: 11))
+                        .foregroundColor(.white.opacity(0.9))
+                    Spacer()
+                }
+                .padding(.horizontal, 10)
+                .padding(.vertical, 6)
+            }
+            .buttonStyle(.plain)
+            
+            // Restore All Displays
+            Button(action: {
+                DisplayManager.shared.restoreAllDisplays()
+            }) {
+                HStack {
+                    Image(systemName: "arrow.counterclockwise.circle")
+                        .font(.system(size: 11))
+                        .frame(width: 18)
+                        .foregroundColor(.green.opacity(0.9))
+                    Text("Restore All Displays (Crisp Modes)")
+                        .font(.system(size: 11))
+                        .foregroundColor(.white.opacity(0.9))
+                    Spacer()
+                }
+                .padding(.horizontal, 10)
+                .padding(.vertical, 6)
+            }
+            .buttonStyle(.plain)
+            
             // Check for Updates
             Button(action: {
                 // Check for updates

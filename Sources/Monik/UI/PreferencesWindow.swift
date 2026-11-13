@@ -31,6 +31,14 @@ public class PreferencesWindowController {
         newWindow.makeKeyAndOrderFront(nil)
         NSApp.activate(ignoringOtherApps: true)
         self.window = newWindow
+        
+        NSEvent.addLocalMonitorForEvents(matching: .keyDown) { event in
+            if event.modifierFlags.contains(.command) && event.charactersIgnoringModifiers == "q" {
+                NSApplication.shared.terminate(nil)
+                return nil
+            }
+            return event
+        }
     }
 }
 
@@ -118,6 +126,32 @@ struct FullSettingsView: View {
                         .font(.system(size: 11))
                     
                     Button(action: {
+                        DisplayManager.shared.enableMacFontSmoothing()
+                    }) {
+                        HStack(spacing: 4) {
+                            Image(systemName: "textformat.size")
+                                .font(.system(size: 11))
+                            Text("Fix Blurry Text")
+                                .font(.system(size: 11))
+                        }
+                        .foregroundColor(.blue)
+                    }
+                    .buttonStyle(.plain)
+                    
+                    Button(action: {
+                        DisplayManager.shared.restoreAllDisplays()
+                    }) {
+                        HStack(spacing: 4) {
+                            Image(systemName: "arrow.counterclockwise")
+                                .font(.system(size: 11))
+                            Text("Restore All Displays")
+                                .font(.system(size: 11))
+                        }
+                        .foregroundColor(.blue)
+                    }
+                    .buttonStyle(.plain)
+                    
+                    Button(action: {
                         MenuBarController.shared.togglePopover()
                     }) {
                         HStack(spacing: 4) {
@@ -127,6 +161,23 @@ struct FullSettingsView: View {
                                 .font(.system(size: 11))
                         }
                         .foregroundColor(.blue)
+                    }
+                    .buttonStyle(.plain)
+                    
+                    Button(action: {
+                        NSApplication.shared.terminate(nil)
+                    }) {
+                        HStack(spacing: 4) {
+                            Image(systemName: "power")
+                                .font(.system(size: 11, weight: .bold))
+                            Text("Quit Manage Your Display")
+                                .font(.system(size: 11, weight: .semibold))
+                        }
+                        .foregroundColor(.white)
+                        .padding(.horizontal, 8)
+                        .padding(.vertical, 5)
+                        .background(Color.red.opacity(0.85))
+                        .cornerRadius(6)
                     }
                     .buttonStyle(.plain)
                     

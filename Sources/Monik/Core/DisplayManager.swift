@@ -166,12 +166,60 @@ public class DisplayManager: ObservableObject {
         
         if display.isBuiltIn {
             CoreDisplay_Display_SetUserBrightness(display.id, value)
+            SoftwareDimmer.shared.setDimming(displayID: display.id, brightness: 1.0)
         } else {
             let hardwareVal = Int(round(value * 100))
-            _ = DDCService.shared.setBrightness(displayID: display.id, value: hardwareVal)
+            let ddcOk = DDCService.shared.setBrightness(displayID: display.id, value: hardwareVal)
+            if ddcOk {
+                SoftwareDimmer.shared.setDimming(displayID: display.id, brightness: 1.0)
+            } else {
+                SoftwareDimmer.shared.setDimming(displayID: display.id, brightness: value)
+            }
+        }
+    }
+    
+    public func enableMacFontSmoothing() {
+        let task = Process()
+        task.executableURL = URL(fileURLWithPath: "/usr/bin/defaults")
+        task.arguments = ["-currentHost", "write", "-g", "AppleFontSmoothing", "-int", "2"]
+        try? task.run()
+        task.waitUntilExit()
+        
+        let task2 = Process()
+        task2.executableURL = URL(fileURLWithPath: "/usr/bin/defaults")
+        task2.arguments = ["write", "-g", "CGFontRenderingFontSmoothingDisabled", "-bool", "NO"]
+        try? task2.run()
+        task2.waitUntilExit()
+        
+        OSDHUDController.shared.show(
+            icon: "textformat.size",
+            title: "Font Smoothing Enabled",
+            valueText: "Crisp External Display Text"
+        )
+    }
+    
+    public func restoreAllDisplays() {
+        SoftwareDimmer.shared.removeAll()
+        enableMacFontSmoothing()
+        
+        for display in displays {
+            _ = DisplayModesService.shared.setDisplayEnabled(displayID: display.id, enabled: true)
+            resetGeometry(for: display)
+            
+            // Prefer crisp scaled / HiDPI mode with highest refresh rate
+            if let bestMode = display.availableModes.filter({ $0.isHiDPI }).max(by: { $0.refreshRate < $1.refreshRate })
+                ?? display.availableModes.max(by: { $0.refreshRate < $1.refreshRate }) {
+                setDisplayMode(for: display, mode: bestMode)
+            }
         }
         
-        SoftwareDimmer.shared.setDimming(displayID: display.id, brightness: value)
+        refreshDisplays()
+        
+        OSDHUDController.shared.show(
+            icon: "display",
+            title: "All Displays Restored",
+            valueText: "Crisp HiDPI & Standard Gamma"
+        )
     }
     
     public func setVolume(for display: DisplayInfo, value: Double) {

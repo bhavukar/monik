@@ -25,8 +25,13 @@ public class DDCService {
         displayServices.removeAll()
         let locServices = getIoregLocationToAVServices()
         
-        for candidateID in 1...20 {
-            let id = CGDirectDisplayID(candidateID)
+        var onlineDisplays = [CGDirectDisplayID](repeating: 0, count: 16)
+        var count: UInt32 = 0
+        _ = CGGetOnlineDisplayList(16, &onlineDisplays, &count)
+        var candidates = Set(Array(onlineDisplays.prefix(Int(count))))
+        for c in 1...20 { candidates.insert(CGDirectDisplayID(c)) }
+        
+        for id in candidates {
             if let unmanagedDict = CoreDisplay_DisplayCreateInfoDictionary(id) {
                 let dict = unmanagedDict.takeRetainedValue() as NSDictionary
                 if let loc = dict["IODisplayLocation"] as? String,

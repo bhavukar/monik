@@ -21,30 +21,48 @@ public class DisplayModesService {
         CGSGetNumberOfDisplayModes(displayID, &numberOfModes)
         CGSGetCurrentDisplayMode(displayID, &currentModeNum)
         
-        var seenResolutions = Set<String>()
-        
         if numberOfModes > 0 {
             var modeDesc = CGSDisplayMode()
             let modeLength = Int32(MemoryLayout<CGSDisplayMode>.size)
             
+            var rawModes: [(index: Int32, width: UInt32, height: UInt32, refresh: Double, isHiDPI: Bool, isActive: Bool)] = []
+            
             for i in 0..<numberOfModes {
                 CGSGetDisplayModeDescriptionOfLength(displayID, i, &modeDesc, modeLength)
-                
                 let isHiDPI = modeDesc.density > 1.0
                 let refresh = Double(modeDesc.freq)
-                let key = "\(modeDesc.width)x\(modeDesc.height)@\(Int(refresh))-\(isHiDPI)"
-                
+                rawModes.append((
+                    index: Int32(i),
+                    width: modeDesc.width,
+                    height: modeDesc.height,
+                    refresh: refresh,
+                    isHiDPI: isHiDPI,
+                    isActive: (i == currentModeNum)
+                ))
+            }
+            
+            // Prioritize: Active mode first, then HiDPI (crisp scaled rendering), then higher refresh rates
+            rawModes.sort { a, b in
+                if a.isActive != b.isActive { return a.isActive }
+                if a.width != b.width { return a.width > b.width }
+                if a.height != b.height { return a.height > b.height }
+                if a.isHiDPI != b.isHiDPI { return a.isHiDPI }
+                return a.refresh > b.refresh
+            }
+            
+            var seenResolutions = Set<String>()
+            for m in rawModes {
+                let key = "\(m.width)x\(m.height)@\(Int(round(m.refresh)))-\(m.isHiDPI)"
                 if !seenResolutions.contains(key) {
                     seenResolutions.insert(key)
-                    let item = DisplayModeItem(
-                        modeNumber: Int32(modeDesc.modeNumber),
-                        width: modeDesc.width,
-                        height: modeDesc.height,
-                        refreshRate: refresh,
-                        isHiDPI: isHiDPI,
-                        isActive: (i == currentModeNum)
-                    )
-                    items.append(item)
+                    items.append(DisplayModeItem(
+                        modeNumber: m.index,
+                        width: m.width,
+                        height: m.height,
+                        refreshRate: m.refresh,
+                        isHiDPI: m.isHiDPI,
+                        isActive: m.isActive
+                    ))
                 }
             }
         }
@@ -53,12 +71,13 @@ public class DisplayModesService {
         if items.isEmpty {
             let opt = [kCGDisplayShowDuplicateLowResolutionModes: kCFBooleanTrue] as CFDictionary
             if let cgModes = CGDisplayCopyAllDisplayModes(displayID, opt) as? [CGDisplayMode] {
+                var seenResolutions = Set<String>()
                 for (idx, m) in cgModes.enumerated() {
                     let w = UInt32(m.width)
                     let h = UInt32(m.height)
                     let refresh = m.refreshRate
                     let isHiDPI = (m.pixelWidth > m.width || m.pixelHeight > m.height)
-                    let key = "\(w)x\(h)@\(Int(refresh))-\(isHiDPI)"
+                    let key = "\(w)x\(h)@\(Int(round(refresh)))-\(isHiDPI)"
                     if !seenResolutions.contains(key) {
                         seenResolutions.insert(key)
                         items.append(DisplayModeItem(
@@ -88,12 +107,33 @@ public class DisplayModesService {
     
     public func setDisplayMode(displayID: CGDirectDisplayID, modeNumber: Int32) -> Bool {
         var config: CGDisplayConfigRef?
-        guard CGBeginDisplayConfiguration(&config) == .success, let cfg = config else {
-            return false
+        if CGBeginDisplayConfiguration(&config) == .success, let cfg = config {
+            CGSConfigureDisplayMode(cfg, displayID, modeNumber)
+            let result = CGCompleteDisplayConfiguration(cfg, .permanently)
+            if result == .success {
+                return true
+            }
+            CGCancelDisplayConfiguration(cfg)
         }
-        CGSConfigureDisplayMode(cfg, displayID, modeNumber)
-        let result = CGCompleteDisplayConfiguration(cfg, .permanently)
-        return result == .success
+        
+        // Fallback to displayplacer CLI if installed
+        if let uuid = getDisplayUUID(for: displayID) {
+            let displayplacerPaths = ["/opt/homebrew/bin/displayplacer", "/usr/local/bin/displayplacer"]
+            for path in displayplacerPaths {
+                if FileManager.default.fileExists(atPath: path) {
+                    let task = Process()
+                    task.executableURL = URL(fileURLWithPath: path)
+                    task.arguments = ["id:\(uuid) mode:\(modeNumber)"]
+                    try? task.run()
+                    task.waitUntilExit()
+                    if task.terminationStatus == 0 {
+                        return true
+                    }
+                }
+            }
+        }
+        
+        return false
     }
     
     public func setRotation(displayID: CGDirectDisplayID, rotationDegrees: Int) -> Bool {

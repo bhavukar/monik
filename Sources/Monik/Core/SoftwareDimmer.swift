@@ -18,8 +18,14 @@ public class SoftwareDimmer {
     public func setDimming(displayID: CGDirectDisplayID, brightness: Double) {
         DispatchQueue.main.async {
             let clamped = max(0.0, min(1.0, brightness))
-            let dimAlpha = (1.0 - clamped) * 0.85
             
+            // If brightness is normal / near full, remove software overlay immediately
+            if clamped >= 0.98 {
+                self.overlayWindows[displayID]?.orderOut(nil)
+                return
+            }
+            
+            let dimAlpha = (1.0 - clamped) * 0.85
             if dimAlpha <= 0.01 {
                 self.overlayWindows[displayID]?.orderOut(nil)
                 return
@@ -48,7 +54,8 @@ public class SoftwareDimmer {
             } else {
                 self.blackedOutDisplays.remove(displayID)
                 
-                // 1. Restore hardware ColorSync gamma curve
+                // 1. Restore identity gamma transfer formula
+                CGSetDisplayTransferByFormula(displayID, 0.0, 1.0, 1.0, 0.0, 1.0, 1.0, 0.0, 1.0, 1.0)
                 CGDisplayRestoreColorSyncSettings()
                 
                 // 2. Hide blackout window
@@ -142,6 +149,14 @@ public class SoftwareDimmer {
     
     public func removeAll() {
         DispatchQueue.main.async {
+            var onlineDisplays = [CGDirectDisplayID](repeating: 0, count: 16)
+            var count: UInt32 = 0
+            if CGGetOnlineDisplayList(16, &onlineDisplays, &count) == .success {
+                for i in 0..<Int(count) {
+                    let dID = onlineDisplays[i]
+                    CGSetDisplayTransferByFormula(dID, 0.0, 1.0, 1.0, 0.0, 1.0, 1.0, 0.0, 1.0, 1.0)
+                }
+            }
             CGDisplayRestoreColorSyncSettings()
             for (_, window) in self.overlayWindows {
                 window.orderOut(nil)

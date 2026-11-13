@@ -122,9 +122,14 @@ public class DisplayIntelligenceService {
     public func applyRecommendation(display: DisplayInfo, recommendation: DisplayProfileRecommendation) {
         display.currentColorProfile = recommendation.optimalColorProfile
         DisplayManager.shared.setCombinedBrightness(for: display, value: recommendation.optimalBrightness)
+        DisplayManager.shared.enableMacFontSmoothing()
+        DisplayManager.shared.resetGeometry(for: display)
         
-        // Find best mode matching optimal resolution and refresh rate
+        // Find best crisp mode matching optimal resolution and highest refresh rate with HiDPI prioritized
         if let bestMode = display.availableModes.first(where: {
+            $0.isHiDPI &&
+            Int(round($0.refreshRate)) == Int(round(recommendation.optimalRefreshRate))
+        }) ?? display.availableModes.first(where: {
             $0.resolutionString == recommendation.optimalResolution &&
             Int(round($0.refreshRate)) == Int(round(recommendation.optimalRefreshRate))
         }) ?? display.availableModes.first(where: { Int(round($0.refreshRate)) == Int(round(recommendation.optimalRefreshRate)) }) {
